@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ParticleCanvas from "./ParticleCanvas";
 import ShaderBackground from "./ShaderBackground";
-import { relics, RUNES,  SectionId } from "./data";
+import { relics, RUNES, SectionId } from "./data";
 
 // Section Components
 import AboutSection from "./sections/AboutSection";
@@ -21,12 +21,13 @@ import PlaceholderSection from "./sections/PlaceholderSection";
 
 export default function PortfolioShell() {
   const [activeId, setActiveId] = useState<SectionId>("about");
-  const mainRef = useRef<HTMLElement>(null);
+  const mainRef   = useRef<HTMLElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
   
   const activeRelic = relics.find((r) => r.id === activeId) || relics[0];
 
-  // GSAP ambient camera breathing (matches Stitch design)
+  // GSAP ambient camera breathing
   useEffect(() => {
     let tween: { kill: () => void } | null = null;
     import("gsap").then(({ gsap }) => {
@@ -39,33 +40,37 @@ export default function PortfolioShell() {
     return () => { tween?.kill(); };
   }, []);
 
-  // Mouse parallax for the center background layer
+  // Mouse: parallax + cursor ambient light
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      const cx = window.innerWidth / 2;
+      const cx = window.innerWidth  / 2;
       const cy = window.innerHeight / 2;
       setParallax({
         x: ((e.clientX - cx) / cx) * 10,
         y: ((e.clientY - cy) / cy) * 6,
       });
+      if (cursorRef.current) {
+        cursorRef.current.style.left = `${e.clientX}px`;
+        cursorRef.current.style.top  = `${e.clientY}px`;
+      }
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // GSAP stone-press interaction on relics (spec: heavy stone press + tiny shake)
+  // GSAP stone-press on relics — sound-ready (data-sound="click")
   useEffect(() => {
     import("gsap").then(({ gsap }) => {
       const relicEls = document.querySelectorAll<HTMLElement>(".relic-item");
       relicEls.forEach((el) => {
         const onDown = () => gsap.to(el, { scale: 0.93, duration: 0.08, ease: "power2.in" });
-        const onUp = () => gsap.to(el, { scale: 1, duration: 0.25, ease: "back.out(2)" });
+        const onUp   = () => gsap.to(el, { scale: 1,    duration: 0.28, ease: "back.out(2.2)" });
         el.addEventListener("mousedown", onDown);
-        el.addEventListener("mouseup", onUp);
+        el.addEventListener("mouseup",   onUp);
         el.addEventListener("mouseleave", onUp);
         (el as HTMLElement & { _gsapCleanup?: () => void })._gsapCleanup = () => {
           el.removeEventListener("mousedown", onDown);
-          el.removeEventListener("mouseup", onUp);
+          el.removeEventListener("mouseup",   onUp);
           el.removeEventListener("mouseleave", onUp);
         };
       });
@@ -100,25 +105,37 @@ export default function PortfolioShell() {
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-surface-container-lowest text-on-surface font-body-md antialiased selection:bg-rune-glow selection:text-surface">
       
-      {/* Background Layer */}
+      {/* ── Cursor ambient light ── */}
+      <div ref={cursorRef} className="cursor-light" aria-hidden="true" />
+
+      {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0">
         <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
-        style={{
-          transform: `translate(${parallax.x}px, ${parallax.y}px) scale(1.04)`,
-          transition: "transform 0.15s ease-out",
-        }}
-      >
-        <source src="/gow-bg.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+          autoPlay muted loop playsInline preload="auto"
+          className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
+          style={{
+            transform: `translate(${parallax.x}px, ${parallax.y}px) scale(1.04)`,
+            transition: "transform 0.15s ease-out",
+          }}
+        >
+          <source src="/gow-bg.mp4" type="video/mp4" />
+        </video>
+
+        {/* Cinematic gradient overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-surface-container-lowest opacity-40" />
+
+        {/* Warm gold ambient — upper right */}
+        <div className="absolute inset-0 gold-ambient" />
+
+        {/* Blue moonlight — left edge */}
+        <div className="absolute inset-0 moon-ambient" />
+
+        {/* Vignette */}
+        <div className="absolute inset-0 vignette-layer" />
+
+        {/* Occasional lightning flash */}
+        <div className="absolute inset-0 lightning-layer bg-white" />
       </div>
 
       {/* Global Particle Overlay */}
@@ -163,40 +180,46 @@ export default function PortfolioShell() {
                   <button
                     key={relic.id}
                     onClick={() => setActiveId(relic.id)}
-                    className={`relic-item relic-stone frost-border group relative aspect-square flex flex-col items-center justify-center p-2 rounded-stone transition-all duration-300 ${
+                    data-sound={isActive ? undefined : "click"}
+                    className={`relic-item relic-stone relic-stone-texture frost-border group relative aspect-square flex flex-col items-center justify-center p-2 rounded-stone transition-all duration-300 ${
                       isActive
                         ? "relic-active"
                         : "text-on-surface-variant hover:text-icy-cyan"
                     }`}
                     style={{
                       background: isActive
-                        ? "linear-gradient(135deg, rgba(72,202,228,0.18) 0%, rgba(26,28,30,0.92) 100%)"
-                        : "linear-gradient(135deg, rgba(42,44,48,0.82) 0%, rgba(26,28,30,0.88) 100%)",
-                      backdropFilter: "blur(2px)",
-                      WebkitBackdropFilter: "blur(2px)",
-                      boxShadow: isActive
-                        ? "0 0 18px rgba(72,202,228,0.45), 0 8px 24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)"
-                        : "0 6px 20px rgba(0,0,0,0.65), 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+                        ? "linear-gradient(135deg, rgba(72,202,228,0.16) 0%, rgba(20,22,26,0.94) 100%)"
+                        : "linear-gradient(160deg, rgba(48,52,58,0.88) 0%, rgba(22,24,28,0.92) 100%)",
+                      backdropFilter: "blur(3px)",
+                      WebkitBackdropFilter: "blur(3px)",
                       border: isActive
-                        ? "1px solid rgba(72,202,228,0.55)"
-                        : "1px solid rgba(90,92,96,0.45)",
+                        ? "1px solid rgba(72,202,228,0.60)"
+                        : "1px solid rgba(100,104,110,0.40)",
+                      boxShadow: isActive ? undefined :
+                        "0 6px 22px rgba(0,0,0,0.68), 0 2px 6px rgba(0,0,0,0.55), inset 0 1px 0 rgba(220,230,240,0.05), inset 0 -1px 0 rgba(0,0,0,0.55), inset 1px 0 0 rgba(220,230,240,0.04), inset -1px 0 0 rgba(0,0,0,0.35)",
                       transform: "perspective(600px) rotateX(1deg)",
                     }}
                   >
+                    {/* Active relic frost shimmer sweep */}
+                    {isActive && <div className="frost-sweep" aria-hidden="true" />}
+
+                    {/* Active inner glow overlay */}
                     {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-rune-glow/10 to-transparent rounded-stone opacity-60 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-rune-glow/12 via-transparent to-transparent rounded-stone pointer-events-none" />
                     )}
+
                     <span
                       className={`material-symbols-outlined text-3xl xl:text-4xl mb-2 icon-engraved transition-colors ${
-                        isActive ? "text-rune-glow rune-glow-text" : ""
+                        isActive ? "text-rune-glow rune-glow-text rune-pulse" : ""
                       }`}
                       style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
+                      data-sound="hover"
                     >
                       {relic.icon}
                     </span>
                     <span
                       className={`font-label-caps text-[9px] xl:text-[10px] uppercase text-center w-full truncate tracking-widest mt-1 ${
-                        isActive ? "text-white" : ""
+                        isActive ? "text-white engraved-text" : ""
                       }`}
                     >
                       {relic.label}
@@ -259,15 +282,15 @@ export default function PortfolioShell() {
                     <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
                       {activeRelic.codexLabel}
                     </p>
-                    <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow rune-glow-text uppercase tracking-widest mb-3 lg:mb-4">
+                    <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
                       {activeRelic.codexTitle}
                     </h2>
                     
-                    {/* Runic Divider with line brackets */}
-                    <div className="flex items-center justify-center gap-3 text-icy-cyan/60 text-xs tracking-[0.5em] mb-3 lg:mb-4">
-                      <span className="material-symbols-outlined text-sm text-icy-cyan/40">remove</span>
-                      {RUNES.map((r, i) => <span key={i}>{r}</span>)}
-                      <span className="material-symbols-outlined text-sm text-icy-cyan/40">remove</span>
+                    {/* Norse ornament divider */}
+                    <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
+                      <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
+                      {RUNES.map((r, i) => <span key={i} className="text-icy-cyan/60">{r}</span>)}
+                      <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
                     </div>
                   </motion.div>
                 </AnimatePresence>
@@ -285,10 +308,11 @@ export default function PortfolioShell() {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeId}
-                    initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
-                    transition={{ duration: 0.28, ease: "easeOut" }}
+                    data-sound="transition"
+                    initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
+                    animate={{ opacity: 1, y: 0,  filter: "blur(0px)" }}
+                    exit={{    opacity: 0, y: -10, filter: "blur(4px)" }}
+                    transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
                   >
                     {renderContent()}
                   </motion.div>
