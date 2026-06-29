@@ -104,3 +104,92 @@ export const staggerItem: Variants = {
   exit:   { opacity: 0, y: -6,
     transition: { duration: 0.18, ease: EASE_IN_HARD } },
 };
+
+// ── Engraving reveal — ancient stone carving sequence ─────
+// Phase durations (ms): line grow 250 | sweep 350 | reveal 350
+// Icon 150 | title 200 | desc 250 | glow settle 400
+
+/** 1. Rune seed line — scales from 0 to full width at center */
+export const engraveSeedLine: Variants = {
+  hidden: { scaleX: 0, opacity: 0 },
+  show: {
+    scaleX: 1,
+    opacity: 1,
+    transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: { scaleX: 0, opacity: 0,
+    transition: { duration: 0.15, ease: EASE_IN_HARD } },
+};
+
+/** 2. Sweep line — travels left→right via clip-path */
+export const engraveSweep: Variants = {
+  hidden: { clipPath: "inset(0 100% 0 0)", opacity: 1 },
+  show: {
+    clipPath: "inset(0 0% 0 0)",
+    opacity: 1,
+    transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1], delay: 0.25 },
+  },
+  exit: { opacity: 0, transition: { duration: 0.15, delay: 0 } },
+};
+
+/** 3. Stone slab reveals under the sweep (mask slides left→right) */
+export const engraveSlabReveal: Variants = {
+  hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+  show: {
+    clipPath: "inset(0 0% 0 0)",
+    opacity: 1,
+    transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1], delay: 0.30 },
+  },
+  exit: {
+    opacity: 0,
+    clipPath: "inset(0 0% 0 0)",
+    transition: { duration: 0.18, ease: EASE_IN_HARD },
+  },
+};
+
+/** 4a. Icon — fades up after slab reveals */
+export const engraveIcon: Variants = {
+  hidden: { opacity: 0, y: 10, scale: 0.85 },
+  show: {
+    opacity: 1, y: 0, scale: 1,
+    transition: { duration: 0.15, ease: EASE_HEAVY, delay: 0.60 },
+  },
+  exit: { opacity: 0, y: -6, transition: { duration: 0.12 } },
+};
+
+/** 4b. Title — fades in with letter-spacing collapse (engraved feel) */
+export const engraveTitle: Variants = {
+  hidden: { opacity: 0, letterSpacing: "0.5em", filter: "blur(4px)" },
+  show: {
+    opacity: 1, letterSpacing: "0.12em", filter: "blur(0px)",
+    transition: { duration: 0.20, ease: EASE_HEAVY, delay: 0.72 },
+  },
+  exit: { opacity: 0, transition: { duration: 0.12 } },
+};
+
+/** 4c. Description / body — slides up */
+export const engraveDesc: Variants = {
+  hidden: { opacity: 0, y: 14, filter: "blur(3px)" },
+  show: {
+    opacity: 1, y: 0, filter: "blur(0px)",
+    transition: { duration: 0.25, ease: EASE_HEAVY, delay: 0.85 },
+  },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.14 } },
+};
+
+/** 4d. Rune accents — illuminate after everything settles */
+export const engraveAccents: Variants = {
+  hidden: { opacity: 0, scale: 0.7 },
+  show: {
+    opacity: 1, scale: 1,
+    transition: { duration: 0.40, ease: EASE_HEAVY, delay: 1.0 },
+  },
+  exit: { opacity: 0, transition: { duration: 0.12 } },
+};
+
+/** Sweep line glow — fades away at the very end leaving stone */
+export const engraveSweepFade: Variants = {
+  hidden: { opacity: 0 },
+  show:   { opacity: 1, transition: { duration: 0.10, delay: 0.25 } },
+  exit:   { opacity: 0, transition: { duration: 0.40, ease: "easeOut", delay: 0.60 } },
+};

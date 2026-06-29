@@ -6,13 +6,10 @@ import ParticleCanvas from "./ParticleCanvas";
 import RelicTile from "./ui/RelicTile";
 import { relics, RUNES, SectionId } from "./data";
 import {
-  fadeUp,
-  fadeDown,
-  staggerContainer,
-  staggerItem,
   energyTravel,
 } from "@/app/lib/animations";
 import { useRelicTransition } from "@/app/hooks/useRelicTransition";
+import EngravingReveal from "./ui/EngravingReveal";
 
 // Section Components
 import AboutSection       from "./sections/AboutSection";
@@ -50,7 +47,7 @@ export default function PortfolioShell() {
   const navRef    = useRef<HTMLDivElement>(null);
   const codexRef  = useRef<HTMLDivElement>(null);
   const logoRef   = useRef<HTMLDivElement>(null);
-  const bgRef     = useRef<HTMLVideoElement>(null);
+  const bgRef     = useRef<HTMLImageElement>(null);
 
   const activeRelic = relics.find((r) => r.id === selectedId) || relics[0];
 
@@ -208,14 +205,14 @@ export default function PortfolioShell() {
 
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0">
-        <video
+        <img
           ref={bgRef}
-          autoPlay muted loop playsInline preload="auto"
+          src="/gow-bg.png"
+          alt=""
+          aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
           style={{ transition: "transform 0.12s linear" }}
-        >
-          <source src="/gow-bg.mp4" type="video/mp4" />
-        </video>
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-surface-container-lowest opacity-40" />
         <div className="absolute inset-0 world-reaction-layer pointer-events-none" />
@@ -321,12 +318,6 @@ export default function PortfolioShell() {
 
         {/* CENTER: Living World */}
         <section className="flex-1 hidden md:flex items-end justify-center relative pointer-events-none pb-10">
-          <div className="flex items-center gap-8 text-rune-glow/60 opacity-80 mb-4">
-            <span className="material-symbols-outlined text-3xl rune-glow-text">change_history</span>
-            <span className="material-symbols-outlined text-3xl">circle</span>
-            <span className="material-symbols-outlined text-3xl">close</span>
-            <span className="material-symbols-outlined text-3xl">square</span>
-          </div>
         </section>
 
         {/* RIGHT: Hanging Codex */}
@@ -349,73 +340,43 @@ export default function PortfolioShell() {
             {/* Inner Codex Area */}
             <div className="m-4 p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md">
 
-              {/* ── Codex Header — staggered children ── */}
-              <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={selectedId + "-header"}
-                    variants={staggerContainer}
-                    initial="hidden"
-                    animate="show"
-                    exit="exit"
-                    data-sound="transition"
-                  >
-                    {/* 1 — Codex label */}
-                    <motion.p
-                      variants={fadeDown}
-                      className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text"
-                    >
-                      {activeRelic.codexLabel}
-                    </motion.p>
+              <EngravingReveal sectionKey={selectedId} className="flex flex-col flex-1 overflow-hidden">
 
-                    {/* 2 — Title */}
-                    <motion.h2
-                      variants={fadeUp}
-                      className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4"
-                    >
-                      {activeRelic.codexTitle}
-                    </motion.h2>
+                {/* ── Codex Header ── */}
+                <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
+                  {/* Codex label */}
+                  <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
+                    {activeRelic.codexLabel}
+                  </p>
 
-                    {/* 3 — Runic divider */}
-                    <motion.div
-                      variants={fadeUp}
-                      className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]"
-                    >
-                      <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                      {RUNES.map((r, i) => (
-                        <span key={i} className="text-icy-cyan/60">{r}</span>
-                      ))}
-                      <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                    </motion.div>
-                  </motion.div>
-                </AnimatePresence>
+                  {/* Title */}
+                  <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
+                    {activeRelic.codexTitle}
+                  </h2>
 
-                {/* Centered ornament diamond */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
-                  <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
-                    {activeRelic.runeSymbol}
-                  </span>
+                  {/* Runic divider */}
+                  <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
+                    <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
+                    {RUNES.map((r, i) => (
+                      <span key={i} className="text-icy-cyan/60">{r}</span>
+                    ))}
+                    <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
+                  </div>
+
+                  {/* Centered ornament diamond */}
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
+                    <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
+                      {activeRelic.runeSymbol}
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              {/* ── Codex Body — staggered content ── */}
-              <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={selectedId + "-body"}
-                    variants={staggerContainer}
-                    initial="hidden"
-                    animate="show"
-                    exit="exit"
-                    data-sound="transition"
-                  >
-                    {/* Wrap content in a stagger item so the body rises as one */}
-                    <motion.div variants={staggerItem}>
-                      {renderContent()}
-                    </motion.div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                {/* ── Codex Body ── */}
+                <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
+                  {renderContent()}
+                </div>
+
+              </EngravingReveal>
 
               {/* Bottom fading edge */}
               <div className="absolute bottom-4 left-0 w-full h-12 bg-gradient-to-t from-surface-container-low to-transparent z-20 pointer-events-none" />
