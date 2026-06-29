@@ -145,47 +145,37 @@ export default function EngravingReveal({
 
   const animRef  = useRef<{ stop: () => void } | null>(null);
   const prevKey  = useRef(sectionKey);
-  // Store next children during exit so we can swap after fade
-  const nextRef  = useRef<React.ReactNode>(null);
 
-  const runScan = useCallback((newChildren: React.ReactNode) => {
+  const runScan = useCallback((newChildren: React.ReactNode, skipSwap = false) => {
     const outer = outerRef.current;
     if (!outer) {
-      setDisplayed(newChildren);
+      if (!skipSwap) setDisplayed(newChildren);
       return;
     }
 
     animRef.current?.stop();
 
-    // Measure the panel height now (before any transition)
     const h = outer.offsetHeight;
     const w = outer.offsetWidth;
     setPanelH(h);
 
-    // Step 1 — fade out current content
+    // Step 1 — ensure content is hidden before we start
     if (contentRef.current) {
-      contentRef.current.style.transition = "opacity 0.15s ease";
+      contentRef.current.style.transition = skipSwap ? "none" : "opacity 0.15s ease";
       contentRef.current.style.opacity    = "0";
     }
 
-    setTimeout(() => {
-      // Step 2 — swap content while invisible
-      nextRef.current = newChildren;
-      setDisplayed(newChildren);
-
-      // Step 3 — reset clip (fully hidden) and start scan
+    const doScan = (w: number, h: number) => {
       setClipX(0);
       setBeamX(0);
       progress.set(0);
       setScanning(true);
 
-      // Make content visible again immediately — mask covers it
       if (contentRef.current) {
         contentRef.current.style.transition = "none";
         contentRef.current.style.opacity    = "1";
       }
 
-      // Step 4 — animate beam across
       const ctrl = animate(progress, 1, {
         duration: 0.85,
         ease: [0.2, 0.05, 0.3, 1.0],
@@ -194,12 +184,21 @@ export default function EngravingReveal({
           setBeamX(x);
           setClipX(x);
         },
-        onComplete: () => {
-          setScanning(false);
-        },
+        onComplete: () => setScanning(false),
       });
       animRef.current = ctrl;
-    }, 160);
+    };
+
+    if (skipSwap) {
+      // Initial mount — no content swap, just scan immediately
+      doScan(w, h);
+    } else {
+      setTimeout(() => {
+        setDisplayed(newChildren);
+        setPanelH(outer.offsetHeight);
+        doScan(outer.offsetWidth, outer.offsetHeight);
+      }, 160);
+    }
   }, [progress]);
 
   useEffect(() => {
@@ -209,11 +208,17 @@ export default function EngravingReveal({
     }
   }, [sectionKey, children, runScan]);
 
-  // On mount — content is already visible, no scan needed
+  // On mount — run the scan once to engrave initial content
   useLayoutEffect(() => {
     if (contentRef.current) {
-      contentRef.current.style.opacity = "1";
+      contentRef.current.style.opacity = "0";
     }
+    // Short delay so the DOM is fully laid out before we measure
+    const t = setTimeout(() => {
+      runScan(children, true);
+    }, 300);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

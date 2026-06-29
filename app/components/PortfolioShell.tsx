@@ -317,58 +317,61 @@ export default function PortfolioShell() {
 
         {/* RIGHT: Hanging Codex */}
         <aside className="w-full md:w-[40%] lg:w-[35%] h-full flex items-center justify-center px-6 pointer-events-auto z-30">
-          <div
-            ref={codexRef}
-            className={`relative w-full max-w-lg h-[95%] codex-tablet flex flex-col${phase === "opening" ? " codex-flash" : ""}`}
-            style={{ willChange: "transform" }}
+          <EngravingReveal
+            sectionKey={selectedId}
+            className="relative w-full max-w-lg h-[95%]"
+            innerClassName={`codex-tablet flex flex-col w-full h-full${phase === "opening" ? " codex-flash" : ""}`}
           >
-            {/* Heavy Chains */}
-            <div className="absolute -top-[60px] left-8 w-3 h-[80px] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=')] opacity-80" />
-            <div className="absolute -top-[60px] right-8 w-3 h-[80px] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=')] opacity-80" />
-
-            {/* Corner Ornaments */}
-            <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-[#555] rounded-tl" />
-            <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-[#555] rounded-tr" />
-            <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-[#555] rounded-bl" />
-            <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-[#555] rounded-br" />
-
-            {/* Inner Codex Area — EngravingReveal wraps the entire inner panel */}
-            <EngravingReveal
-              sectionKey={selectedId}
-              className="m-4 h-[calc(100%-2rem)]"
-              innerClassName="p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md"
+            <div
+              ref={codexRef}
+              className="relative w-full h-full flex flex-col"
+              style={{ willChange: "transform" }}
             >
-              {/* ── Codex Header ── */}
-              <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
-                <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
-                  {activeRelic.codexLabel}
-                </p>
-                <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
-                  {activeRelic.codexTitle}
-                </h2>
-                <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
-                  <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                  {RUNES.map((r, i) => (
-                    <span key={i} className="text-icy-cyan/60">{r}</span>
-                  ))}
-                  <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                </div>
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
-                  <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
-                    {activeRelic.runeSymbol}
-                  </span>
-                </div>
-              </div>
+              {/* Heavy Chains */}
+              <div className="absolute -top-[60px] left-8 w-3 h-[80px] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=')] opacity-80" />
+              <div className="absolute -top-[60px] right-8 w-3 h-[80px] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=')] opacity-80" />
 
-              {/* ── Codex Body ── */}
-              <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
-                {renderContent()}
-              </div>
+              {/* Corner Ornaments */}
+              <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-[#555] rounded-tl" />
+              <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-[#555] rounded-tr" />
+              <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-[#555] rounded-bl" />
+              <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-[#555] rounded-br" />
 
-              {/* Bottom fading edge */}
-              <div className="absolute bottom-4 left-0 w-full h-12 bg-gradient-to-t from-surface-container-low to-transparent z-20 pointer-events-none" />
-            </EngravingReveal>
-          </div>
+              {/* Inner Codex Area */}
+              <div className="m-4 p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md">
+
+                {/* ── Codex Header ── */}
+                <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
+                  <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
+                    {activeRelic.codexLabel}
+                  </p>
+                  <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
+                    {activeRelic.codexTitle}
+                  </h2>
+                  <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
+                    <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
+                    {RUNES.map((r, i) => (
+                      <span key={i} className="text-icy-cyan/60">{r}</span>
+                    ))}
+                    <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
+                  </div>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
+                    <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
+                      {activeRelic.runeSymbol}
+                    </span>
+                  </div>
+                </div>
+
+                {/* ── Codex Body ── */}
+                <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
+                  {renderContent()}
+                </div>
+
+                {/* Bottom fading edge */}
+                <div className="absolute bottom-4 left-0 w-full h-12 bg-gradient-to-t from-surface-container-low to-transparent z-20 pointer-events-none" />
+              </div>
+            </div>
+          </EngravingReveal>
         </aside>
       </main>
 
