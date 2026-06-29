@@ -653,3 +653,146 @@ body {
 /* [data-sound="hover"] — stone scrape    */
 /* [data-sound="click"] — stone impact    */
 /* [data-sound="transition"] — rune magic */
+
+/* ============================================
+   Phase 8 — World-reaction ambient overlays
+   Toggled by adding a class to <html>.
+   Each effect is a single radial gradient opacity change — no repaint.
+   ============================================ */
+.world-reaction-layer {
+  background: transparent;
+  transition: background 1.2s ease;
+}
+
+/* Projects → distant lightning shimmer */
+html.world-lightning .world-reaction-layer {
+  background: radial-gradient(ellipse at 60% 20%, rgba(180,220,255,0.06) 0%, transparent 55%);
+  animation: worldLightning 6s ease-in-out infinite;
+}
+
+/* Skills → faint rune blue-green pulse */
+html.world-rune .world-reaction-layer {
+  background: radial-gradient(ellipse at 50% 50%, rgba(72,202,228,0.06) 0%, transparent 60%);
+  animation: worldPulse 5s ease-in-out infinite;
+}
+
+/* Experience → colder blue left-edge */
+html.world-cold .world-reaction-layer {
+  background: radial-gradient(ellipse at 5% 50%, rgba(100,180,255,0.08) 0%, transparent 50%);
+}
+
+/* Timeline → warm golden dust */
+html.world-gold .world-reaction-layer {
+  background: radial-gradient(ellipse at 50% 80%, rgba(176,141,87,0.09) 0%, transparent 55%);
+  animation: goldShift 8s ease-in-out infinite;
+}
+
+/* Education → soft floating dust (very faint warm) */
+html.world-dust .world-reaction-layer {
+  background: radial-gradient(ellipse at 40% 60%, rgba(160,145,120,0.07) 0%, transparent 55%);
+  animation: worldPulse 9s ease-in-out infinite;
+}
+
+@keyframes worldLightning {
+  0%, 90%, 100% { opacity: 1; }
+  92% { opacity: 1.6; }
+  94% { opacity: 0.8; }
+  96% { opacity: 1.4; }
+}
+
+@keyframes worldPulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1.0; }
+}
+
+/* ============================================
+   Phase 5 — Codex deeper imperfection overlay
+   Adds a subtle stone-grain pseudo on the tablet.
+   ============================================ */
+.codex-tablet::before {
+  /* Already used for top-left corner ornament in globals — merge */
+  top: 6px; left: 6px;
+  border-width: 2px 0 0 2px;
+}
+
+/* Extra weathering: bottom-right chip ornament uses ::after */
+/* (both already defined above) */
+
+/* Codex stone imperfection layer — additional inner noise */
+.codex-inner-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   LIVING WORLD — Codex breathing shadow
+   ============================================ */
+@keyframes codexBreathe {
+  0%, 100% {
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.95),
+      0 10px 30px rgba(0,0,0,0.85),
+      0 0 0 1px rgba(125,107,74,0.20),
+      -4px 0 30px rgba(72,202,228,0.06),
+      inset 0 2px 3px rgba(255,255,255,0.04),
+      inset 0 -2px 8px rgba(0,0,0,0.70);
+  }
+  50% {
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.95),
+      0 10px 30px rgba(0,0,0,0.85),
+      0 0 0 1px rgba(125,107,74,0.28),
+      -4px 0 40px rgba(72,202,228,0.10),
+      inset 0 2px 3px rgba(255,255,255,0.06),
+      inset 0 -2px 8px rgba(0,0,0,0.70);
+  }
+}
+
+/* Apply codex breathing — overrides the static box-shadow on .codex-tablet */
+.codex-tablet {
+  animation: codexBreathe 9s ease-in-out infinite;
+}
+
+/* ============================================
+   CINEMATIC TRANSITIONS — Codex border flash
+   Triggered by .codex-flash class applied for
+   the duration of the "opening" phase (~160ms).
+   Uses animation-fill-mode: forwards so it
+   settles back naturally.
+   ============================================ */
+@keyframes codexBorderFlash {
+  0%   { border-image-slice: 1;
+         box-shadow:
+           0 30px 80px rgba(0,0,0,0.95),
+           0 10px 30px rgba(0,0,0,0.85),
+           0 0 0 1px rgba(125,107,74,0.20),
+           -4px 0 30px rgba(72,202,228,0.06),
+           inset 0 2px 3px rgba(255,255,255,0.04),
+           inset 0 -2px 8px rgba(0,0,0,0.70); }
+  40%  { box-shadow:
+           0 30px 80px rgba(0,0,0,0.95),
+           0 10px 30px rgba(0,0,0,0.85),
+           0 0 0 2px rgba(72,202,228,0.65),
+           0 0 40px rgba(72,202,228,0.22),
+           -4px 0 50px rgba(72,202,228,0.20),
+           inset 0 2px 3px rgba(255,255,255,0.08),
+           inset 0 -2px 8px rgba(0,0,0,0.70); }
+  100% { box-shadow:
+           0 30px 80px rgba(0,0,0,0.95),
+           0 10px 30px rgba(0,0,0,0.85),
+           0 0 0 1px rgba(125,107,74,0.20),
+           -4px 0 30px rgba(72,202,228,0.06),
+           inset 0 2px 3px rgba(255,255,255,0.04),
+           inset 0 -2px 8px rgba(0,0,0,0.70); }
+}
+
+.codex-flash {
+  animation:
+    codexBorderFlash 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    codexBreathe     9s   ease-in-out infinite 0.4s;
+}

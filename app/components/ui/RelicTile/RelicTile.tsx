@@ -73,8 +73,9 @@ const RelicTile = React.memo(function RelicTile({
       {/* ── Layer 2: Frost overlay ── */}
       <span className={styles.frost} aria-hidden="true" />
 
-      {/* ── Layer 3: CSS radial glow ── */}
-      <span className={styles.glow} aria-hidden="true" />
+      {/* ── Layer 3: CSS radial glow + adjacent spill ── */}
+      <span className={styles.glow}      aria-hidden="true" />
+      <span className={styles.spillGlow} aria-hidden="true" />
 
       {/* ── Active-only overlays ── */}
       {active && (

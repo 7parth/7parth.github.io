@@ -1,69 +1,130 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ParticleCanvas from "./ParticleCanvas";
-import ShaderBackground from "./ShaderBackground";
 import RelicTile from "./ui/RelicTile";
 import { relics, RUNES, SectionId } from "./data";
+import {
+  fadeUp,
+  fadeDown,
+  staggerContainer,
+  staggerItem,
+  energyTravel,
+} from "@/app/lib/animations";
+import { useRelicTransition } from "@/app/hooks/useRelicTransition";
 
 // Section Components
-import AboutSection from "./sections/AboutSection";
-import ProjectsSection from "./sections/ProjectsSection";
-import ExperienceSection from "./sections/ExperienceSection";
-import SkillsSection from "./sections/SkillsSection";
+import AboutSection       from "./sections/AboutSection";
+import ProjectsSection    from "./sections/ProjectsSection";
+import ExperienceSection  from "./sections/ExperienceSection";
+import SkillsSection      from "./sections/SkillsSection";
 import AchievementsSection from "./sections/AchievementsSection";
-import EducationSection from "./sections/EducationSection";
-import ResumeSection from "./sections/ResumeSection";
-import ContactSection from "./sections/ContactSection";
-// import PhotographySection from "./sections/PhotographySection";
-import TimelineSection from "./sections/TimelineSection";
+import EducationSection   from "./sections/EducationSection";
+import ResumeSection      from "./sections/ResumeSection";
+import ContactSection     from "./sections/ContactSection";
+import TimelineSection    from "./sections/TimelineSection";
 import PlaceholderSection from "./sections/PlaceholderSection";
 
+// ── World-reaction map ────────────────────────────────────
+const WORLD_CLASSES: Record<string, string> = {
+  projects:   "world-lightning",
+  skills:     "world-rune",
+  experience: "world-cold",
+  timeline:   "world-gold",
+  education:  "world-dust",
+};
+
 export default function PortfolioShell() {
-  const [activeId, setActiveId] = useState<SectionId>("about");
+  // ── Animation state machine (nav + transition phase) ──
+  const {
+    selectedId,
+    pendingId,
+    phase,
+    isTransitioning,
+    triggerTransition,
+  } = useRelicTransition("about" as SectionId);
+
   const mainRef   = useRef<HTMLElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
-  const [parallax, setParallax] = useState({ x: 0, y: 0 });
-  
-  const activeRelic = relics.find((r) => r.id === activeId) || relics[0];
+  const navRef    = useRef<HTMLDivElement>(null);
+  const codexRef  = useRef<HTMLDivElement>(null);
+  const logoRef   = useRef<HTMLDivElement>(null);
+  const bgRef     = useRef<HTMLVideoElement>(null);
 
-  // GSAP ambient camera breathing
+  const activeRelic = relics.find((r) => r.id === selectedId) || relics[0];
+
+  // ── Parallax target values (pure RAF, zero re-renders) ──
+  const mouse  = useRef({ x: 0, y: 0 });
+  const smooth = useRef({
+    bg:    { x: 0, y: 0 },
+    nav:   { x: 0, y: 0 },
+    codex: { x: 0, y: 0 },
+    logo:  { x: 0, y: 0 },
+  });
+
+  // ── Camera breathing (GSAP) ──────────────────────────────
   useEffect(() => {
     let tween: { kill: () => void } | null = null;
     import("gsap").then(({ gsap }) => {
       if (mainRef.current) {
         tween = gsap.to(mainRef.current, {
-          y: -10, duration: 4, yoyo: true, repeat: -1, ease: "sine.inOut",
+          y: -4, duration: 10, yoyo: true, repeat: -1, ease: "sine.inOut",
         }) as unknown as { kill: () => void };
       }
     }).catch(() => {});
     return () => { tween?.kill(); };
   }, []);
 
-  // Mouse: parallax + cursor ambient light
+  // ── Multi-layer damped parallax ──────────────────────────
   useEffect(() => {
+    const DAMP   = 0.045;
+    const RANGES = { bg: 15, nav: 5, codex: 8, logo: 2 } as const;
+
     const onMove = (e: MouseEvent) => {
       const cx = window.innerWidth  / 2;
       const cy = window.innerHeight / 2;
-      setParallax({
-        x: ((e.clientX - cx) / cx) * 10,
-        y: ((e.clientY - cy) / cy) * 6,
-      });
+      mouse.current.x = (e.clientX - cx) / cx;
+      mouse.current.y = (e.clientY - cy) / cy;
       if (cursorRef.current) {
         cursorRef.current.style.left = `${e.clientX}px`;
         cursorRef.current.style.top  = `${e.clientY}px`;
       }
     };
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+
+    let rafId: number;
+    function tick() {
+      const m = mouse.current;
+      const s = smooth.current;
+      for (const key of ["bg", "nav", "codex", "logo"] as const) {
+        const range = RANGES[key];
+        s[key].x += (m.x * range - s[key].x) * DAMP;
+        s[key].y += (m.y * range - s[key].y) * DAMP;
+      }
+      if (bgRef.current)
+        bgRef.current.style.transform = `translate(${s.bg.x}px,${s.bg.y}px) scale(1.04)`;
+      if (navRef.current)
+        navRef.current.style.transform = `translate(${s.nav.x}px,${s.nav.y}px)`;
+      if (codexRef.current)
+        codexRef.current.style.transform = `translate(${s.codex.x}px,${s.codex.y}px)`;
+      if (logoRef.current)
+        logoRef.current.style.transform = `translate(${s.logo.x}px,${s.logo.y}px)`;
+      rafId = requestAnimationFrame(tick);
+    }
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
-  // GSAP stone-press on relics — sound-ready (data-sound="click")
+  // ── GSAP stone-press on relics ───────────────────────────
   useEffect(() => {
     import("gsap").then(({ gsap }) => {
-      const relicEls = document.querySelectorAll<HTMLElement>(".relic-item");
-      relicEls.forEach((el) => {
+      const els = document.querySelectorAll<HTMLElement>(".relic-item");
+      els.forEach((el) => {
         const onDown = () => gsap.to(el, { scale: 0.93, duration: 0.08, ease: "power2.in" });
         const onUp   = () => gsap.to(el, { scale: 1,    duration: 0.28, ease: "back.out(2.2)" });
         el.addEventListener("mousedown", onDown);
@@ -82,106 +143,138 @@ export default function PortfolioShell() {
     };
   }, []);
 
+  // ── World reaction ───────────────────────────────────────
+  useEffect(() => {
+    const cls = WORLD_CLASSES[selectedId] ?? "";
+    const root = document.documentElement;
+    root.classList.remove("world-lightning","world-rune","world-cold","world-gold","world-dust");
+    if (cls) root.classList.add(cls);
+  }, [selectedId]);
+
+  // ── Section content renderer ─────────────────────────────
   function renderContent() {
-    switch (activeId) {
-      case "about": return <AboutSection />;
-      case "projects": return <ProjectsSection />;
-      case "experience": return <ExperienceSection />;
-      case "skills": return <SkillsSection />;
+    switch (selectedId) {
+      case "about":        return <AboutSection />;
+      case "projects":     return <ProjectsSection />;
+      case "experience":   return <ExperienceSection />;
+      case "skills":       return <SkillsSection />;
       case "achievements": return <AchievementsSection />;
-      case "education": return <EducationSection />;
-      case "resume": return <ResumeSection />;
-      // case "blogs": return <BlogsSection />;
-      case "contact": return <ContactSection />;
-      // case "certificates": return <CertificatesSection />;
-      // case "photography": return <PhotographySection />;
-      case "timeline": return <TimelineSection />;
-      case "github": return <PlaceholderSection title="GitHub" />;
-      case "linkedin": return <PlaceholderSection title="LinkedIn" />;
-      case "leetcode": return <PlaceholderSection title="LeetCode" />;
-      default: return <PlaceholderSection title="Unknown Realm" />;
+      case "education":    return <EducationSection />;
+      case "resume":       return <ResumeSection />;
+      case "contact":      return <ContactSection />;
+      case "timeline":     return <TimelineSection />;
+      case "github":       return <PlaceholderSection title="GitHub" />;
+      case "linkedin":     return <PlaceholderSection title="LinkedIn" />;
+      case "leetcode":     return <PlaceholderSection title="LeetCode" />;
+      default:             return <PlaceholderSection title="Unknown Realm" />;
     }
   }
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-surface-container-lowest text-on-surface font-body-md antialiased selection:bg-rune-glow selection:text-surface">
-      
+
       {/* ── Cursor ambient light ── */}
       <div ref={cursorRef} className="cursor-light" aria-hidden="true" />
+
+      {/* ── Energy travel overlay (relic → codex) ── */}
+      <AnimatePresence>
+        {phase === "traveling" && (
+          <motion.div
+            key="energy-travel"
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
+            style={{ zIndex: 40 }}
+            variants={energyTravel}
+            initial="hidden"
+            animate="travel"
+            exit="hidden"
+          >
+            {/* Horizontal beam from left-center to right-center */}
+            <div
+              className="absolute"
+              style={{
+                top: "50%",
+                left: "28%",
+                right: "10%",
+                height: "2px",
+                marginTop: "-1px",
+                background: "linear-gradient(90deg, transparent, rgba(72,202,228,0.7) 30%, rgba(165,243,252,0.9) 60%, rgba(72,202,228,0.4) 80%, transparent)",
+                boxShadow: "0 0 12px rgba(72,202,228,0.6), 0 0 24px rgba(72,202,228,0.3)",
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0">
         <video
+          ref={bgRef}
           autoPlay muted loop playsInline preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
-          style={{
-            transform: `translate(${parallax.x}px, ${parallax.y}px) scale(1.04)`,
-            transition: "transform 0.15s ease-out",
-          }}
+          style={{ transition: "transform 0.12s linear" }}
         >
           <source src="/gow-bg.mp4" type="video/mp4" />
         </video>
-
-        {/* Cinematic gradient overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-surface-container-lowest opacity-40" />
-
-        {/* Warm gold ambient — upper right */}
+        <div className="absolute inset-0 world-reaction-layer pointer-events-none" />
         <div className="absolute inset-0 gold-ambient" />
-
-        {/* Blue moonlight — left edge */}
         <div className="absolute inset-0 moon-ambient" />
-
-        {/* Vignette */}
         <div className="absolute inset-0 vignette-layer" />
-
-        {/* Occasional lightning flash */}
         <div className="absolute inset-0 lightning-layer bg-white" />
       </div>
 
       {/* Global Particle Overlay */}
-      <ParticleCanvas />
+      <ParticleCanvas worldMode={selectedId} />
 
-
+      {/* ── Header ── */}
       <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 bg-gradient-to-b from-surface-container-lowest/80 to-transparent pointer-events-none">
-        <div className="flex items-center gap-4 pointer-events-auto">
-          <span 
-            className="material-symbols-outlined text-[48px] text-error/80 icon-engraved" 
+        <div
+          ref={logoRef}
+          className="flex items-center gap-4 pointer-events-auto"
+          style={{ willChange: "transform" }}
+        >
+          <span
+            className="material-symbols-outlined text-[48px] text-error/80 icon-engraved"
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
-            <img src="/icons/omega.png" alt="" height={50} width={50}/>
+            <img src="/icons/omega.png" alt="" height={50} width={50} />
           </span>
           <div>
             <h1 className="font-headline-lg text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
-            Parth Waradkar
+              Parth Waradkar
             </h1>
             <p className="font-label-caps text-xs text-on-surface-variant uppercase tracking-[0.3em] mt-1 engraved-text">
-            AI Engineer
+              AI Engineer
             </p>
           </div>
         </div>
       </header>
 
-      {/* Main Layout Container */}
+      {/* ── Main Layout ── */}
       <main ref={mainRef} className="relative z-20 w-full h-full flex flex-col md:flex-row pt-[120px] pb-[80px]">
-        
-        {/* LEFT: Wall of Relics — floating tiles, no container */}
+
+        {/* LEFT: Wall of Relics */}
         <aside className="w-full md:w-[35%] lg:w-[30%] h-full flex flex-col pointer-events-auto z-30 px-6">
-          {/* Atmospheric glow behind the grid — barely noticeable */}
           <div
+            ref={navRef}
             className="flex-1 overflow-y-auto hide-scrollbar py-4 relative"
             style={{
               background: "radial-gradient(ellipse at 40% 50%, rgba(80,180,255,0.08), transparent 70%)",
+              willChange: "transform",
             }}
           >
             <div className="grid grid-cols-3 gap-4">
               {relics.map((relic) => {
-                const isActive = activeId === relic.id;
+                const isActive  = selectedId === relic.id;
+                // Show pending highlight during transition so relic feels "selected"
+                const isPending = pendingId  === relic.id && isTransitioning;
                 return (
                   <RelicTile
                     key={relic.id}
-                    active={isActive}
-                    onClick={() => setActiveId(relic.id)}
+                    active={isActive || isPending}
+                    onClick={() => triggerTransition(relic.id as SectionId)}
                     title={relic.label}
                     subtitle={`${relic.sublabel[0]}\n${relic.sublabel[1]}`}
                     icon={
@@ -189,7 +282,7 @@ export default function PortfolioShell() {
                         className="material-symbols-outlined"
                         style={{
                           fontSize: "inherit",
-                          fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
+                          fontVariationSettings: (isActive || isPending) ? "'FILL' 1" : "'FILL' 0",
                         }}
                       >
                         {relic.icon}
@@ -214,12 +307,15 @@ export default function PortfolioShell() {
 
         {/* RIGHT: Hanging Codex */}
         <aside className="w-full md:w-[40%] lg:w-[35%] h-full flex items-center justify-center px-6 pointer-events-auto z-30">
-          <div className="relative w-full max-w-lg h-[95%] codex-tablet flex flex-col">
-            
+          <div
+            ref={codexRef}
+            className={`relative w-full max-w-lg h-[95%] codex-tablet flex flex-col${phase === "opening" ? " codex-flash" : ""}`}
+            style={{ willChange: "transform" }}
+          >
             {/* Heavy Chains */}
             <div className="absolute -top-[60px] left-8 w-3 h-[80px] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=')] opacity-80" />
             <div className="absolute -top-[60px] right-8 w-3 h-[80px] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=')] opacity-80" />
-            
+
             {/* Corner Ornaments */}
             <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-[#555] rounded-tl" />
             <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-[#555] rounded-tr" />
@@ -228,34 +324,49 @@ export default function PortfolioShell() {
 
             {/* Inner Codex Area */}
             <div className="m-4 p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md">
-              
-              {/* Codex Header */}
+
+              {/* ── Codex Header — staggered children ── */}
               <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={activeId + "-header"}
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.22, ease: "easeOut" }}
+                    key={selectedId + "-header"}
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="show"
+                    exit="exit"
+                    data-sound="transition"
                   >
-                    <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
+                    {/* 1 — Codex label */}
+                    <motion.p
+                      variants={fadeDown}
+                      className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text"
+                    >
                       {activeRelic.codexLabel}
-                    </p>
-                    <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
+                    </motion.p>
+
+                    {/* 2 — Title */}
+                    <motion.h2
+                      variants={fadeUp}
+                      className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4"
+                    >
                       {activeRelic.codexTitle}
-                    </h2>
-                    
-                    {/* Norse ornament divider */}
-                    <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
+                    </motion.h2>
+
+                    {/* 3 — Runic divider */}
+                    <motion.div
+                      variants={fadeUp}
+                      className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]"
+                    >
                       <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                      {RUNES.map((r, i) => <span key={i} className="text-icy-cyan/60">{r}</span>)}
+                      {RUNES.map((r, i) => (
+                        <span key={i} className="text-icy-cyan/60">{r}</span>
+                      ))}
                       <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                    </div>
+                    </motion.div>
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Centered ornament diamond at bottom border */}
+                {/* Centered ornament diamond */}
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
                   <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
                     {activeRelic.runeSymbol}
@@ -263,22 +374,25 @@ export default function PortfolioShell() {
                 </div>
               </div>
 
-              {/* Codex Body */}
+              {/* ── Codex Body — staggered content ── */}
               <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={activeId}
+                    key={selectedId + "-body"}
+                    variants={staggerContainer}
+                    initial="hidden"
+                    animate="show"
+                    exit="exit"
                     data-sound="transition"
-                    initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
-                    animate={{ opacity: 1, y: 0,  filter: "blur(0px)" }}
-                    exit={{    opacity: 0, y: -10, filter: "blur(4px)" }}
-                    transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {renderContent()}
+                    {/* Wrap content in a stagger item so the body rises as one */}
+                    <motion.div variants={staggerItem}>
+                      {renderContent()}
+                    </motion.div>
                   </motion.div>
                 </AnimatePresence>
               </div>
-              
+
               {/* Bottom fading edge */}
               <div className="absolute bottom-4 left-0 w-full h-12 bg-gradient-to-t from-surface-container-low to-transparent z-20 pointer-events-none" />
             </div>
