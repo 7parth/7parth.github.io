@@ -232,12 +232,7 @@ export default function PortfolioShell() {
           className="flex items-center gap-4 pointer-events-auto"
           style={{ willChange: "transform" }}
         >
-          <span
-            className="material-symbols-outlined text-[48px] text-error/80 icon-engraved"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            <img src="/icons/omega-blue.png" alt="" height={60} width={60} />
-          </span>
+          <img src="/icons/omega-blue.png" alt="" aria-hidden="true" height={60} width={60} />
           <div>
             <h1 className="font-headline-lg text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
               Parth Waradkar
@@ -337,22 +332,20 @@ export default function PortfolioShell() {
             <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-[#555] rounded-bl" />
             <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-[#555] rounded-br" />
 
-            {/* Inner Codex Area */}
-            <div className="m-4 p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md">
-
+            {/* Inner Codex Area — EngravingReveal wraps the entire inner panel */}
+            <EngravingReveal
+              sectionKey={selectedId}
+              className="m-4 h-[calc(100%-2rem)]"
+              innerClassName="p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md"
+            >
               {/* ── Codex Header ── */}
               <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
-                {/* Codex label */}
                 <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
                   {activeRelic.codexLabel}
                 </p>
-
-                {/* Title */}
                 <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
                   {activeRelic.codexTitle}
                 </h2>
-
-                {/* Runic divider */}
                 <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
                   <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
                   {RUNES.map((r, i) => (
@@ -360,8 +353,6 @@ export default function PortfolioShell() {
                   ))}
                   <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
                 </div>
-
-                {/* Centered ornament diamond */}
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
                   <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
                     {activeRelic.runeSymbol}
@@ -369,16 +360,14 @@ export default function PortfolioShell() {
                 </div>
               </div>
 
-              {/* ── Codex Body — scrollable, engraving reveal wraps content only ── */}
+              {/* ── Codex Body ── */}
               <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
-                <EngravingReveal sectionKey={selectedId}>
-                  {renderContent()}
-                </EngravingReveal>
+                {renderContent()}
               </div>
 
               {/* Bottom fading edge */}
               <div className="absolute bottom-4 left-0 w-full h-12 bg-gradient-to-t from-surface-container-low to-transparent z-20 pointer-events-none" />
-            </div>
+            </EngravingReveal>
           </div>
         </aside>
       </main>
