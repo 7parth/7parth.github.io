@@ -239,7 +239,7 @@ export default function PortfolioShell() {
             className="material-symbols-outlined text-[48px] text-error/80 icon-engraved"
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
-            <img src="/icons/omega.png" alt="" height={50} width={50} />
+            <img src="/icons/omega-blue.png" alt="" height={60} width={60} />
           </span>
           <div>
             <h1 className="font-headline-lg text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
