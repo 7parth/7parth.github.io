@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ParticleCanvas from "./ParticleCanvas";
 import ShaderBackground from "./ShaderBackground";
-import { relics, RUNES, BG_URL, SectionId } from "./data";
+import { relics, RUNES,  SectionId } from "./data";
 
 // Section Components
 import AboutSection from "./sections/AboutSection";
@@ -14,10 +14,8 @@ import SkillsSection from "./sections/SkillsSection";
 import AchievementsSection from "./sections/AchievementsSection";
 import EducationSection from "./sections/EducationSection";
 import ResumeSection from "./sections/ResumeSection";
-import BlogsSection from "./sections/BlogsSection";
 import ContactSection from "./sections/ContactSection";
-import CertificatesSection from "./sections/CertificatesSection";
-import PhotographySection from "./sections/PhotographySection";
+// import PhotographySection from "./sections/PhotographySection";
 import TimelineSection from "./sections/TimelineSection";
 import PlaceholderSection from "./sections/PlaceholderSection";
 
@@ -87,10 +85,10 @@ export default function PortfolioShell() {
       case "achievements": return <AchievementsSection />;
       case "education": return <EducationSection />;
       case "resume": return <ResumeSection />;
-      case "blogs": return <BlogsSection />;
+      // case "blogs": return <BlogsSection />;
       case "contact": return <ContactSection />;
-      case "certificates": return <CertificatesSection />;
-      case "photography": return <PhotographySection />;
+      // case "certificates": return <CertificatesSection />;
+      // case "photography": return <PhotographySection />;
       case "timeline": return <TimelineSection />;
       case "github": return <PlaceholderSection title="GitHub" />;
       case "linkedin": return <PlaceholderSection title="LinkedIn" />;
@@ -104,17 +102,21 @@ export default function PortfolioShell() {
       
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
-        {/* WebGL animated mist shader (from Stitch design) */}
-        <ShaderBackground />
-        {/* Cinematic Norse backdrop — mix-blend-overlay at 70% per Stitch evolution design */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-70 mix-blend-overlay"
-          style={{
-            backgroundImage: `url(${BG_URL})`,
-            transform: `translate(${parallax.x}px, ${parallax.y}px) scale(1.04)`,
-            transition: "transform 0.15s ease-out",
-          }}
-        />
+        <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
+        style={{
+          transform: `translate(${parallax.x}px, ${parallax.y}px) scale(1.04)`,
+          transition: "transform 0.15s ease-out",
+        }}
+      >
+        <source src="/gow-bg.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-surface-container-lowest opacity-40" />
       </div>
@@ -122,44 +124,39 @@ export default function PortfolioShell() {
       {/* Global Particle Overlay */}
       <ParticleCanvas />
 
-      {/* Top App Bar */}
+
       <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 bg-gradient-to-b from-surface-container-lowest/80 to-transparent pointer-events-none">
         <div className="flex items-center gap-4 pointer-events-auto">
           <span 
             className="material-symbols-outlined text-[48px] text-error/80 icon-engraved" 
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
-            change_history
+            <img src="/icons/omega.png" alt="" height={50} width={50}/>
           </span>
           <div>
             <h1 className="font-headline-lg text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
-              KRATOS' CODEX
+            Parth Waradkar
             </h1>
             <p className="font-label-caps text-xs text-on-surface-variant uppercase tracking-[0.3em] mt-1 engraved-text">
-              CHRONICLES OF A WARRIOR
+            AI Engineer
             </p>
           </div>
         </div>
-
-        {/* Quote / Decorative Element */}
-        <div className="hidden lg:block text-center pointer-events-auto">
-          <p className="font-body-md text-on-surface-variant italic engraved-text">
-            "The past is not where you<br/>live, it is what you learn."
-          </p>
-          <p className="font-label-caps text-rune-glow/80 mt-2 tracking-widest uppercase text-xs">
-            - Kratos
-          </p>
-        </div>
-        <div className="w-32 hidden lg:block" />
       </header>
 
       {/* Main Layout Container */}
       <main ref={mainRef} className="relative z-20 w-full h-full flex flex-col md:flex-row pt-[120px] pb-[80px]">
         
-        {/* LEFT: Wall of Relics */}
-        <aside className="w-full md:w-[35%] lg:w-[30%] h-full flex flex-col pointer-events-auto z-30 px-4">
-          <div className="flex-1 overflow-y-auto hide-scrollbar p-6 heavy-stone-bg rounded-r-xl border-l-0">
-            <div className="grid grid-cols-3 gap-3">
+        {/* LEFT: Wall of Relics — floating tiles, no container */}
+        <aside className="w-full md:w-[35%] lg:w-[30%] h-full flex flex-col pointer-events-auto z-30 px-6">
+          {/* Atmospheric glow behind the grid — barely noticeable */}
+          <div
+            className="flex-1 overflow-y-auto hide-scrollbar py-4 relative"
+            style={{
+              background: "radial-gradient(ellipse at 40% 50%, rgba(80,180,255,0.08), transparent 70%)",
+            }}
+          >
+            <div className="grid grid-cols-3 gap-4">
               {relics.map((relic) => {
                 const isActive = activeId === relic.id;
                 return (
@@ -167,31 +164,53 @@ export default function PortfolioShell() {
                     key={relic.id}
                     onClick={() => setActiveId(relic.id)}
                     className={`relic-item relic-stone frost-border group relative aspect-square flex flex-col items-center justify-center p-2 rounded-stone transition-all duration-300 ${
-                      isActive 
-                        ? "relic-active" 
+                      isActive
+                        ? "relic-active"
                         : "text-on-surface-variant hover:text-icy-cyan"
                     }`}
+                    style={{
+                      background: isActive
+                        ? "linear-gradient(135deg, rgba(72,202,228,0.18) 0%, rgba(26,28,30,0.92) 100%)"
+                        : "linear-gradient(135deg, rgba(42,44,48,0.82) 0%, rgba(26,28,30,0.88) 100%)",
+                      backdropFilter: "blur(2px)",
+                      WebkitBackdropFilter: "blur(2px)",
+                      boxShadow: isActive
+                        ? "0 0 18px rgba(72,202,228,0.45), 0 8px 24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)"
+                        : "0 6px 20px rgba(0,0,0,0.65), 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+                      border: isActive
+                        ? "1px solid rgba(72,202,228,0.55)"
+                        : "1px solid rgba(90,92,96,0.45)",
+                      transform: "perspective(600px) rotateX(1deg)",
+                    }}
                   >
                     {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-stone opacity-50 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-rune-glow/10 to-transparent rounded-stone opacity-60 pointer-events-none" />
                     )}
-                    <span 
-                      className={`material-symbols-outlined text-3xl xl:text-4xl mb-2 icon-engraved ${
+                    <span
+                      className={`material-symbols-outlined text-3xl xl:text-4xl mb-2 icon-engraved transition-colors ${
                         isActive ? "text-rune-glow rune-glow-text" : ""
                       }`}
                       style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
                     >
                       {relic.icon}
                     </span>
-                    <span className={`font-label-caps text-[9px] xl:text-[10px] uppercase text-center w-full truncate tracking-widest mt-1 ${
-                      isActive ? "text-white" : ""
-                    }`}>
+                    <span
+                      className={`font-label-caps text-[9px] xl:text-[10px] uppercase text-center w-full truncate tracking-widest mt-1 ${
+                        isActive ? "text-white" : ""
+                      }`}
+                    >
                       {relic.label}
                     </span>
-                    <span className={`font-label-caps text-[7px] xl:text-[8px] uppercase text-center w-full truncate tracking-widest ${
-                      isActive ? "text-rune-glow/70" : "text-on-surface-variant/50 group-hover:text-icy-cyan/50"
-                    }`}>
-                      {relic.sublabel[0]}<br/>{relic.sublabel[1]}
+                    <span
+                      className={`font-label-caps text-[7px] xl:text-[8px] uppercase text-center w-full truncate tracking-widest ${
+                        isActive
+                          ? "text-rune-glow/70"
+                          : "text-on-surface-variant/50 group-hover:text-icy-cyan/50"
+                      }`}
+                    >
+                      {relic.sublabel[0]}
+                      <br />
+                      {relic.sublabel[1]}
                     </span>
                   </button>
                 );

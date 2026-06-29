@@ -14,10 +14,7 @@ export type SectionId =
   | "github"
   | "linkedin"
   | "leetcode"
-  | "blogs"
   | "contact"
-  | "certificates"
-  | "photography"
   | "timeline";
 
 export interface Relic {
@@ -128,15 +125,6 @@ export const relics: Relic[] = [
     runeSymbol: "psychology",
   },
   {
-    id: "blogs",
-    icon: "import_contacts",
-    label: "Blogs",
-    sublabel: ["Sage's", "Journal"],
-    codexTitle: "Blogs",
-    codexLabel: "SAGE'S JOURNAL",
-    runeSymbol: "import_contacts",
-  },
-  {
     id: "contact",
     icon: "explore",
     label: "Contact",
@@ -144,24 +132,6 @@ export const relics: Relic[] = [
     codexTitle: "Contact",
     codexLabel: "MYSTIC GATEWAY",
     runeSymbol: "explore",
-  },
-  {
-    id: "certificates",
-    icon: "workspace_premium",
-    label: "Certificates",
-    sublabel: ["Sacred", "Seals"],
-    codexTitle: "Certificates",
-    codexLabel: "SACRED SEALS",
-    runeSymbol: "workspace_premium",
-  },
-  {
-    id: "photography",
-    icon: "photo_camera",
-    label: "Photography",
-    sublabel: ["Visions Across", "the Realms"],
-    codexTitle: "Photography",
-    codexLabel: "VISIONS ACROSS THE REALMS",
-    runeSymbol: "photo_camera",
   },
   {
     id: "timeline",
@@ -178,5 +148,4 @@ export const relics: Relic[] = [
 export const RUNES = ["ᛚ", "ᛗ", "ᚢ", "ᛋ", "ᛏ"] as const;
 
 /** Background image URL — cinematic ruined Nordic temple (from Stitch design) */
-export const BG_URL =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuBrMRhgntGWUWiKUMxCH64TdFilTsS4X_DmN-YCl28DFde7tSyXSKpu5jaczZpe59oWFtwgWag7SqXtC2vTIzhm9kkBlhEeDbStbfESE-MTTayp8XpHxj6hMoXIjLUqV3lukUROH7JyBFxA4HZ8GNqmqvdLQYqz_hC7KpSLZSAn1u9gTfAIo5OTcnzBhLALKqwhnBg7uPfb2wx-wH4uS1QXP-DyaIvPqOy9qXJmLWQpV_GcFO6lv_WiL0LGkaNBMfEDvP_9Ihw-zIZx";
+
