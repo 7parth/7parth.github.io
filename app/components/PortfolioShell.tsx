@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ParticleCanvas from "./ParticleCanvas";
 import ShaderBackground from "./ShaderBackground";
+import RelicTile from "./ui/RelicTile";
 import { relics, RUNES, SectionId } from "./data";
 
 // Section Components
@@ -177,65 +178,24 @@ export default function PortfolioShell() {
               {relics.map((relic) => {
                 const isActive = activeId === relic.id;
                 return (
-                  <button
+                  <RelicTile
                     key={relic.id}
+                    active={isActive}
                     onClick={() => setActiveId(relic.id)}
-                    data-sound={isActive ? undefined : "click"}
-                    className={`relic-item relic-stone relic-stone-texture frost-border group relative aspect-square flex flex-col items-center justify-center p-2 rounded-stone transition-all duration-300 ${
-                      isActive
-                        ? "relic-active"
-                        : "text-on-surface-variant hover:text-icy-cyan"
-                    }`}
-                    style={{
-                      background: isActive
-                        ? "linear-gradient(135deg, rgba(72,202,228,0.16) 0%, rgba(20,22,26,0.94) 100%)"
-                        : "linear-gradient(160deg, rgba(48,52,58,0.88) 0%, rgba(22,24,28,0.92) 100%)",
-                      backdropFilter: "blur(3px)",
-                      WebkitBackdropFilter: "blur(3px)",
-                      border: isActive
-                        ? "1px solid rgba(72,202,228,0.60)"
-                        : "1px solid rgba(100,104,110,0.40)",
-                      boxShadow: isActive ? undefined :
-                        "0 6px 22px rgba(0,0,0,0.68), 0 2px 6px rgba(0,0,0,0.55), inset 0 1px 0 rgba(220,230,240,0.05), inset 0 -1px 0 rgba(0,0,0,0.55), inset 1px 0 0 rgba(220,230,240,0.04), inset -1px 0 0 rgba(0,0,0,0.35)",
-                      transform: "perspective(600px) rotateX(1deg)",
-                    }}
-                  >
-                    {/* Active relic frost shimmer sweep */}
-                    {isActive && <div className="frost-sweep" aria-hidden="true" />}
-
-                    {/* Active inner glow overlay */}
-                    {isActive && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-rune-glow/12 via-transparent to-transparent rounded-stone pointer-events-none" />
-                    )}
-
-                    <span
-                      className={`material-symbols-outlined text-3xl xl:text-4xl mb-2 icon-engraved transition-colors ${
-                        isActive ? "text-rune-glow rune-glow-text rune-pulse" : ""
-                      }`}
-                      style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
-                      data-sound="hover"
-                    >
-                      {relic.icon}
-                    </span>
-                    <span
-                      className={`font-label-caps text-[9px] xl:text-[10px] uppercase text-center w-full truncate tracking-widest mt-1 ${
-                        isActive ? "text-white engraved-text" : ""
-                      }`}
-                    >
-                      {relic.label}
-                    </span>
-                    <span
-                      className={`font-label-caps text-[7px] xl:text-[8px] uppercase text-center w-full truncate tracking-widest ${
-                        isActive
-                          ? "text-rune-glow/70"
-                          : "text-on-surface-variant/50 group-hover:text-icy-cyan/50"
-                      }`}
-                    >
-                      {relic.sublabel[0]}
-                      <br />
-                      {relic.sublabel[1]}
-                    </span>
-                  </button>
+                    title={relic.label}
+                    subtitle={`${relic.sublabel[0]}\n${relic.sublabel[1]}`}
+                    icon={
+                      <span
+                        className="material-symbols-outlined"
+                        style={{
+                          fontSize: "inherit",
+                          fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
+                        }}
+                      >
+                        {relic.icon}
+                      </span>
+                    }
+                  />
                 );
               })}
             </div>

@@ -1,0 +1,336 @@
+/* ============================================================
+   RelicTile.module.css
+   State machine: idle → hover → pressed → active
+   All animations: CSS only. No JS.
+   Glow: radial-gradient, no PNG.
+   ============================================================ */
+
+/* ── Layer 1: Stone background image ── */
+.stone {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 220ms ease;
+}
+.stoneIdle   { background-image: url("/ui/relic/relic-default.png"); opacity: 1; }
+.stoneHover  { background-image: url("/ui/relic/relic-hover.png");   opacity: 0; }
+.stoneActive { background-image: url("/ui/relic/relic-active.png");  opacity: 0; }
+
+/* ── Layer 2: Frost overlay ── */
+.frost {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("/ui/overlays/frost.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 260ms ease;
+  pointer-events: none;
+}
+
+/* ── Layer 3: CSS radial glow (no PNG) ── */
+.glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(105, 214, 255, 0.22) 0%,
+    rgba(72, 202, 228, 0.10) 45%,
+    transparent 75%
+  );
+  opacity: 0;
+  transition: opacity 260ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Layer 5: Future particle slot ── */
+/* Mount a <canvas> or <div> as a child with data-layer="particles".
+   This wrapper keeps the stacking context clean for that future layer. */
+.particles {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 10;
+  /* intentionally empty — hook for future particle canvas */
+}
+
+/* ── Root tile ── */
+.tile {
+  /* Positioning & sizing */
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 4px; /* --radius-stone */
+  overflow: hidden;
+  cursor: pointer;
+
+  /* Base stone appearance — matches existing design tokens exactly */
+  background: linear-gradient(160deg, rgba(48, 52, 58, 0.88) 0%, rgba(22, 24, 28, 0.92) 100%);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 1px solid rgba(100, 104, 110, 0.40);
+  box-shadow:
+    0 6px 22px rgba(0, 0, 0, 0.68),
+    0 2px 6px  rgba(0, 0, 0, 0.55),
+    inset 0  1px 0 rgba(220, 230, 240, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+    inset  1px 0 0 rgba(220, 230, 240, 0.04),
+    inset -1px 0 0 rgba(0, 0, 0, 0.35);
+
+  /* Perspective bevel — same as existing */
+  transform: perspective(600px) rotateX(1deg);
+  transition:
+    transform    260ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    border-color 260ms ease,
+    box-shadow   260ms ease;
+
+  /* Keyboard focus — visible ring */
+  outline: none;
+}
+
+.tile:focus-visible {
+  outline: 2px solid rgba(105, 214, 255, 0.75);
+  outline-offset: 2px;
+}
+
+/* ──────────────────────────────────────────
+   HOVER STATE
+   ────────────────────────────────────────── */
+.tile:hover {
+  transform: perspective(600px) rotateX(1deg) translateY(-5px);
+  border-color: rgba(72, 202, 228, 0.60);
+  box-shadow:
+    0 0 20px rgba(72, 202, 228, 0.42),
+    0 0 40px rgba(72, 202, 228, 0.14),
+    0 16px 36px rgba(0, 0, 0, 0.78),
+    inset 0  1px 0 rgba(200, 240, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.60),
+    inset  1px 0 0 rgba(200, 240, 255, 0.06),
+    inset -1px 0 0 rgba(0, 0, 0, 0.40);
+}
+
+/* Show hover stone image + boost glow */
+.tile:hover .stoneHover { opacity: 1; }
+.tile:hover .glow        { opacity: 1; }
+
+/* Frost border pseudo-glow on hover */
+.tile::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(72, 202, 228, 0) 0%,
+    rgba(72, 202, 228, 0.55) 50%,
+    rgba(165, 243, 252, 0.20) 75%,
+    rgba(72, 202, 228, 0) 100%
+  );
+  z-index: -1;
+  opacity: 0;
+  filter: blur(5px);
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.tile:hover::before { opacity: 1; }
+
+/* ──────────────────────────────────────────
+   PRESSED STATE  (active pseudo-class = mousedown)
+   ────────────────────────────────────────── */
+.tile:active {
+  transform: perspective(600px) rotateX(1deg) scale(0.97);
+  transition-duration: 120ms;
+}
+
+/* ──────────────────────────────────────────
+   ACTIVE (selected) STATE
+   ────────────────────────────────────────── */
+.tileActive {
+  background: linear-gradient(
+    135deg,
+    rgba(72, 202, 228, 0.16) 0%,
+    rgba(20, 22, 26, 0.94) 100%
+  );
+  border-color: rgba(72, 202, 228, 0.60) !important;
+  transform: perspective(600px) rotateX(1deg) translateY(-3px) !important;
+  animation: relicBreathe 3.5s ease-in-out infinite;
+}
+
+/* Show active stone + frost + stronger glow */
+.tileActive .stoneActive { opacity: 1; }
+.tileActive .frost        { opacity: 0.55; }
+.tileActive .glow         { opacity: 1.0; }
+.tileActive::before       { opacity: 1; }
+
+/* Active inner gradient overlay */
+.activeOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom right,
+    rgba(72, 202, 228, 0.12) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Frost shimmer sweep — active only */
+.frostSweep {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 4;
+}
+.frostSweep::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(165, 243, 252, 0.12), transparent);
+  animation: frostSweep 5s ease-in-out infinite 1.5s;
+}
+
+/* ── Layer 4: Content ── */
+.content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  pointer-events: none;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.875rem; /* 30px — text-3xl */
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.8));
+  color: var(--color-on-surface-variant, #c5c6ca);
+  transition: color 220ms ease, filter 220ms ease;
+}
+
+.tileActive .icon {
+  color: var(--color-rune-glow, #48CAE4);
+  filter:
+    drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.8))
+    drop-shadow(0 0 6px rgba(72, 202, 228, 0.6));
+  animation: runePulse 4s ease-in-out infinite;
+}
+
+.tile:hover .icon {
+  color: var(--color-icy-cyan, #A5F3FC);
+}
+
+.title {
+  font-size: 0.5625rem;     /* 9px */
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+  color: var(--color-on-surface-variant, #c5c6ca);
+  transition: color 220ms ease;
+  /* engraved text-shadow */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.1);
+}
+
+.tileActive .title { color: #ffffff; }
+.tile:hover  .title { color: var(--color-icy-cyan, #A5F3FC); }
+
+.subtitle {
+  font-size: 0.4375rem;     /* 7px */
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  /* max two lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: rgba(197, 198, 202, 0.5); /* on-surface-variant/50 */
+  transition: color 220ms ease;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.tileActive .subtitle { color: rgba(72, 202, 228, 0.70); }
+.tile:hover  .subtitle { color: rgba(165, 243, 252, 0.50); }
+
+/* ── @lg: bigger icon + title ── */
+@media (min-width: 1280px) {
+  .icon  { font-size: 2.25rem; width: 44px; height: 44px; }
+  .title { font-size: 0.625rem; }  /* 10px */
+  .subtitle { font-size: 0.5rem; } /* 8px */
+}
+
+/* ──────────────────────────────────────────
+   Keyframes (duplicated here so the module
+   is self-contained; globals.css also has them)
+   ────────────────────────────────────────── */
+@keyframes relicBreathe {
+  0%, 100% {
+    box-shadow:
+      0 0 14px rgba(72,202,228,0.38),
+      0 0 28px rgba(72,202,228,0.18),
+      0 8px 24px rgba(0,0,0,0.75),
+      inset 0 0 10px rgba(72,202,228,0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 26px rgba(72,202,228,0.65),
+      0 0 50px rgba(72,202,228,0.28),
+      0 10px 28px rgba(0,0,0,0.80),
+      inset 0 0 18px rgba(72,202,228,0.22);
+  }
+}
+
+@keyframes runePulse {
+  0%, 70%, 100% {
+    filter:
+      drop-shadow(0px 2px 2px rgba(0,0,0,0.8))
+      drop-shadow(0 0 4px rgba(72,202,228,0.5));
+  }
+  80% {
+    filter:
+      drop-shadow(0px 2px 2px rgba(0,0,0,0.8))
+      drop-shadow(0 0 12px rgba(72,202,228,1))
+      drop-shadow(0 0 24px rgba(165,243,252,0.6));
+  }
+  90% {
+    filter:
+      drop-shadow(0px 2px 2px rgba(0,0,0,0.8))
+      drop-shadow(0 0 6px rgba(72,202,228,0.7));
+  }
+}
+
+@keyframes frostSweep {
+  0%   { transform: translateX(-120%) skewX(-15deg); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateX(220%) skewX(-15deg); opacity: 0; }
+}
