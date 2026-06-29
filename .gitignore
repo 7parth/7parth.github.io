@@ -21,7 +21,7 @@
 public/ChatGPT Image Jun 29, 2026, 09_46_55 AM.png
 # production
 /build
-
+graphify-out
 # misc
 .DS_Store
 *.pem

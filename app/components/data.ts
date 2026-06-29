@@ -19,8 +19,12 @@ export type SectionId =
 
 export interface Relic {
   id: SectionId;
-  /** Material Symbols icon name */
+  /** Material Symbols icon name (fallback when no iconImg) */
   icon: string;
+  /** Path to a custom PNG icon in /public/icons/ — takes precedence over `icon` on the relic tile */
+  iconImg?: string;
+  /** Scale multiplier for iconImg when the image has excess padding (default 1) */
+  iconScale?: number;
   /** Main label shown on the relic tile */
   label: string;
   /** Two-line Norse subtitle shown below the label */
@@ -37,6 +41,8 @@ export const relics: Relic[] = [
   {
     id: "about",
     icon: "change_history",
+    iconImg: "/icons/aboutme.png",
+    iconScale: 1.5,
     label: "About Me",
     sublabel: ["Warrior's", "Chronicle"],
     codexTitle: "About Me",
@@ -46,6 +52,7 @@ export const relics: Relic[] = [
   {
     id: "projects",
     icon: "hardware",
+    iconImg: "/icons/axe.png",
     label: "Projects",
     sublabel: ["Legendary", "Quests"],
     codexTitle: "Projects",
@@ -55,6 +62,7 @@ export const relics: Relic[] = [
   {
     id: "experience",
     icon: "shield",
+    iconImg: "/icons/experience.png",
     label: "Experience",
     sublabel: ["Battles", "Fought"],
     codexTitle: "Experience",
@@ -64,6 +72,7 @@ export const relics: Relic[] = [
   {
     id: "skills",
     icon: "swords",
+    iconImg: "/icons/skills.png",
     label: "Skills",
     sublabel: ["Weapons", "Mastered"],
     codexTitle: "Skills",
@@ -73,6 +82,7 @@ export const relics: Relic[] = [
   {
     id: "achievements",
     icon: "emoji_events",
+    iconImg: "/icons/achievements.png",
     label: "Achievements",
     sublabel: ["Trophies of", "Valhalla"],
     codexTitle: "Achievements",
@@ -82,6 +92,7 @@ export const relics: Relic[] = [
   {
     id: "education",
     icon: "menu_book",
+    iconImg: "/icons/book.png",
     label: "Education",
     sublabel: ["Scrolls of", "Knowledge"],
     codexTitle: "Education",
@@ -91,6 +102,7 @@ export const relics: Relic[] = [
   {
     id: "resume",
     icon: "history_edu",
+    iconImg: "/icons/resume.png",
     label: "Resume",
     sublabel: ["Ancient", "Scroll"],
     codexTitle: "Resume",
@@ -100,6 +112,7 @@ export const relics: Relic[] = [
   {
     id: "github",
     icon: "code",
+    iconImg: "/icons/github.png",
     label: "GitHub",
     sublabel: ["Forge", "Archives"],
     codexTitle: "GitHub",
@@ -109,6 +122,7 @@ export const relics: Relic[] = [
   {
     id: "linkedin",
     icon: "work",
+    iconImg: "/icons/linkedin.png",
     label: "LinkedIn",
     sublabel: ["Hall of", "Allies"],
     codexTitle: "LinkedIn",
@@ -118,6 +132,7 @@ export const relics: Relic[] = [
   {
     id: "leetcode",
     icon: "psychology",
+    iconImg: "/icons/leetcode.png",
     label: "LeetCode",
     sublabel: ["Trials of", "Wisdom"],
     codexTitle: "LeetCode",
@@ -127,6 +142,7 @@ export const relics: Relic[] = [
   {
     id: "contact",
     icon: "explore",
+    iconImg: "/icons/contact.png",
     label: "Contact",
     sublabel: ["Mystic", "Gateway"],
     codexTitle: "Contact",

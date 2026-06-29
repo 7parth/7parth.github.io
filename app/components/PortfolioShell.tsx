@@ -278,15 +278,39 @@ export default function PortfolioShell() {
                     title={relic.label}
                     subtitle={`${relic.sublabel[0]}\n${relic.sublabel[1]}`}
                     icon={
-                      <span
-                        className="material-symbols-outlined"
-                        style={{
-                          fontSize: "inherit",
-                          fontVariationSettings: (isActive || isPending) ? "'FILL' 1" : "'FILL' 0",
-                        }}
-                      >
-                        {relic.icon}
-                      </span>
+                      relic.iconImg ? (
+                        <img
+                          src={relic.iconImg}
+                          alt=""
+                          aria-hidden="true"
+                          style={{
+                            display: "block",
+                            width: `${relic.iconScale ?? 1}em`,
+                            height: `${relic.iconScale ?? 1}em`,
+                            objectFit: "contain",
+                            margin: "0 auto",
+                            filter: (isActive || isPending)
+                              ? "brightness(1.4) drop-shadow(0 0 4px rgba(72,202,228,0.7))"
+                              : "brightness(0.85)",
+                          }}
+                        />
+                      ) : (
+                        <span
+                          className="material-symbols-outlined"
+                          style={{
+                            fontSize: "inherit",
+                            lineHeight: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "1em",
+                            height: "1em",
+                            fontVariationSettings: (isActive || isPending) ? "'FILL' 1" : "'FILL' 0",
+                          }}
+                        >
+                          {relic.icon}
+                        </span>
+                      )
                     }
                   />
                 );
