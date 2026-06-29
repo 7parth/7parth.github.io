@@ -16,7 +16,9 @@
 # next.js
 /.next/
 /out/
-
+.kiro/
+.vscode
+public/ChatGPT Image Jun 29, 2026, 09_46_55 AM.png
 # production
 /build
 
