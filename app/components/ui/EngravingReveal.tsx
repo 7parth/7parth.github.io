@@ -292,6 +292,53 @@ export default function EngravingReveal({
 
   return (
     <div ref={containerRef} className={`relative w-full ${className}`}>
+      {/* ── Beam overlays — sit above content, pointer-events none ── */}
+      {isScanning && (
+        <>
+          <SparkCanvas
+            beamX={beamX}
+            containerHeight={containerH}
+            active={isScanning}
+          />
+          {/* Beam line */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: 0,
+              height: `${containerH}px`,
+              left: `${beamX}px`,
+              width: "3px",
+              zIndex: 25,
+              pointerEvents: "none",
+              boxShadow: [
+                "0 0 12px 4px rgba(180,130,40,0.55)",
+                "0 0 28px 8px rgba(160,110,30,0.25)",
+                "0 0 2px 1px rgba(220,180,80,0.9)",
+              ].join(", "),
+              background:
+                "linear-gradient(to bottom, transparent 0%, rgba(220,180,60,0.4) 10%, rgba(220,180,60,0.95) 40%, rgba(240,200,80,1) 50%, rgba(220,180,60,0.95) 60%, rgba(220,180,60,0.4) 90%, transparent 100%)",
+            }}
+          >
+            <RuneStream />
+          </div>
+          {/* Trailing glow */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: 0,
+              height: `${containerH}px`,
+              left: Math.max(0, beamX - 40),
+              width: "40px",
+              zIndex: 24,
+              pointerEvents: "none",
+              background: "linear-gradient(to right, transparent, rgba(160,110,30,0.08))",
+            }}
+          />
+        </>
+      )}
+
       {/* ── Revealed content (masked) ── */}
       <div
         style={{
@@ -310,59 +357,6 @@ export default function EngravingReveal({
           </motion.div>
         </AnimatePresence>
       </div>
-
-      {/* ── Beam overlay (only during scan) ── */}
-      {isScanning && (
-        <>
-          {/* Spark canvas — full container */}
-          <SparkCanvas
-            beamX={beamX}
-            containerHeight={containerH}
-            active={isScanning}
-          />
-
-          {/* Beam line + glow */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              left: `${beamX}px`,
-              width: "3px",
-              zIndex: 25,
-              pointerEvents: "none",
-              // Outer glow
-              boxShadow: [
-                `0 0 12px 4px rgba(180, 130, 40, 0.55)`,
-                `0 0 28px 8px rgba(160, 110, 30, 0.25)`,
-                `0 0 2px 1px rgba(220, 180, 80, 0.9)`,
-              ].join(", "),
-              background:
-                "linear-gradient(to bottom, transparent 0%, rgba(220,180,60,0.4) 10%, rgba(220,180,60,0.95) 40%, rgba(240,200,80,1) 50%, rgba(220,180,60,0.95) 60%, rgba(220,180,60,0.4) 90%, transparent 100%)",
-            }}
-          >
-            {/* Rune stream inside beam */}
-            <RuneStream />
-          </div>
-
-          {/* Left-side soft glow trail */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              left: Math.max(0, beamX - 40),
-              width: "40px",
-              zIndex: 24,
-              pointerEvents: "none",
-              background:
-                "linear-gradient(to right, transparent, rgba(160, 110, 30, 0.08))",
-            }}
-          />
-        </>
-      )}
     </div>
   );
 }

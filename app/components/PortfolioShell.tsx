@@ -340,43 +340,41 @@ export default function PortfolioShell() {
             {/* Inner Codex Area */}
             <div className="m-4 p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md">
 
-              <EngravingReveal sectionKey={selectedId} className="flex flex-col flex-1 overflow-hidden">
+              {/* ── Codex Header ── */}
+              <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
+                {/* Codex label */}
+                <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
+                  {activeRelic.codexLabel}
+                </p>
 
-                {/* ── Codex Header ── */}
-                <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
-                  {/* Codex label */}
-                  <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">
-                    {activeRelic.codexLabel}
-                  </p>
+                {/* Title */}
+                <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
+                  {activeRelic.codexTitle}
+                </h2>
 
-                  {/* Title */}
-                  <h2 className="font-headline-lg text-2xl lg:text-[40px] text-rune-glow codex-title-animate uppercase tracking-widest mb-3 lg:mb-4">
-                    {activeRelic.codexTitle}
-                  </h2>
-
-                  {/* Runic divider */}
-                  <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
-                    <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                    {RUNES.map((r, i) => (
-                      <span key={i} className="text-icy-cyan/60">{r}</span>
-                    ))}
-                    <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
-                  </div>
-
-                  {/* Centered ornament diamond */}
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
-                    <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
-                      {activeRelic.runeSymbol}
-                    </span>
-                  </div>
+                {/* Runic divider */}
+                <div className="norse-divider justify-center mb-3 lg:mb-4 text-icy-cyan/55 text-xs tracking-[0.5em]">
+                  <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
+                  {RUNES.map((r, i) => (
+                    <span key={i} className="text-icy-cyan/60">{r}</span>
+                  ))}
+                  <span className="material-symbols-outlined text-sm text-icy-cyan/35">remove</span>
                 </div>
 
-                {/* ── Codex Body ── */}
-                <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
+                {/* Centered ornament diamond */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-8 h-8 rounded-full border border-faded-bronze/60 bg-surface-container-highest flex items-center justify-center z-10">
+                  <span className="material-symbols-outlined text-muted-gold text-lg icon-engraved">
+                    {activeRelic.runeSymbol}
+                  </span>
+                </div>
+              </div>
+
+              {/* ── Codex Body — scrollable, engraving reveal wraps content only ── */}
+              <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 relative z-10 pb-12 pt-4">
+                <EngravingReveal sectionKey={selectedId}>
                   {renderContent()}
-                </div>
-
-              </EngravingReveal>
+                </EngravingReveal>
+              </div>
 
               {/* Bottom fading edge */}
               <div className="absolute bottom-4 left-0 w-full h-12 bg-gradient-to-t from-surface-container-low to-transparent z-20 pointer-events-none" />
