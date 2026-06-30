@@ -6,28 +6,28 @@ import RelicTile from "./ui/RelicTile";
 import { relics, RUNES, SectionId } from "./data";
 import { useRelicTransition } from "@/app/hooks/useRelicTransition";
 import CodexCinematic from "./ui/CodexCinematic";
+import MagicalPathOverlay from "./ui/MagicalPathOverlay";
 
 // Section Components
-import AboutSection        from "./sections/AboutSection";
-import ProjectsSection     from "./sections/ProjectsSection";
-import ExperienceSection   from "./sections/ExperienceSection";
-import SkillsSection       from "./sections/SkillsSection";
+import AboutSection from "./sections/AboutSection";
+import ProjectsSection from "./sections/ProjectsSection";
+import ExperienceSection from "./sections/ExperienceSection";
+import SkillsSection from "./sections/SkillsSection";
 import AchievementsSection from "./sections/AchievementsSection";
-import EducationSection    from "./sections/EducationSection";
-import ResumeSection       from "./sections/ResumeSection";
-import ContactSection      from "./sections/ContactSection";
-import TimelineSection     from "./sections/TimelineSection";
-import PlaceholderSection  from "./sections/PlaceholderSection";
+import EducationSection from "./sections/EducationSection";
+import ResumeSection from "./sections/ResumeSection";
+import ContactSection from "./sections/ContactSection";
+import TimelineSection from "./sections/TimelineSection";
+import PlaceholderSection from "./sections/PlaceholderSection";
 
 // ── World-reaction map ────────────────────────────────────
 const WORLD_CLASSES: Record<string, string> = {
-  projects:   "world-lightning",
-  skills:     "world-rune",
+  projects: "world-lightning",
+  skills: "world-rune",
   experience: "world-cold",
-  timeline:   "world-gold",
-  education:  "world-dust",
+  timeline: "world-gold",
+  education: "world-dust",
 };
-
 export default function PortfolioShell() {
   // ── Single animation state machine ────────────────────────
   const {
@@ -43,13 +43,14 @@ export default function PortfolioShell() {
     triggerClose,
   } = useRelicTransition("about" as SectionId);
 
-  const mainRef   = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
-  const navRef    = useRef<HTMLDivElement>(null);
-  const logoRef   = useRef<HTMLDivElement>(null);
-  const bgRef     = useRef<HTMLImageElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLImageElement>(null);
   const wallPulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [wallAwake, setWallAwake] = useState(false);
+  const [hoveredRelicIndex, setHoveredRelicIndex] = useState<number | null>(null);
 
   const activeRelic = relics.find((r) => r.id === selectedId) || relics[0];
   const activeRelicIndex = relics.findIndex((r) => r.id === (isTransitioning ? pendingId : selectedId));
@@ -63,10 +64,10 @@ export default function PortfolioShell() {
   };
 
   // ── Parallax target values (pure RAF, zero re-renders) ──
-  const mouse  = useRef({ x: 0, y: 0 });
+  const mouse = useRef({ x: 0, y: 0 });
   const smooth = useRef({
-    bg:   { x: 0, y: 0 },
-    nav:  { x: 0, y: 0 },
+    bg: { x: 0, y: 0 },
+    nav: { x: 0, y: 0 },
     logo: { x: 0, y: 0 },
   });
 
@@ -79,23 +80,23 @@ export default function PortfolioShell() {
           y: -4, duration: 10, yoyo: true, repeat: -1, ease: "sine.inOut",
         }) as unknown as { kill: () => void };
       }
-    }).catch(() => {});
+    }).catch(() => { });
     return () => { tween?.kill(); };
   }, []);
 
   // ── Multi-layer damped parallax ──────────────────────────
   useEffect(() => {
-    const DAMP   = 0.045;
+    const DAMP = 0.045;
     const RANGES = { bg: 15, nav: 5, logo: 2 } as const;
 
     const onMove = (e: MouseEvent) => {
-      const cx = window.innerWidth  / 2;
+      const cx = window.innerWidth / 2;
       const cy = window.innerHeight / 2;
       mouse.current.x = (e.clientX - cx) / cx;
       mouse.current.y = (e.clientY - cy) / cy;
       if (cursorRef.current) {
         cursorRef.current.style.left = `${e.clientX}px`;
-        cursorRef.current.style.top  = `${e.clientY}px`;
+        cursorRef.current.style.top = `${e.clientY}px`;
       }
     };
     window.addEventListener("mousemove", onMove);
@@ -131,17 +132,17 @@ export default function PortfolioShell() {
       const els = document.querySelectorAll<HTMLElement>(".relic-item");
       els.forEach((el) => {
         const onDown = () => gsap.to(el, { scale: 0.93, duration: 0.08, ease: "power2.in" });
-        const onUp   = () => gsap.to(el, { scale: 1,    duration: 0.28, ease: "back.out(2.2)" });
+        const onUp = () => gsap.to(el, { scale: 1, duration: 0.28, ease: "back.out(2.2)" });
         el.addEventListener("mousedown", onDown);
-        el.addEventListener("mouseup",   onUp);
+        el.addEventListener("mouseup", onUp);
         el.addEventListener("mouseleave", onUp);
         (el as HTMLElement & { _gsapCleanup?: () => void })._gsapCleanup = () => {
           el.removeEventListener("mousedown", onDown);
-          el.removeEventListener("mouseup",   onUp);
+          el.removeEventListener("mouseup", onUp);
           el.removeEventListener("mouseleave", onUp);
         };
       });
-    }).catch(() => {});
+    }).catch(() => { });
     return () => {
       document.querySelectorAll<HTMLElement & { _gsapCleanup?: () => void }>(".relic-item")
         .forEach((el) => el._gsapCleanup?.());
@@ -152,7 +153,7 @@ export default function PortfolioShell() {
   useEffect(() => {
     const cls = WORLD_CLASSES[selectedId] ?? "";
     const root = document.documentElement;
-    root.classList.remove("world-lightning","world-rune","world-cold","world-gold","world-dust");
+    root.classList.remove("world-lightning", "world-rune", "world-cold", "world-gold", "world-dust");
     if (cls) root.classList.add(cls);
   }, [selectedId]);
 
@@ -165,19 +166,19 @@ export default function PortfolioShell() {
   // ── Section content renderer ─────────────────────────────
   function renderContent() {
     switch (selectedId) {
-      case "about":        return <AboutSection />;
-      case "projects":     return <ProjectsSection />;
-      case "experience":   return <ExperienceSection />;
-      case "skills":       return <SkillsSection />;
+      case "about": return <AboutSection />;
+      case "projects": return <ProjectsSection />;
+      case "experience": return <ExperienceSection />;
+      case "skills": return <SkillsSection />;
       case "achievements": return <AchievementsSection />;
-      case "education":    return <EducationSection />;
-      case "resume":       return <ResumeSection />;
-      case "contact":      return <ContactSection />;
-      case "timeline":     return <TimelineSection />;
-      case "github":       return <PlaceholderSection title="GitHub" />;
-      case "linkedin":     return <PlaceholderSection title="LinkedIn" />;
-      case "leetcode":     return <PlaceholderSection title="LeetCode" />;
-      default:             return <PlaceholderSection title="Unknown Realm" />;
+      case "education": return <EducationSection />;
+      case "resume": return <ResumeSection />;
+      case "contact": return <ContactSection />;
+      case "timeline": return <TimelineSection />;
+      case "github": return <PlaceholderSection title="GitHub" />;
+      case "linkedin": return <PlaceholderSection title="LinkedIn" />;
+      case "leetcode": return <PlaceholderSection title="LeetCode" />;
+      default: return <PlaceholderSection title="Unknown Realm" />;
     }
   }
 
@@ -191,7 +192,7 @@ export default function PortfolioShell() {
       <div className="absolute inset-0 z-0">
         <img
           ref={bgRef}
-          src="/gow-bg.png"
+          src="/gow-bg2.png"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
@@ -229,20 +230,21 @@ export default function PortfolioShell() {
       </header>
 
       {/* ── Main Layout ── */}
-      <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-start pt-[120px] pb-[80px] px-8">
+      <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-start pt-[140px] pb-[100px] px-8">
 
         {/* LEFT: Wall of Relics */}
-        <aside className="w-full md:w-[35%] lg:w-[30%] h-full flex flex-col pointer-events-auto z-30 px-6">
+        <aside className="w-full md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-6">
           <div
             ref={navRef}
-            className="relic-wall-shell flex-1 overflow-y-auto hide-scrollbar py-4 relative"
+            className="relic-wall-shell flex-1 py-4 relative"
             style={{
               willChange: "transform",
             }}
           >
-            <div className={`relic-wall grid grid-cols-3 gap-4 ${wallAwake ? "relic-wall-awake" : ""}`}>
+            <MagicalPathOverlay hoveredRelicIndex={hoveredRelicIndex} activeRelicIndex={activeRelicIndex} />
+            <div className={`relic-wall relative z-10 grid grid-cols-3 gap-8 md:h-full place-content-center ${wallAwake ? "relic-wall-awake" : ""}`}>
               {relics.map((relic, index) => {
-                const isActive  = selectedId === relic.id;
+                const isActive = selectedId === relic.id;
                 // Show pending highlight during transition so relic feels "selected"
                 const isPending = pendingId === relic.id && isTransitioning;
                 const activeRow = Math.floor(activeRelicIndex / 3);
@@ -254,6 +256,7 @@ export default function PortfolioShell() {
                   !isActive &&
                   !isPending &&
                   Math.abs(row - activeRow) + Math.abs(col - activeCol) <= 1;
+
                 return (
                   <RelicTile
                     key={relic.id}
@@ -261,6 +264,8 @@ export default function PortfolioShell() {
                     neighbor={isNeighbor}
                     wear={(index % 4) as 0 | 1 | 2 | 3}
                     onClick={() => handleRelicClick(relic.id as SectionId)}
+                    onMouseEnter={() => setHoveredRelicIndex(index)}
+                    onMouseLeave={() => setHoveredRelicIndex(null)}
                     title={relic.label}
                     subtitle={`${relic.sublabel[0]}\n${relic.sublabel[1]}`}
                     icon={
@@ -277,7 +282,7 @@ export default function PortfolioShell() {
                             margin: "0 auto",
                             filter: (isActive || isPending)
                               ? "brightness(1.16) contrast(1.08) drop-shadow(0 1px 1px rgba(0,0,0,0.9)) drop-shadow(0 0 3px rgba(72,202,228,0.36))"
-                              : "brightness(0.68) contrast(1.08) saturate(0.72)",
+                              : "brightness(0.85) contrast(1.10) saturate(0.90)",
                           }}
                         />
                       ) : (

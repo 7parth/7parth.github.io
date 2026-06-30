@@ -34,8 +34,9 @@ export interface RelicTileProps {
   wear?: 0 | 1 | 2 | 3;
   /** Click handler. */
   onClick?: () => void;
-  /** Forward className for layout overrides only (not visual state). */
-  className?: string;
+  /** Hover events for path tracking */
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const RelicTile = React.memo(function RelicTile({
@@ -46,6 +47,8 @@ const RelicTile = React.memo(function RelicTile({
   neighbor = false,
   wear = 0,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
   className = "",
 }: RelicTileProps) {
   const tileClass = [
@@ -64,6 +67,8 @@ const RelicTile = React.memo(function RelicTile({
       aria-pressed={active}
       aria-label={`Navigate to ${title}`}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={tileClass}
       data-neighbor={neighbor ? "true" : undefined}
       data-wear={wear}

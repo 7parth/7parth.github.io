@@ -29,19 +29,19 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
   will-change: opacity;
   transition: opacity 240ms ease;
   pointer-events: none;
   /*
-   * Multiply blend: stone PNG darkens the mountain world behind it.
-   * The mountain landscape shows through rather than being covered.
+   * Removed multiply blend because tile is now opaque,
+   * allowing the actual PNG texture to render clearly.
    */
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
 }
 /* Idle: very faint stone grain — world bleeds through strongly */
-.stoneIdle   { background-image: url("/ui/relic/relic-default.png"); opacity: 0.28; }
+.stoneIdle   { background-image: url("/ui/relic/relic-default.png"); opacity: 1; }
 /* Hover: stone texture becomes slightly more visible */
 .stoneHover  { background-image: url("/ui/relic/relic-hover.png");   opacity: 0; }
 /* Active: glowing stone shows through the recess */
@@ -213,7 +213,7 @@
    ──────────────────────────────────────────────────────────── */
 .tile {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 6 / 5;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -222,24 +222,27 @@
   border-radius: 4px;
   overflow: visible;
   cursor: pointer;
+  /* Prevent any compositing leak from layers below (magical path SVG) */
+  isolation: isolate;
+  z-index: 1;
 
   /*
    * CARVED STONE RELIEF — not a panel, not a card.
    * The mountain world shows strongly through each tile.
    * Only carved bevel shadows define the relic shape.
    */
-  opacity: 0.92;
-  background:
-    /* Very faint stone tint — the mountain MUST read through clearly */
+  opacity: 1;
+  background-color: #080a0d; /* Solid backdrop to block magical path visibility */
+  background-image:
+    /* Stronger stone tint so it doesn't look like empty glass */
     linear-gradient(
       165deg,
-      rgba(18, 21, 26, 0.10) 0%,
-      rgba(6, 8, 11, 0.15) 56%,
-      rgba(10, 13, 16, 0.10) 100%
+      rgba(30, 35, 42, 0.65) 0%,
+      rgba(15, 18, 24, 0.75) 56%,
+      rgba(20, 24, 30, 0.65) 100%
     );
-  /* Barely darken the world behind — keep landscape highly visible */
-  backdrop-filter: blur(0.5px) brightness(0.88) contrast(1.02);
-  -webkit-backdrop-filter: blur(0.5px) brightness(0.88) contrast(1.02);
+  /* backdrop-filter removed: tiles are now fully opaque, and it was
+     causing the magical path SVG to bleed through the stone surface */
   /* Hairline chiseled edge — stone fracture line */
   border: 1px solid rgba(90, 95, 102, 0.18);
 
@@ -257,7 +260,7 @@
     0 2px 6px rgba(0,0,0,0.18),
     0 4px 12px rgba(0,0,0,0.10);
 
-  /* Slight perspective tilt — same as before */
+  /* Slight perspective tilt — same as before, plus custom base rotation */
   transform: perspective(600px) rotateX(1deg) translateZ(0);
   will-change: transform, box-shadow, border-color;
   transition:
@@ -283,7 +286,7 @@
    No scale > 1.03.
    ──────────────────────────────────────────────────────────── */
 .tile:hover {
-  opacity: 0.96;
+  opacity: 1;
   transform: perspective(600px) rotateX(1deg) translateY(-1px) translateZ(0);
   border-color: var(--rt-border-hover);
   box-shadow:
@@ -298,9 +301,9 @@
 }
 
 .tile:hover .stoneHover { opacity: 1; }
-.tile:hover .frost       { opacity: 0.30; }
-.tile:hover .glow        { opacity: 0.22; }
-.tile:hover .innerLight  { opacity: 0.34; }
+.tile:hover .frost       { opacity: 0.40; }
+.tile:hover .glow        { opacity: 0.45; }
+.tile:hover .innerLight  { opacity: 0.50; }
 .tile:hover .cracks      { opacity: 0.64; }
 .tile:hover .frostVeins  { opacity: 0.24; }
 
@@ -336,10 +339,11 @@
    ──────────────────────────────────────────────────────────── */
 .tileActive {
   /*
-   * Awakened carved stone — runic energy seeps up through the mountain face.
-   * Still translucent: the world shows through, just tinted with ancient ice.
+   * Awakened carved stone — runic energy seeps through.
+   * Fully opaque so magical path cannot bleed through.
    */
-  background: linear-gradient(
+  background-color: #080a0d;
+  background-image: linear-gradient(
     155deg,
     rgba(72, 202, 228, 0.22) 0%,
     rgba(18, 22, 28, 0.58) 50%,
@@ -359,8 +363,8 @@
 .tileActive .frost { opacity: 0.48; }
 
 /* Glow full */
-.tileActive .glow  { opacity: 0.42; }
-.tileActive .innerLight { opacity: 0.92; animation: innerRuneFlicker 5.8s ease-in-out infinite; }
+.tileActive .glow  { opacity: 0.70; }
+.tileActive .innerLight { opacity: 1; animation: innerRuneFlicker 5.8s ease-in-out infinite; }
 .tileActive .cracks { opacity: 0.92; }
 .tileActive .frostVeins { opacity: 0.54; }
 

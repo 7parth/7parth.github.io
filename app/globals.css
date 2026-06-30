@@ -695,6 +695,14 @@ body {
   /* No solid background. The world bleeds through between tiles. */
 }
 
+/* Handcrafted positioning for desktop. Mobile falls back to relative grid flow. */
+@media (min-width: 768px) {
+  .relic-wrapper {
+    top: var(--md-top, auto);
+    left: var(--md-left, auto);
+  }
+}
+
 .relic-wall::before,
 .relic-wall::after {
   content: '';

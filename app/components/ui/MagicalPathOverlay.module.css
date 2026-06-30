@@ -1,0 +1,45 @@
+.overlayContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: visible;
+}
+
+.svgLayer {
+  overflow: visible;
+}
+
+.idleGroove {
+  stroke: rgba(20, 20, 25, 0.7);
+  stroke-width: 6px;
+  fill: none;
+  stroke-linecap: round;
+  /* Very subtle highlight to make it look carved *into* the stone */
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.05));
+}
+
+.activeGlow {
+  stroke: #7dd3fc; /* sky-300 */
+  stroke-width: 4px;
+  fill: none;
+  stroke-linecap: round;
+  
+  /* The path length is normalized to 100 by the SVG attribute */
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  
+  /* Smooth progressive flow animation */
+  transition-property: stroke-dashoffset, opacity;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+  
+  /* Frosty ambient glow */
+  filter: drop-shadow(0 0 8px rgba(125, 211, 252, 0.5));
+}
+
+.illuminated {
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
