@@ -1,0 +1,292 @@
+/* ────────────────────────────────────────────────────────
+   GhostWhisper.module.css — Whisper of the Ghost
+   Environmental lore inscription styles
+   ──────────────────────────────────────────────────────── */
+
+/* ── Container ── */
+.ghost {
+  position: absolute;
+  right: 3%;
+  top: 45%;
+  transform: translateY(-50%);
+  width: clamp(340px, 28vw, 440px);
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* ── Dark aura effect matching background ── */
+.ghost::before {
+  content: '';
+  position: absolute;
+  inset: -120px -80px;
+  background: radial-gradient(ellipse at center,
+      rgba(14, 14, 14, 0.65) 0%,
+      rgba(14, 14, 14, 0.5) 45%,
+      transparent 75%);
+  z-index: -2;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(24px);
+}
+
+/* ── Heading ── */
+.heading {
+  font-family: var(--font-cinzel, 'Cinzel', 'Georgia', serif);
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: center;
+  color: rgba(224, 242, 254, 0.95);
+  text-shadow: 0 0 18px rgba(105, 214, 255, 0.35);
+  margin-bottom: 0.3rem;
+}
+
+/* ── Divider rune below heading ── */
+.headingDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.8rem;
+  opacity: 0.35;
+}
+
+.headingDivider::before,
+.headingDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(105, 214, 255, 0.35), transparent);
+}
+
+.headingRune {
+  font-size: 0.75rem;
+  color: rgba(165, 243, 252, 0.6);
+}
+
+/* ── Body stanzas ── */
+.stanza {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 1.1rem;
+}
+
+.stanzaRune {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: rgba(105, 214, 255, 0.3);
+  margin-top: 0.15em;
+  text-shadow: 0 0 6px rgba(105, 214, 255, 0.15);
+}
+
+.stanzaText {
+  font-family: var(--font-cinzel, 'Cinzel', 'Georgia', serif);
+  font-size: clamp(0.82rem, 1.2vw, 1rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.75;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: rgba(224, 242, 254, 0.88);
+  text-shadow: 0 0 10px rgba(105, 214, 255, 0.18);
+}
+
+/* ── Signature divider ── */
+.signatureDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.6rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+.signatureDivider::before,
+.signatureDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(165, 243, 252, 0.3), transparent);
+}
+
+.signatureRune {
+  font-size: 0.75rem;
+  color: rgba(165, 243, 252, 0.5);
+}
+
+/* ── Signature ── */
+.signature {
+  font-family: var(--font-cinzel, 'Cinzel', 'Georgia', serif);
+  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+  font-weight: 400;
+  text-align: right;
+  letter-spacing: 0.08em;
+  color: rgba(224, 242, 254, 0.88);
+  text-shadow: 0 0 10px rgba(105, 214, 255, 0.18);
+}
+
+/* ── Side runes ── */
+.sideRunes {
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  width: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 1rem;
+  color: rgba(165, 243, 252, 0.14);
+  pointer-events: none;
+}
+
+.sideRunesLeft {
+  left: -44px;
+}
+
+.sideRunesRight {
+  right: -44px;
+}
+
+/* ── Localized particles ── */
+.particleField {
+  position: absolute;
+  inset: -30px -50px;
+  pointer-events: none;
+  z-index: -1;
+  overflow: visible;
+}
+
+.mote {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ════════════════════════════════════════════════════════
+   ANIMATIONS
+   ════════════════════════════════════════════════════════ */
+
+/* Fade-in the whole container */
+.fadeIn {
+  animation: ghostFadeIn 1.6s ease-out forwards;
+}
+
+@keyframes ghostFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Left-to-right engraving mask for each text element */
+.engrave {
+  -webkit-mask-image: linear-gradient(to right, black 40%, rgba(0, 0, 0, 0.4) 50%, transparent 60%);
+  mask-image: linear-gradient(to right, black 40%, rgba(0, 0, 0, 0.4) 50%, transparent 60%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  opacity: 0;
+}
+
+.engraveReveal {
+  animation: engraveSlide 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes engraveSlide {
+  0% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    opacity: 0;
+    filter: brightness(1.8);
+  }
+
+  20% {
+    opacity: 1;
+    filter: brightness(1.6);
+  }
+
+  100% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* Idle breathing glow — applied after reveal finishes */
+.idleBreathe {
+  animation: ghostBreathe 10s ease-in-out infinite;
+}
+
+@keyframes ghostBreathe {
+
+  0%,
+  100% {
+    opacity: 0.90;
+    text-shadow: 0 0 8px rgba(105, 214, 255, 0.25);
+  }
+
+  50% {
+    opacity: 1.0;
+    text-shadow: 0 0 18px rgba(105, 214, 255, 0.45);
+  }
+}
+
+/* Side runes slow drift */
+.runeDrift {
+  animation: sideRuneDrift 14s ease-in-out infinite;
+}
+
+.runeDriftAlt {
+  animation: sideRuneDrift 14s ease-in-out infinite reverse;
+}
+
+@keyframes sideRuneDrift {
+
+  0%,
+  100% {
+    transform: translateY(8px);
+    opacity: 0.12;
+  }
+
+  50% {
+    transform: translateY(-8px);
+    opacity: 0.28;
+    text-shadow: 0 0 10px rgba(105, 214, 255, 0.4);
+  }
+}
+
+/* Particle float */
+.moteFloat {
+  animation: moteRise linear infinite;
+}
+
+@keyframes moteRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.6);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.5;
+  }
+
+  85% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translateY(-40px) translateX(8px) scale(1.2);
+    opacity: 0;
+  }
+}

@@ -7,6 +7,7 @@ import { relics, RUNES, SectionId } from "./data";
 import { useRelicTransition } from "@/app/hooks/useRelicTransition";
 import CodexCinematic from "./ui/CodexCinematic";
 import MagicalPathOverlay from "./ui/MagicalPathOverlay";
+import GhostWhisper from "./ui/GhostWhisper";
 
 // Section Components
 import AboutSection from "./sections/AboutSection";
@@ -209,6 +210,9 @@ export default function PortfolioShell() {
 
       {/* Global Particle Overlay */}
       <ParticleCanvas worldMode={selectedId} />
+
+      {/* ── Whisper of the Ghost — environmental lore inscription ── */}
+      <GhostWhisper />
 
       {/* ── Header ── */}
       <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 bg-gradient-to-b from-surface-container-lowest/80 to-transparent pointer-events-none">

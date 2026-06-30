@@ -6,12 +6,10 @@ export default function AboutSection() {
     <div className="flex flex-col gap-6 text-center section-fade">
       {/* Bio */}
       <p className="font-body-md text-on-surface-variant/90 leading-relaxed tracking-wide text-sm engraved-text px-2">
-        I am a final year Computer Engineering student and a passionate developer
-        who loves building efficient, scalable and impactful digital solutions.
+        I am a Computer Engineering undergraduate with hands-on experience building production grade AI systems, RAG pipelines, and scalable backend APIs.
       </p>
       <p className="font-body-md text-on-surface-variant/90 leading-relaxed tracking-wide text-sm engraved-text px-2">
-        From solving complex problems to creating immersive experiences, I enjoy
-        turning ideas into products that make a difference.
+        I specialize in Agentic AI, LLM integration, and hybrid retrieval to solve complex problems and deliver end-to-end AI solutions.
       </p>
 
       {/* Stats Row */}
