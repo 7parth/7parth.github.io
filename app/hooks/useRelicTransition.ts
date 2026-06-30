@@ -1,85 +1,58 @@
-/**
- * useRelicTransition.ts
- * ─────────────────────────────────────────────────────────────
- * Separates animation state from navigation state.
- *
- * State machine:
- *   idle
- *     → pressing     (relic compresses, 80ms)
- *     → traveling    (energy travels relic→codex, 300ms)
- *     → opening      (codex border flashes, content exits, 200ms)
- *     → idle         (new content enters)
- *
- * The hook exposes:
- *   selectedId     — the committed navigation ID (lags behind click)
- *   pendingId      — the ID being animated toward
- *   phase          — current animation phase
- *   isTransitioning — true while any phase is active
- *   triggerTransition(id) — call on relic click
- *
- * Sound hooks are left as data attributes / callbacks for future.
- */
-
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useCallback, useState } from "react";
 import type { SectionId } from "@/app/components/data";
-
-export type TransitionPhase = "idle" | "pressing" | "traveling" | "opening";
+import type { CinematicPhase } from "@/app/lib/codexTiming";
 
 export interface RelicTransitionState {
-  selectedId:      SectionId;
-  pendingId:       SectionId;
-  phase:           TransitionPhase;
-  isTransitioning: boolean;
+  selectedId:        SectionId;
+  pendingId:         SectionId;
+  phase:             CinematicPhase;
+  isTransitioning:   boolean;
+  codexMounted:      boolean;
+  setPhase:          (phase: CinematicPhase) => void;
+  commitPending:     () => void;
+  finishClose:       () => void;
   triggerTransition: (id: SectionId) => void;
+  triggerClose:      () => void;
 }
 
-// Timing constants (ms) — tuned for 500–700ms total feel
-const T_PRESS   =  90;  // relic compress
-const T_TRAVEL  = 280;  // energy shoots across
-const T_OPEN    = 160;  // codex border flash + content exit
-
 export function useRelicTransition(initial: SectionId): RelicTransitionState {
-  const [selectedId,  setSelectedId]  = useState<SectionId>(initial);
-  const [pendingId,   setPendingId]   = useState<SectionId>(initial);
-  const [phase,       setPhase]       = useState<TransitionPhase>("idle");
-
-  // Prevent overlap if user clicks rapidly
-  const lockRef = useRef(false);
+  const [selectedId, setSelectedId] = useState<SectionId>(initial);
+  const [pendingId,  setPendingId]  = useState<SectionId>(initial);
+  const [phase,      setPhase]      = useState<CinematicPhase>("IDLE");
+  const [codexMounted, setCodexMounted] = useState(false);
 
   const triggerTransition = useCallback((id: SectionId) => {
-    // Same section or already transitioning — ignore
-    if (id === selectedId || lockRef.current) return;
-
-    lockRef.current = true;
+    if (codexMounted) return;
     setPendingId(id);
+    setCodexMounted(true);
+  }, [codexMounted]);
 
-    // Phase 1 — relic compress
-    setPhase("pressing");
+  const triggerClose = useCallback(() => {
+    if (phase !== "READY") return;
+    setPhase("ERASE");
+  }, [phase]);
 
-    setTimeout(() => {
-      // Phase 2 — energy travels
-      setPhase("traveling");
+  const commitPending = useCallback(() => {
+    setSelectedId(pendingId);
+  }, [pendingId]);
 
-      setTimeout(() => {
-        // Phase 3 — codex opens, content commits
-        setPhase("opening");
-        setSelectedId(id);   // commit nav; content exit/enter now driven by Framer
-
-        setTimeout(() => {
-          setPhase("idle");
-          lockRef.current = false;
-        }, T_OPEN);
-      }, T_TRAVEL);
-    }, T_PRESS);
-  }, [selectedId]);
+  const finishClose = useCallback(() => {
+    setCodexMounted(false);
+    setPhase("IDLE");
+  }, []);
 
   return {
     selectedId,
     pendingId,
     phase,
-    isTransitioning: phase !== "idle",
+    isTransitioning: codexMounted && phase !== "READY",
+    codexMounted,
+    setPhase,
+    commitPending,
+    finishClose,
     triggerTransition,
+    triggerClose,
   };
 }

@@ -1,27 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import ParticleCanvas from "./ParticleCanvas";
 import RelicTile from "./ui/RelicTile";
 import { relics, RUNES, SectionId } from "./data";
-import {
-  energyTravel,
-} from "@/app/lib/animations";
 import { useRelicTransition } from "@/app/hooks/useRelicTransition";
-import CodexOverlay from "./ui/CodexOverlay";
+import CodexCinematic from "./ui/CodexCinematic";
 
 // Section Components
-import AboutSection       from "./sections/AboutSection";
-import ProjectsSection    from "./sections/ProjectsSection";
-import ExperienceSection  from "./sections/ExperienceSection";
-import SkillsSection      from "./sections/SkillsSection";
+import AboutSection        from "./sections/AboutSection";
+import ProjectsSection     from "./sections/ProjectsSection";
+import ExperienceSection   from "./sections/ExperienceSection";
+import SkillsSection       from "./sections/SkillsSection";
 import AchievementsSection from "./sections/AchievementsSection";
-import EducationSection   from "./sections/EducationSection";
-import ResumeSection      from "./sections/ResumeSection";
-import ContactSection     from "./sections/ContactSection";
-import TimelineSection    from "./sections/TimelineSection";
-import PlaceholderSection from "./sections/PlaceholderSection";
+import EducationSection    from "./sections/EducationSection";
+import ResumeSection       from "./sections/ResumeSection";
+import ContactSection      from "./sections/ContactSection";
+import TimelineSection     from "./sections/TimelineSection";
+import PlaceholderSection  from "./sections/PlaceholderSection";
 
 // ── World-reaction map ────────────────────────────────────
 const WORLD_CLASSES: Record<string, string> = {
@@ -33,17 +29,19 @@ const WORLD_CLASSES: Record<string, string> = {
 };
 
 export default function PortfolioShell() {
-  // ── Animation state machine (nav + transition phase) ──
+  // ── Single animation state machine ────────────────────────
   const {
     selectedId,
     pendingId,
     phase,
     isTransitioning,
+    codexMounted,
+    setPhase,
+    commitPending,
+    finishClose,
     triggerTransition,
+    triggerClose,
   } = useRelicTransition("about" as SectionId);
-
-  // ── Codex overlay state ───────────────────────────────
-  const [codexOpen, setCodexOpen] = useState(false);
 
   const mainRef   = useRef<HTMLElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
@@ -172,36 +170,6 @@ export default function PortfolioShell() {
       {/* ── Cursor ambient light ── */}
       <div ref={cursorRef} className="cursor-light" aria-hidden="true" />
 
-      {/* ── Energy travel overlay (relic → codex) ── */}
-      <AnimatePresence>
-        {phase === "traveling" && (
-          <motion.div
-            key="energy-travel"
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{ zIndex: 40 }}
-            variants={energyTravel}
-            initial="hidden"
-            animate="travel"
-            exit="hidden"
-          >
-            {/* Horizontal beam from left-center to right-center */}
-            <div
-              className="absolute"
-              style={{
-                top: "50%",
-                left: "28%",
-                right: "10%",
-                height: "2px",
-                marginTop: "-1px",
-                background: "linear-gradient(90deg, transparent, rgba(72,202,228,0.7) 30%, rgba(165,243,252,0.9) 60%, rgba(72,202,228,0.4) 80%, transparent)",
-                boxShadow: "0 0 12px rgba(72,202,228,0.6), 0 0 24px rgba(72,202,228,0.3)",
-              }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* ── Background Layer ── */}
       <div className="absolute inset-0 z-0">
         <img
@@ -260,15 +228,12 @@ export default function PortfolioShell() {
               {relics.map((relic) => {
                 const isActive  = selectedId === relic.id;
                 // Show pending highlight during transition so relic feels "selected"
-                const isPending = pendingId  === relic.id && isTransitioning;
+                const isPending = pendingId === relic.id && isTransitioning;
                 return (
                   <RelicTile
                     key={relic.id}
                     active={isActive || isPending}
-                    onClick={() => {
-                      triggerTransition(relic.id as SectionId);
-                      setCodexOpen(true);
-                    }}
+                    onClick={() => triggerTransition(relic.id as SectionId)}
                     title={relic.label}
                     subtitle={`${relic.sublabel[0]}\n${relic.sublabel[1]}`}
                     icon={
@@ -315,18 +280,23 @@ export default function PortfolioShell() {
 
       </main>
 
-      {/* ── Codex Overlay ── */}
-      <CodexOverlay
-        isOpen={codexOpen}
-        sectionKey={selectedId}
-        codexLabel={activeRelic.codexLabel}
-        codexTitle={activeRelic.codexTitle}
-        runeSymbol={activeRelic.runeSymbol}
-        runes={RUNES}
-        onClose={() => setCodexOpen(false)}
-      >
-        {renderContent()}
-      </CodexOverlay>
+      {/* ── Codex Cinematic — one progress-driven artifact summon ── */}
+      {codexMounted && (
+        <CodexCinematic
+          phase={phase}
+          sectionKey={selectedId}
+          codexLabel={activeRelic.codexLabel}
+          codexTitle={activeRelic.codexTitle}
+          runeSymbol={activeRelic.runeSymbol}
+          runes={RUNES}
+          onPhaseChange={setPhase}
+          onCommitContent={commitPending}
+          onCloseRequest={triggerClose}
+          onClosed={finishClose}
+        >
+          {renderContent()}
+        </CodexCinematic>
+      )}
 
       {/* Footer */}
       <footer className="absolute bottom-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-gradient-to-t from-surface-container-lowest to-transparent pointer-events-none">
