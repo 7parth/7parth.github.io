@@ -15,6 +15,7 @@ export const CODEX_TIMELINE = {
 } as const;
 
 export const CODEX_DURATION = 1800;
+export const CODEX_CLOSE_DURATION = 900;
 
 export type CinematicPhase =
   | "IDLE"

@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import CodexArtifact from "./CodexArtifact";
 import type { CinematicPhase } from "@/app/lib/codexTiming";
-import { CODEX_DURATION, phaseFromProgress } from "@/app/lib/codexTiming";
+import { CODEX_CLOSE_DURATION, CODEX_DURATION, phaseFromProgress } from "@/app/lib/codexTiming";
 
 export interface CodexCinematicProps {
   phase: CinematicPhase;
@@ -122,7 +122,7 @@ export default function CodexCinematic({
     directionRef.current = "close";
 
     const controls = animate(progress, 0, {
-      duration: CODEX_DURATION / 1000,
+      duration: CODEX_CLOSE_DURATION / 1000,
       ease: EASE_RETURN,
       onComplete: onClosed,
     });
