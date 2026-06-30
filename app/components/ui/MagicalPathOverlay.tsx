@@ -131,18 +131,14 @@ export default function MagicalPathOverlay({
             <rect width="100%" height="100%" fill="white" />
             {/* Punch black holes for every relic tile */}
             {COORDS.map((coord, i) => {
-              // Calculate half-width and half-height of the mask hole.
-              // Since each cell is 33.33% wide and 25% high, a shrink factor
-              // of 0.85 matches the physical tile coverage perfectly.
+              // Calculate width and height of the mask hole (85% of cell width/height)
               const w = COL_W * 0.85;
               const h = ROW_H * 0.85;
-              const cx = parseFloat(coord.x);
-              const cy = parseFloat(coord.y);
               return (
                 <rect
                   key={i}
-                  x={`${cx - w / 2}%`}
-                  y={`${cy - h / 2}%`}
+                  x={`calc(${coord.x} - ${w / 2}%)`}
+                  y={`calc(${coord.y} - ${h / 2}%)`}
                   width={`${w}%`}
                   height={`${h}%`}
                   fill="black"

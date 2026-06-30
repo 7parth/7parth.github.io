@@ -230,19 +230,19 @@ export default function PortfolioShell() {
       </header>
 
       {/* ── Main Layout ── */}
-      <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-start pt-[140px] pb-[100px] px-8">
+      <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-start pt-[80px] pb-[100px] px-8">
 
         {/* LEFT: Wall of Relics */}
-        <aside className="w-full md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-6">
+        <aside className="w-full md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-4">
           <div
             ref={navRef}
-            className="relic-wall-shell flex-1 py-4 relative"
+            className="relic-wall-shell flex-1 pt-8 pb-8 relative"
             style={{
               willChange: "transform",
             }}
           >
             <MagicalPathOverlay hoveredRelicIndex={hoveredRelicIndex} activeRelicIndex={activeRelicIndex} />
-            <div className={`relic-wall relative z-10 grid grid-cols-3 gap-8 md:h-full place-content-center ${wallAwake ? "relic-wall-awake" : ""}`}>
+            <div className={`relic-wall relative z-10 grid grid-cols-3 gap-6 md:h-full place-content-center ${wallAwake ? "relic-wall-awake" : ""}`}>
               {relics.map((relic, index) => {
                 const isActive = selectedId === relic.id;
                 // Show pending highlight during transition so relic feels "selected"
