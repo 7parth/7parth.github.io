@@ -9,24 +9,23 @@ const CHAIN_SVG =
 
 export interface CodexArtifactProps extends CodexContentProps {
   progress: MotionValue<number>;
+  revealProgress: MotionValue<number>;
   interactionEnabled: boolean;
   onClose: () => void;
 }
 
 export default function CodexArtifact({
   progress,
+  revealProgress,
   interactionEnabled,
   onClose,
   ...contentProps
 }: CodexArtifactProps) {
-  const artifactClip = useTransform(progress, (value) => {
-    const reveal = Math.max(0, Math.min(1, (value - 0.45) / 0.55));
-    return `inset(0 ${100 - reveal * 100}% 0 0)`;
-  });
+  const artifactClip = useTransform(revealProgress, (value) => `inset(0 ${100 - value * 100}% 0 0)`);
 
-  const artifactScale = useTransform(progress, [0.4, 0.52, 1], [0.975, 1.008, 1]);
-  const artifactFilter = useTransform(progress, [0.45, 0.62, 1], ["blur(5px)", "blur(1px)", "blur(0px)"]);
-  const runeIgnition = useTransform(progress, [0.45, 0.55, 0.8, 1], [0, 0.85, 0.25, 0]);
+  const artifactScale = useTransform(revealProgress, [0, 0.14, 1], [0.975, 1.006, 1]);
+  const artifactFilter = useTransform(revealProgress, [0, 0.28, 1], ["blur(5px)", "blur(1px)", "blur(0px)"]);
+  const runeIgnition = useTransform(revealProgress, [0, 0.18, 0.72, 1], [0, 0.78, 0.22, 0]);
 
   return (
     <motion.div

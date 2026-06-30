@@ -50,21 +50,23 @@ export default function CodexCinematic({
   const openStartedRef = useRef(false);
   const closeStartedRef = useRef(false);
   const activeAnimationRef = useRef<{ stop: () => void } | null>(null);
+  const openRafRef = useRef<number | null>(null);
   const interactionEnabled = phase === "READY";
 
   const backdropOpacity = useTransform(progress, [0, 0.4, 0.65, 1], [0, 0, 0.18, 0.28]);
-  const beamOpacity = useTransform(progress, [0, 0.1, 0.15, 0.95, 1], [0, 0, 1, 1, 0]);
-  const beamLeft = useTransform(progress, (value) => {
-    if (value < 0.4) return `${28 + (value / 0.4) * 16}%`;
-    const reveal = Math.max(0, Math.min(1, (value - 0.45) / 0.55));
-    return `calc(50% - min(500px, 42.5vw) + ${reveal * 85}vw)`;
+  const artifactReveal = useTransform(progress, (value) => Math.max(0, Math.min(1, (value - 0.45) / 0.55)));
+  const travelBeamOpacity = useTransform(progress, [0, 0.1, 0.15, 0.39, 0.45], [0, 0, 1, 1, 0]);
+  const carvingBeamOpacity = useTransform(artifactReveal, [0, 0.02, 1], [0, 0.86, 0.72]);
+  const carvingEdgeOpacity = interactionEnabled ? 0 : carvingBeamOpacity;
+  const travelBeamLeft = useTransform(progress, [0.15, 0.4], ["28%", "calc(50% - min(500px, 42.5vw))"]);
+  const travelBeamLength = useTransform(progress, (value) => {
+    if (value < 0.15) return "0px";
+    const travel = Math.max(0, Math.min(1, (value - 0.15) / 0.25));
+    return `calc(${travel} * (50vw - min(500px, 42.5vw) - 28vw))`;
   });
-  const beamLength = useTransform(progress, (value) => {
-    if (value < 0.45) return `${Math.max(0, value - 0.15) * 180}vw`;
-    const reveal = Math.max(0, Math.min(1, (value - 0.45) / 0.55));
-    return `${reveal * 85}vw`;
-  });
-  const beamRight = useMotionTemplate`calc(100% - ${beamLeft})`;
+  const travelBeamRight = useMotionTemplate`calc(100% - ${travelBeamLeft})`;
+  const carvingBeamX = useTransform(artifactReveal, (value) => `${value * 100}%`);
+  const carvedWidth = useTransform(artifactReveal, (value) => `${value * 100}%`);
   const runePulse = useTransform(progress, [0.05, 0.1, 0.15], [0, 1, 0]);
 
   useMotionValueEvent(progress, "change", (value) => {
@@ -83,20 +85,34 @@ export default function CodexCinematic({
   useEffect(() => {
     if (openStartedRef.current) return;
 
-    openStartedRef.current = true;
     directionRef.current = "open";
     committedRef.current = false;
     lastPhaseRef.current = "IDLE";
+    progress.set(0);
 
-    const controls = animate(progress, 1, {
-      duration: CODEX_DURATION / 1000,
-      ease: EASE_SUMMON,
-      onComplete: () => {
-        lastPhaseRef.current = "READY";
-        onPhaseChange("READY");
-      },
+    openRafRef.current = requestAnimationFrame(() => {
+      openRafRef.current = null;
+      if (openStartedRef.current) return;
+      openStartedRef.current = true;
+      const controls = animate(progress, 1, {
+        duration: CODEX_DURATION / 1000,
+        ease: EASE_SUMMON,
+        onComplete: () => {
+          lastPhaseRef.current = "READY";
+          onPhaseChange("READY");
+        },
+      });
+      activeAnimationRef.current = controls;
     });
-    activeAnimationRef.current = controls;
+
+    return () => {
+      if (openRafRef.current !== null) {
+        cancelAnimationFrame(openRafRef.current);
+        openRafRef.current = null;
+      }
+      activeAnimationRef.current?.stop();
+      activeAnimationRef.current = null;
+    };
   }, [onPhaseChange, progress]);
 
   useEffect(() => {
@@ -148,30 +164,45 @@ export default function CodexCinematic({
         style={{ zIndex: 52 }}
       >
         <motion.div
-          className="absolute top-1/2 h-px origin-right"
+          className="codex-travel-beam absolute top-1/2 h-px origin-right"
           style={{
-            right: beamRight,
-            width: beamLength,
-            opacity: beamOpacity,
+            right: travelBeamRight,
+            width: travelBeamLength,
+            opacity: travelBeamOpacity,
             background:
               "linear-gradient(90deg, transparent, rgba(72,202,228,0.45), rgba(165,243,252,0.9), rgba(230,185,70,0.95))",
             boxShadow:
               "0 0 10px rgba(72,202,228,0.7), 0 0 24px rgba(72,202,228,0.38), 0 0 38px rgba(176,141,87,0.2)",
           }}
         />
-        <motion.div
-          className="absolute top-1/2 -translate-y-1/2 w-[5px] h-[min(800px,85vh)]"
-          style={{
-            left: beamLeft,
-            opacity: beamOpacity,
-            background:
-              "linear-gradient(to bottom, transparent, rgba(72,202,228,0.5) 12%, rgba(240,195,70,1) 50%, rgba(72,202,228,0.5) 88%, transparent)",
-            boxShadow:
-              "0 0 12px 4px rgba(72,202,228,0.55), 0 0 28px 8px rgba(176,141,87,0.26), 0 0 2px 1px rgba(240,195,70,0.9)",
-          }}
-        >
-          <span className="codex-rune-stream">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛋ</span>
-        </motion.div>
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative pointer-events-none" style={{ width: "min(1000px, 85vw)", height: "min(800px, 85vh)" }}>
+            <motion.div
+              className="codex-carved-trail absolute left-0 top-1/2 h-px origin-left"
+              style={{
+                width: carvedWidth,
+                opacity: carvingEdgeOpacity,
+                background:
+                  "linear-gradient(90deg, rgba(72,202,228,0.05), rgba(176,141,87,0.32), rgba(240,195,70,0.56))",
+                boxShadow: "0 0 10px rgba(176,141,87,0.22)",
+              }}
+            />
+            <motion.div
+              className="codex-carving-beam absolute top-0 -translate-x-1/2 w-[2px] h-full"
+              style={{
+                left: carvingBeamX,
+                opacity: carvingEdgeOpacity,
+                background:
+                  "linear-gradient(to bottom, transparent, rgba(165,243,252,0.22) 16%, rgba(240,195,70,0.76) 50%, rgba(165,243,252,0.22) 84%, transparent)",
+                boxShadow:
+                  "0 0 6px 1px rgba(240,195,70,0.36), 0 0 18px 4px rgba(72,202,228,0.16)",
+              }}
+            >
+              <span className="codex-rune-stream">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛋ</span>
+            </motion.div>
+          </div>
+        </div>
 
         <motion.div
           className="absolute left-[28%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full"
@@ -185,6 +216,7 @@ export default function CodexCinematic({
 
       <CodexArtifact
         progress={progress}
+        revealProgress={artifactReveal}
         interactionEnabled={interactionEnabled}
         onClose={onCloseRequest}
         sectionKey={sectionKey}
