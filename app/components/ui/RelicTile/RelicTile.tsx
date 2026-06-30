@@ -28,6 +28,10 @@ export interface RelicTileProps {
   subtitle: string;
   /** Whether this tile is the currently selected section. */
   active?: boolean;
+  /** Whether this tile is close enough to catch reflected magic from the selected relic. */
+  neighbor?: boolean;
+  /** Small deterministic material variation. */
+  wear?: 0 | 1 | 2 | 3;
   /** Click handler. */
   onClick?: () => void;
   /** Forward className for layout overrides only (not visual state). */
@@ -39,6 +43,8 @@ const RelicTile = React.memo(function RelicTile({
   title,
   subtitle,
   active = false,
+  neighbor = false,
+  wear = 0,
   onClick,
   className = "",
 }: RelicTileProps) {
@@ -59,6 +65,8 @@ const RelicTile = React.memo(function RelicTile({
       aria-label={`Navigate to ${title}`}
       onClick={onClick}
       className={tileClass}
+      data-neighbor={neighbor ? "true" : undefined}
+      data-wear={wear}
       // ── Sound-ready hooks ──────────────────────────────────
       // Attach audio in a future useSound() hook or event listener.
       // hover  → stone scrape  (attach to onMouseEnter)
@@ -72,6 +80,10 @@ const RelicTile = React.memo(function RelicTile({
 
       {/* ── Layer 2: Frost overlay ── */}
       <span className={styles.frost} aria-hidden="true" />
+      <span className={styles.wear} aria-hidden="true" />
+      <span className={styles.cracks} aria-hidden="true" />
+      <span className={styles.innerLight} aria-hidden="true" />
+      <span className={styles.frostVeins} aria-hidden="true" />
 
       {/* ── Layer 3: CSS radial glow + adjacent spill ── */}
       <span className={styles.glow}      aria-hidden="true" />
@@ -84,6 +96,7 @@ const RelicTile = React.memo(function RelicTile({
           <span className={styles.activeOverlay} aria-hidden="true" />
           {/* Frost shimmer sweep */}
           <span className={styles.frostSweep}    aria-hidden="true" />
+          <span className={styles.awakenedDust}  aria-hidden="true" />
         </>
       )}
 

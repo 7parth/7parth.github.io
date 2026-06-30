@@ -390,6 +390,24 @@ body {
   to   { transform: translateY(18%); }
 }
 
+@keyframes relicWallDust {
+  0%, 100% { transform: translate3d(0, 5px, 0); opacity: 0.18; }
+  50% { transform: translate3d(0, -7px, 0); opacity: 0.30; }
+}
+
+@keyframes relicWallPulse {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+  18% { opacity: 0.72; }
+  62% { opacity: 0.36; clip-path: inset(0 0 0 0); }
+  100% { opacity: 0; clip-path: inset(0 0 0 0); }
+}
+
+@keyframes relicWallBloom {
+  0% { opacity: 0; transform: scaleX(0.72); }
+  28% { opacity: 0.75; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1.04); }
+}
+
 /* Occasional lightning flash */
 @keyframes lightningFlash {
   0%, 96%, 100% { opacity: 0; }
@@ -622,6 +640,90 @@ body {
   mix-blend-mode: screen;
   transition: left 0.08s linear, top 0.08s linear;
   z-index: 15;
+}
+
+/* ============================================
+   Relic Wall — Norse monument carved into mountain
+   No container. No panel. Relics emerge from the world.
+   ============================================ */
+.relic-wall-shell {
+  isolation: isolate;
+  /* No background, no border-radius border — the shell is invisible */
+  /* A soft vignette shadow fades the grid edges into the environment */
+  background: none;
+}
+
+.relic-wall-shell::before,
+.relic-wall-shell::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Ambient mountain shadow — top & bottom edges dissolve into the scene */
+.relic-wall-shell::before {
+  inset: -60px -40px;
+  background:
+    /* Just the very subtle frost shimmer — no dark container shadow */
+    linear-gradient(118deg,
+      transparent 0 17%,
+      rgba(165,243,252,0.02) 18%,
+      transparent 20% 100%),
+    linear-gradient(28deg,
+      transparent 0 62%,
+      rgba(125,107,74,0.03) 63%,
+      transparent 65% 100%);
+  opacity: 0.90;
+}
+
+/* Drifting ancient dust motes — proof the stone is alive */
+.relic-wall-shell::after {
+  inset: -10px -8px;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(165,243,252,0.16) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 38%, rgba(176,141,87,0.13) 0 1px, transparent 2px),
+    radial-gradient(circle at 46% 76%, rgba(165,243,252,0.12) 0 1px, transparent 2px);
+  opacity: 0.24;
+  animation: relicWallDust 14s ease-in-out infinite;
+}
+
+.relic-wall {
+  position: relative;
+  isolation: isolate;
+  padding: 2px;
+  /* No solid background. The world bleeds through between tiles. */
+}
+
+.relic-wall::before,
+.relic-wall::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+}
+
+/* Awakened runic energy — appears on click, then fades */
+.relic-wall::before {
+  background:
+    linear-gradient(90deg, transparent 0 7%, rgba(72,202,228,0.10) 8%, transparent 11% 29%, rgba(165,243,252,0.08) 30%, transparent 33% 59%, rgba(72,202,228,0.09) 60%, transparent 64% 100%),
+    linear-gradient(0deg, transparent 0 12%, rgba(72,202,228,0.07) 13%, transparent 16% 44%, rgba(165,243,252,0.06) 45%, transparent 48% 74%, rgba(72,202,228,0.06) 75%, transparent 78% 100%);
+  mix-blend-mode: screen;
+}
+
+.relic-wall::after {
+  background: radial-gradient(ellipse at 50% 45%, rgba(72,202,228,0.15), transparent 68%);
+  transform: scaleX(0.72);
+}
+
+.relic-wall-awake::before {
+  animation: relicWallPulse 1.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.relic-wall-awake::after {
+  animation: relicWallBloom 2.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* ============================================

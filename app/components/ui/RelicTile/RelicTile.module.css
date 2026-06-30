@@ -16,8 +16,8 @@
   --rt-bevel-hi:   rgba(220, 235, 245, 0.065);
   --rt-bevel-lo:   rgba(0, 0, 0, 0.62);
   --rt-border-idle: rgba(88, 92, 100, 0.38);
-  --rt-border-hover: rgba(72, 202, 228, 0.62);
-  --rt-border-active: rgba(72, 202, 228, 0.78);
+  --rt-border-hover: rgba(128, 151, 158, 0.42);
+  --rt-border-active: rgba(151, 169, 166, 0.56);
   --rt-ease-heavy: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -34,9 +34,17 @@
   will-change: opacity;
   transition: opacity 240ms ease;
   pointer-events: none;
+  /*
+   * Multiply blend: stone PNG darkens the mountain world behind it.
+   * The mountain landscape shows through rather than being covered.
+   */
+  mix-blend-mode: multiply;
 }
-.stoneIdle   { background-image: url("/ui/relic/relic-default.png"); opacity: 1; }
+/* Idle: very faint stone grain — world bleeds through strongly */
+.stoneIdle   { background-image: url("/ui/relic/relic-default.png"); opacity: 0.28; }
+/* Hover: stone texture becomes slightly more visible */
 .stoneHover  { background-image: url("/ui/relic/relic-hover.png");   opacity: 0; }
+/* Active: glowing stone shows through the recess */
 .stoneActive { background-image: url("/ui/relic/relic-active.png");  opacity: 0; }
 
 /* ────────────────────────────────────────────────────────────
@@ -46,14 +54,86 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-image: url("/ui/overlays/frost.webp");
-  background-size: cover;
-  background-position: center;
+  background:
+    linear-gradient(136deg, transparent 0 18%, rgba(165,243,252,0.16) 19%, transparent 20% 100%),
+    linear-gradient(28deg, transparent 0 68%, rgba(165,243,252,0.12) 69%, transparent 70% 100%),
+    radial-gradient(ellipse at 18% 18%, rgba(220,250,255,0.08), transparent 34%),
+    radial-gradient(ellipse at 82% 88%, rgba(165,243,252,0.07), transparent 38%);
   opacity: 0;
   will-change: opacity;
   transition: opacity 280ms ease;
   pointer-events: none;
   z-index: 2;
+}
+
+.wear,
+.cracks,
+.innerLight,
+.frostVeins {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.wear {
+  z-index: 2;
+  opacity: 0.44;
+  background:
+    linear-gradient(132deg, transparent 0 16%, rgba(255,255,255,0.045) 17%, transparent 18% 100%),
+    linear-gradient(32deg, transparent 0 46%, rgba(0,0,0,0.24) 47%, transparent 49% 100%),
+    radial-gradient(circle at 16% 18%, rgba(0,0,0,0.34) 0 2px, transparent 3px),
+    radial-gradient(circle at 84% 72%, rgba(255,255,255,0.055) 0 1px, transparent 2px);
+  mix-blend-mode: overlay;
+}
+
+.tile[data-wear="1"] .wear {
+  background:
+    linear-gradient(82deg, transparent 0 28%, rgba(0,0,0,0.26) 29%, transparent 31% 100%),
+    linear-gradient(156deg, transparent 0 61%, rgba(255,255,255,0.05) 62%, transparent 64% 100%),
+    radial-gradient(circle at 76% 16%, rgba(0,0,0,0.38) 0 2px, transparent 3px);
+}
+
+.tile[data-wear="2"] .wear {
+  background:
+    linear-gradient(18deg, transparent 0 36%, rgba(0,0,0,0.24) 37%, transparent 38% 100%),
+    linear-gradient(118deg, transparent 0 70%, rgba(255,255,255,0.05) 71%, transparent 72% 100%),
+    radial-gradient(circle at 22% 78%, rgba(0,0,0,0.36) 0 2px, transparent 3px);
+}
+
+.tile[data-wear="3"] .wear {
+  background:
+    linear-gradient(146deg, transparent 0 24%, rgba(255,255,255,0.045) 25%, transparent 27% 100%),
+    linear-gradient(64deg, transparent 0 58%, rgba(0,0,0,0.28) 59%, transparent 61% 100%),
+    radial-gradient(circle at 82% 24%, rgba(0,0,0,0.34) 0 2px, transparent 3px);
+}
+
+.cracks {
+  z-index: 3;
+  opacity: 0.46;
+  background:
+    linear-gradient(112deg, transparent 0 43%, rgba(4,8,10,0.55) 43.4%, rgba(200,240,255,0.08) 43.8%, transparent 44.5% 100%),
+    linear-gradient(25deg, transparent 0 62%, rgba(3,6,8,0.46) 62.3%, transparent 63% 100%),
+    radial-gradient(ellipse at 54% 55%, transparent 0 42%, rgba(0,0,0,0.24) 74%, rgba(0,0,0,0.36) 100%);
+}
+
+.innerLight {
+  z-index: 3;
+  opacity: 0;
+  background:
+    linear-gradient(112deg, transparent 0 43%, rgba(72,202,228,0.34) 43.4%, rgba(165,243,252,0.2) 43.8%, transparent 45% 100%),
+    radial-gradient(ellipse at 50% 44%, rgba(72,202,228,0.2), transparent 58%);
+  transition: opacity 420ms ease;
+}
+
+.frostVeins {
+  z-index: 4;
+  opacity: 0.12;
+  background:
+    linear-gradient(145deg, transparent 0 18%, rgba(165,243,252,0.12) 19%, transparent 20% 100%),
+    linear-gradient(20deg, transparent 0 78%, rgba(165,243,252,0.10) 79%, transparent 80% 100%);
+  transform: translate3d(0, 0, 0);
+  animation: frostVeinDrift 12s ease-in-out infinite;
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -109,7 +189,8 @@
   width: 100%;
   height: 100%;           /* fill tile height */
   overflow: hidden;       /* clip label/sublabel inside the tile */
-  padding: 0.375rem 0.25rem;
+  padding: 0.5rem 0.32rem 0.46rem;
+  gap: 0.14rem;
   pointer-events: none;
 }
 
@@ -139,38 +220,42 @@
   justify-content: center;
   padding: 0.5rem;
   border-radius: 4px;
-  overflow: visible; /* allow spill glow */
+  overflow: visible;
   cursor: pointer;
 
-  /* Stone base — slightly darker idle for Phase 7 hierarchy */
-  background: linear-gradient(
-    165deg,
-    rgba(38, 42, 48, 0.90) 0%,
-    rgba(18, 20, 23, 0.94) 55%,
-    rgba(22, 25, 28, 0.92) 100%
-  );
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  border: 1px solid var(--rt-border-idle);
+  /*
+   * CARVED STONE RELIEF — not a panel, not a card.
+   * The mountain world shows strongly through each tile.
+   * Only carved bevel shadows define the relic shape.
+   */
+  opacity: 0.92;
+  background:
+    /* Very faint stone tint — the mountain MUST read through clearly */
+    linear-gradient(
+      165deg,
+      rgba(18, 21, 26, 0.10) 0%,
+      rgba(6, 8, 11, 0.15) 56%,
+      rgba(10, 13, 16, 0.10) 100%
+    );
+  /* Barely darken the world behind — keep landscape highly visible */
+  backdrop-filter: blur(0.5px) brightness(0.88) contrast(1.02);
+  -webkit-backdrop-filter: blur(0.5px) brightness(0.88) contrast(1.02);
+  /* Hairline chiseled edge — stone fracture line */
+  border: 1px solid rgba(90, 95, 102, 0.18);
 
-  /* Phase 1: Deeper bevel — 6 inset stops for carved stone */
+  /* Carved bevel — lighter shadows so tiles don't merge into a dark block */
   box-shadow:
-    /* Drop shadow — heavy */
-    0  8px 28px rgba(0,0,0,0.72),
-    0  2px  8px rgba(0,0,0,0.58),
-    /* Top highlight bevel (thin rim catch-light) */
-    inset 0  1px 0 var(--rt-bevel-hi),
-    /* Bottom ambient occlusion */
-    inset 0 -2px 0 var(--rt-bevel-lo),
-    /* Left bevel */
-    inset  1px 0 0 rgba(210,225,235,0.04),
-    /* Right AO */
-    inset -2px 0 0 rgba(0,0,0,0.38),
-    /* Inner depth — dark center */
-    inset 0 0 18px rgba(0,0,0,0.35),
-    /* Corner AO — darkens all four corners */
-    inset 3px  3px 6px rgba(0,0,0,0.28),
-    inset -3px -3px 6px rgba(0,0,0,0.28);
+    0  1px  0 rgba(255,255,255,0.018),
+    0 -1px  0 rgba(0,0,0,0.20),
+    /* Carved recess — subtle occlusion only */
+    inset 0  2px 1px rgba(215,230,235,0.03),
+    inset 0 -3px 6px rgba(0,0,0,0.30),
+    inset 3px  0 5px rgba(0,0,0,0.22),
+    inset -3px 0 5px rgba(0,0,0,0.24),
+    inset 0 0 10px rgba(0,0,0,0.18),
+    /* Subtle outer shadow — just enough depth, not a dark halo */
+    0 2px 6px rgba(0,0,0,0.18),
+    0 4px 12px rgba(0,0,0,0.10);
 
   /* Slight perspective tilt — same as before */
   transform: perspective(600px) rotateX(1deg) translateZ(0);
@@ -178,7 +263,8 @@
   transition:
     transform    260ms var(--rt-ease-heavy),
     box-shadow   260ms ease,
-    border-color 260ms ease;
+    border-color 260ms ease,
+    opacity 300ms ease;
 
   outline: none;
 }
@@ -189,58 +275,58 @@
   outline-offset: 3px;
 }
 
+/* The overlapping ::after shadows that caused the dark grid have been removed. */
+
 /* ────────────────────────────────────────────────────────────
    HOVER STATE — Phase 3 & 6
    Lift 4px, stronger shadow, frost opacity +, glow +
    No scale > 1.03.
    ──────────────────────────────────────────────────────────── */
 .tile:hover {
-  transform: perspective(600px) rotateX(1deg) translateY(-4px) translateZ(0);
+  opacity: 0.96;
+  transform: perspective(600px) rotateX(1deg) translateY(-1px) translateZ(0);
   border-color: var(--rt-border-hover);
   box-shadow:
-    0  0 22px rgba(72,202,228,0.44),
-    0  0 44px rgba(72,202,228,0.15),
-    0 18px 40px rgba(0,0,0,0.80),
-    inset 0  1px 0 rgba(200,240,255,0.12),
-    inset 0 -2px 0 var(--rt-bevel-lo),
-    inset  1px 0 0 rgba(200,240,255,0.07),
-    inset -2px 0 0 rgba(0,0,0,0.42),
-    inset 0 0 18px rgba(0,0,0,0.28),
-    inset 3px  3px 6px rgba(0,0,0,0.22),
-    inset -3px -3px 6px rgba(0,0,0,0.22);
+    0  1px  0 rgba(255,255,255,0.04),
+    0 -1px  0 rgba(0,0,0,0.28),
+    inset 0  1px 0 rgba(200,240,255,0.10),
+    inset 0 -3px 5px rgba(0,0,0,0.32),
+    inset 3px  0 5px rgba(0,0,0,0.20),
+    inset -3px 0 5px rgba(0,0,0,0.22),
+    inset 0 0 12px rgba(72,202,228,0.08),
+    inset 0 0 16px rgba(0,0,0,0.18);
 }
 
 .tile:hover .stoneHover { opacity: 1; }
 .tile:hover .frost       { opacity: 0.30; }
-.tile:hover .glow        { opacity: 1; }
+.tile:hover .glow        { opacity: 0.22; }
+.tile:hover .innerLight  { opacity: 0.34; }
+.tile:hover .cracks      { opacity: 0.64; }
+.tile:hover .frostVeins  { opacity: 0.24; }
 
-/* Frost edge bloom — ::before (no expensive filter on hover critical path) */
+/* Carved edge — frost and chisel marks around each stone face */
 .tile::before {
   content: '';
   position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: linear-gradient(
-    140deg,
-    rgba(72,202,228,0) 0%,
-    rgba(72,202,228,0.48) 45%,
-    rgba(165,243,252,0.18) 72%,
-    rgba(72,202,228,0) 100%
-  );
-  z-index: -1;
-  opacity: 0;
+  inset: -7px;
+  border-radius: 7px;
+  background:
+    /* Frost accent diagonal — no heavy black fills, no edges bleeding together */
+    linear-gradient(140deg, transparent 0 16%, rgba(165,243,252,0.042) 17%, transparent 18% 100%),
+    linear-gradient(32deg, transparent 0 78%, rgba(125,107,74,0.07) 79%, transparent 80% 100%);
+  z-index: -2;
+  opacity: 0.60;
   transition: opacity 300ms ease;
   pointer-events: none;
-  /* No blur here — blur is expensive. The gradient itself looks like a glow. */
 }
-.tile:hover::before { opacity: 1; }
+.tile:hover::before { opacity: 0.82; }
 
 /* ────────────────────────────────────────────────────────────
    PRESSED STATE — Phase 6
    Scale 0.97, 120ms, cubic ease-in.
    ──────────────────────────────────────────────────────────── */
 .tile:active {
-  transform: perspective(600px) rotateX(1deg) scale(0.97) translateZ(0);
+  transform: perspective(600px) rotateX(1deg) scale(0.985) translateZ(0);
   transition-duration: 120ms;
   transition-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
 }
@@ -249,15 +335,19 @@
    ACTIVE (selected) STATE — Phases 1, 2, 4, 7
    ──────────────────────────────────────────────────────────── */
 .tileActive {
+  /*
+   * Awakened carved stone — runic energy seeps up through the mountain face.
+   * Still translucent: the world shows through, just tinted with ancient ice.
+   */
   background: linear-gradient(
     155deg,
-    rgba(72, 202, 228, 0.18) 0%,
-    rgba(22, 26, 30, 0.95) 50%,
-    rgba(14, 18, 22, 0.97) 100%
+    rgba(72, 202, 228, 0.22) 0%,
+    rgba(18, 22, 28, 0.58) 50%,
+    rgba(12, 16, 20, 0.62) 100%
   );
+  opacity: 1;
   border-color: var(--rt-border-active) !important;
-  transform: perspective(600px) rotateX(1deg) translateY(-3px) translateZ(0) !important;
-  /* Breathing glow overrides box-shadow */
+  transform: perspective(600px) rotateX(1deg) translateY(-1px) translateZ(0) !important;
   animation: relicBreathe 4.5s ease-in-out infinite;
 }
 
@@ -266,10 +356,13 @@
 .tileActive .stoneIdle   { opacity: 0; }
 
 /* Frost full show */
-.tileActive .frost { opacity: 0.60; }
+.tileActive .frost { opacity: 0.48; }
 
 /* Glow full */
-.tileActive .glow  { opacity: 1; }
+.tileActive .glow  { opacity: 0.42; }
+.tileActive .innerLight { opacity: 0.92; animation: innerRuneFlicker 5.8s ease-in-out infinite; }
+.tileActive .cracks { opacity: 0.92; }
+.tileActive .frostVeins { opacity: 0.54; }
 
 /* Spill — lights adjacent tiles faintly */
 .tileActive .spillGlow { opacity: 1; }
@@ -284,8 +377,8 @@
   border-radius: inherit;
   background: linear-gradient(
     to bottom right,
-    rgba(72,202,228,0.14) 0%,
-    rgba(105,214,255,0.04) 40%,
+    rgba(72,202,228,0.10) 0%,
+    rgba(105,214,255,0.035) 40%,
     transparent 70%
   );
   pointer-events: none;
@@ -315,6 +408,33 @@
   animation: frostSweep 5.5s ease-in-out infinite 2s;
 }
 
+.awakenedDust {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0.48;
+  background:
+    radial-gradient(circle at 30% 70%, rgba(165,243,252,0.42) 0 1px, transparent 2px),
+    radial-gradient(circle at 62% 38%, rgba(176,141,87,0.32) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 76%, rgba(165,243,252,0.36) 0 1px, transparent 2px);
+  animation: dustLift 7.5s ease-in-out infinite;
+}
+
+.tile[data-neighbor="true"] {
+  opacity: 0.86;
+  border-color: rgba(120, 139, 145, 0.34);
+}
+
+.tile[data-neighbor="true"] .innerLight {
+  opacity: 0.18;
+}
+
+.tile[data-neighbor="true"] .frostVeins {
+  opacity: 0.28;
+}
+
 /* ────────────────────────────────────────────────────────────
    ICON — Phase 1 & 4
    Engraved appearance: deep shadow, no gloss.
@@ -323,35 +443,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;        /* 32px — balanced with title/subtitle */
-  width: 40px;
-  height: 40px;
-  margin-bottom: 0.25rem;
+  font-size: 2.2rem;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 0.35rem;
 
   /* Engraved: bottom shadow + subtle top highlight = carved look */
   filter:
-    drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-    drop-shadow(0px -1px 0px rgba(255,255,255,0.04));
+    drop-shadow(0px 2px 2px rgba(0,0,0,0.92))
+    drop-shadow(0px -1px 0px rgba(255,255,255,0.035));
 
   /* Phase 7: idle icons 20% dimmer */
-  color: rgba(175, 178, 184, 0.82);
-  transition: color 240ms ease, filter 240ms ease;
+  color: rgba(150, 156, 160, 0.68);
+  opacity: 0.82;
+  transition: color 240ms ease, filter 240ms ease, opacity 240ms ease, transform 260ms var(--rt-ease-heavy);
 }
 
 .tileActive .icon {
-  color: #48CAE4;
+  color: rgba(178, 238, 248, 0.94);
+  opacity: 1;
   filter:
     drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
     drop-shadow(0px -1px 0px rgba(255,255,255,0.04))
-    drop-shadow(0 0 7px rgba(72,202,228,0.65));
+    drop-shadow(0 0 4px rgba(72,202,228,0.42));
   animation: runePulse 4.5s ease-in-out infinite;
 }
 
 .tile:hover .icon {
-  color: rgba(165, 243, 252, 0.95);
+  color: rgba(180, 211, 216, 0.92);
+  opacity: 0.96;
+  transform: translateY(-1px);
   filter:
     drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-    drop-shadow(0 0 4px rgba(105,214,255,0.40));
+    drop-shadow(0 0 3px rgba(105,214,255,0.22));
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -367,10 +491,11 @@
   white-space: nowrap;
   letter-spacing: 0.10em;
   font-weight: 600;
-  margin-top: 0.25rem;
+  margin-top: 0.1rem;
+  line-height: 1.08;
 
   /* Phase 7: idle 20% dimmer for hierarchy */
-  color: rgba(185, 188, 194, 0.80);
+  color: rgba(178, 181, 184, 0.78);
   transition: color 240ms ease;
 
   /* Engraved */
@@ -380,13 +505,13 @@
 }
 
 .tileActive .title {
-  color: #ffffff;
+  color: rgba(235, 244, 244, 0.96);
   text-shadow:
     0px 1px 2px rgba(0,0,0,0.90),
     0px -1px 1px rgba(255,255,255,0.07),
-    0 0 8px rgba(72,202,228,0.25);
+    0 0 5px rgba(72,202,228,0.18);
 }
-.tile:hover .title { color: rgba(165,243,252,0.95); }
+.tile:hover .title { color: rgba(211,223,222,0.9); }
 
 /* ────────────────────────────────────────────────────────────
    SUBTITLE — Phase 7
@@ -399,7 +524,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: 0.09em;
-  line-height: 1.35;
+  line-height: 1.28;
+  margin-top: 0.05rem;
   /* two lines max */
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -407,19 +533,20 @@
   -webkit-box-orient: vertical;
 
   /* Phase 7: ~45% opacity */
-  color: rgba(185, 188, 194, 0.45);
+  color: rgba(176, 181, 184, 0.42);
   transition: color 240ms ease;
   text-shadow: 0px 1px 2px rgba(0,0,0,0.85);
 }
 
-.tileActive .subtitle { color: rgba(72,202,228,0.72); }
-.tile:hover  .subtitle { color: rgba(165,243,252,0.52); }
+.tileActive .subtitle { color: rgba(157,218,226,0.68); }
+.tile:hover  .subtitle { color: rgba(190,210,211,0.54); }
 
 /* ────────────────────────────────────────────────────────────
    RESPONSIVE
    ──────────────────────────────────────────────────────────── */
 @media (min-width: 1280px) {
-  .icon     { font-size: 2.25rem; width: 44px; height: 44px; }
+  .content { padding: 0.58rem 0.38rem 0.5rem; gap: 0.16rem; }
+  .icon     { font-size: 2.48rem; width: 49px; height: 49px; margin-bottom: 0.42rem; }
   .title    { font-size: 0.625rem; }
   .subtitle { font-size: 0.5rem; }
 }
@@ -433,25 +560,25 @@
 @keyframes relicBreathe {
   0%, 100% {
     box-shadow:
-      0 0  12px rgba(72,202,228,0.32),
-      0 0  26px rgba(72,202,228,0.14),
-      0  8px 26px rgba(0,0,0,0.78),
-      inset 0 0  8px rgba(72,202,228,0.10),
-      inset 0 1px 0 var(--rt-bevel-hi),
-      inset 0 -2px 0 var(--rt-bevel-lo),
-      inset 3px 3px 6px rgba(0,0,0,0.28),
-      inset -3px -3px 6px rgba(0,0,0,0.28);
+      0  1px  0 rgba(255,255,255,0.03),
+      0 -1px  0 rgba(0,0,0,0.55),
+      inset 0 0  11px rgba(72,202,228,0.14),
+      inset 0 0  30px rgba(0,0,0,0.44),
+      inset 0 2px 1px var(--rt-bevel-hi),
+      inset 0 -4px 5px rgba(0,0,0,0.72),
+      inset 4px 0 7px rgba(0,0,0,0.40),
+      inset -4px 0 7px rgba(0,0,0,0.44);
   }
   50% {
     box-shadow:
-      0 0  24px rgba(72,202,228,0.60),
-      0 0  48px rgba(72,202,228,0.25),
-      0 12px 30px rgba(0,0,0,0.82),
-      inset 0 0 16px rgba(72,202,228,0.20),
-      inset 0 1px 0 var(--rt-bevel-hi),
-      inset 0 -2px 0 var(--rt-bevel-lo),
-      inset 3px 3px 6px rgba(0,0,0,0.24),
-      inset -3px -3px 6px rgba(0,0,0,0.24);
+      0  1px  0 rgba(255,255,255,0.035),
+      0 -1px  0 rgba(0,0,0,0.58),
+      inset 0 0 19px rgba(72,202,228,0.25),
+      inset 0 0 32px rgba(0,0,0,0.34),
+      inset 0 2px 1px var(--rt-bevel-hi),
+      inset 0 -4px 5px rgba(0,0,0,0.66),
+      inset 4px 0 7px rgba(0,0,0,0.34),
+      inset -4px 0 7px rgba(0,0,0,0.38);
   }
 }
 
@@ -460,24 +587,24 @@
   0%, 65%, 100% {
     filter:
       drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 5px rgba(72,202,228,0.50));
+      drop-shadow(0 0 3px rgba(72,202,228,0.36));
   }
   75% {
     filter:
       drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 14px rgba(72,202,228,1.0))
-      drop-shadow(0 0 28px rgba(165,243,252,0.65));
+      drop-shadow(0 0 9px rgba(72,202,228,0.72))
+      drop-shadow(0 0 18px rgba(165,243,252,0.34));
   }
   82% {
     filter:
       drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 6px rgba(72,202,228,0.60));
+      drop-shadow(0 0 4px rgba(72,202,228,0.42));
   }
   88% {
     filter:
       drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 10px rgba(72,202,228,0.85))
-      drop-shadow(0 0 20px rgba(165,243,252,0.40));
+      drop-shadow(0 0 7px rgba(72,202,228,0.58))
+      drop-shadow(0 0 14px rgba(165,243,252,0.25));
   }
 }
 
@@ -487,4 +614,22 @@
   8%   { opacity: 0.7; }
   85%  { opacity: 0.25; }
   100% { transform: translateX(230%) skewX(-12deg); opacity: 0; }
+}
+
+@keyframes innerRuneFlicker {
+  0%, 58%, 100% { opacity: 0.82; }
+  63% { opacity: 0.98; }
+  68% { opacity: 0.72; }
+  74% { opacity: 0.9; }
+}
+
+@keyframes frostVeinDrift {
+  0%, 100% { transform: translate3d(-1px, 0, 0); }
+  50% { transform: translate3d(1px, -1px, 0); }
+}
+
+@keyframes dustLift {
+  0%, 100% { transform: translate3d(0, 5px, 0); opacity: 0.18; }
+  45% { transform: translate3d(0, -7px, 0); opacity: 0.46; }
+  72% { opacity: 0.28; }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ParticleCanvas from "./ParticleCanvas";
 import RelicTile from "./ui/RelicTile";
 import { relics, RUNES, SectionId } from "./data";
@@ -48,8 +48,19 @@ export default function PortfolioShell() {
   const navRef    = useRef<HTMLDivElement>(null);
   const logoRef   = useRef<HTMLDivElement>(null);
   const bgRef     = useRef<HTMLImageElement>(null);
+  const wallPulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [wallAwake, setWallAwake] = useState(false);
 
   const activeRelic = relics.find((r) => r.id === selectedId) || relics[0];
+  const activeRelicIndex = relics.findIndex((r) => r.id === (isTransitioning ? pendingId : selectedId));
+
+  const handleRelicClick = (id: SectionId) => {
+    setWallAwake(false);
+    if (wallPulseTimerRef.current) clearTimeout(wallPulseTimerRef.current);
+    requestAnimationFrame(() => setWallAwake(true));
+    wallPulseTimerRef.current = setTimeout(() => setWallAwake(false), 2300);
+    triggerTransition(id);
+  };
 
   // ── Parallax target values (pure RAF, zero re-renders) ──
   const mouse  = useRef({ x: 0, y: 0 });
@@ -145,6 +156,12 @@ export default function PortfolioShell() {
     if (cls) root.classList.add(cls);
   }, [selectedId]);
 
+  useEffect(() => {
+    return () => {
+      if (wallPulseTimerRef.current) clearTimeout(wallPulseTimerRef.current);
+    };
+  }, []);
+
   // ── Section content renderer ─────────────────────────────
   function renderContent() {
     switch (selectedId) {
@@ -180,8 +197,8 @@ export default function PortfolioShell() {
           className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
           style={{ transition: "transform 0.12s linear" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-surface-container-lowest opacity-40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest opacity-40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-surface-container-lowest opacity-25" />
         <div className="absolute inset-0 world-reaction-layer pointer-events-none" />
         <div className="absolute inset-0 gold-ambient" />
         <div className="absolute inset-0 moon-ambient" />
@@ -218,22 +235,32 @@ export default function PortfolioShell() {
         <aside className="w-full md:w-[35%] lg:w-[30%] h-full flex flex-col pointer-events-auto z-30 px-6">
           <div
             ref={navRef}
-            className="flex-1 overflow-y-auto hide-scrollbar py-4 relative"
+            className="relic-wall-shell flex-1 overflow-y-auto hide-scrollbar py-4 relative"
             style={{
-              background: "radial-gradient(ellipse at 40% 50%, rgba(80,180,255,0.08), transparent 70%)",
               willChange: "transform",
             }}
           >
-            <div className="grid grid-cols-3 gap-4">
-              {relics.map((relic) => {
+            <div className={`relic-wall grid grid-cols-3 gap-4 ${wallAwake ? "relic-wall-awake" : ""}`}>
+              {relics.map((relic, index) => {
                 const isActive  = selectedId === relic.id;
                 // Show pending highlight during transition so relic feels "selected"
                 const isPending = pendingId === relic.id && isTransitioning;
+                const activeRow = Math.floor(activeRelicIndex / 3);
+                const activeCol = activeRelicIndex % 3;
+                const row = Math.floor(index / 3);
+                const col = index % 3;
+                const isNeighbor =
+                  activeRelicIndex >= 0 &&
+                  !isActive &&
+                  !isPending &&
+                  Math.abs(row - activeRow) + Math.abs(col - activeCol) <= 1;
                 return (
                   <RelicTile
                     key={relic.id}
                     active={isActive || isPending}
-                    onClick={() => triggerTransition(relic.id as SectionId)}
+                    neighbor={isNeighbor}
+                    wear={(index % 4) as 0 | 1 | 2 | 3}
+                    onClick={() => handleRelicClick(relic.id as SectionId)}
                     title={relic.label}
                     subtitle={`${relic.sublabel[0]}\n${relic.sublabel[1]}`}
                     icon={
@@ -249,8 +276,8 @@ export default function PortfolioShell() {
                             objectFit: "contain",
                             margin: "0 auto",
                             filter: (isActive || isPending)
-                              ? "brightness(1.4) drop-shadow(0 0 4px rgba(72,202,228,0.7))"
-                              : "brightness(0.85)",
+                              ? "brightness(1.16) contrast(1.08) drop-shadow(0 1px 1px rgba(0,0,0,0.9)) drop-shadow(0 0 3px rgba(72,202,228,0.36))"
+                              : "brightness(0.68) contrast(1.08) saturate(0.72)",
                           }}
                         />
                       ) : (
