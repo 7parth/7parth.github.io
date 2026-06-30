@@ -397,15 +397,15 @@ body {
 
 @keyframes relicWallPulse {
   0% { opacity: 0; clip-path: inset(0 100% 0 0); }
-  18% { opacity: 0.72; }
-  62% { opacity: 0.36; clip-path: inset(0 0 0 0); }
+  18% { opacity: 0.98; }
+  62% { opacity: 0.60; clip-path: inset(0 0 0 0); }
   100% { opacity: 0; clip-path: inset(0 0 0 0); }
 }
 
 @keyframes relicWallBloom {
-  0% { opacity: 0; transform: scaleX(0.72); }
-  28% { opacity: 0.75; transform: scaleX(1); }
-  100% { opacity: 0; transform: scaleX(1.04); }
+  0% { opacity: 0; transform: scaleX(0.72) scaleY(0.72); }
+  28% { opacity: 0.98; transform: scaleX(1.05) scaleY(1.05); }
+  100% { opacity: 0; transform: scaleX(1.20) scaleY(1.20); }
 }
 
 /* Occasional lightning flash */
@@ -713,16 +713,15 @@ body {
   opacity: 0;
 }
 
-/* Awakened runic energy — appears on click, then fades */
 .relic-wall::before {
   background:
-    linear-gradient(90deg, transparent 0 7%, rgba(72,202,228,0.10) 8%, transparent 11% 29%, rgba(165,243,252,0.08) 30%, transparent 33% 59%, rgba(72,202,228,0.09) 60%, transparent 64% 100%),
-    linear-gradient(0deg, transparent 0 12%, rgba(72,202,228,0.07) 13%, transparent 16% 44%, rgba(165,243,252,0.06) 45%, transparent 48% 74%, rgba(72,202,228,0.06) 75%, transparent 78% 100%);
+    linear-gradient(90deg, transparent 0 7%, rgba(72,202,228,0.50) 8%, transparent 11% 29%, rgba(165,243,252,0.42) 30%, transparent 33% 59%, rgba(72,202,228,0.48) 60%, transparent 64% 100%),
+    linear-gradient(0deg, transparent 0 12%, rgba(72,202,228,0.40) 13%, transparent 16% 44%, rgba(165,243,252,0.36) 45%, transparent 48% 74%, rgba(72,202,228,0.38) 75%, transparent 78% 100%);
   mix-blend-mode: screen;
 }
 
 .relic-wall::after {
-  background: radial-gradient(ellipse at 50% 45%, rgba(72,202,228,0.15), transparent 68%);
+  background: radial-gradient(ellipse at 50% 45%, rgba(72,202,228,0.65), transparent 68%);
   transform: scaleX(0.72);
 }
 

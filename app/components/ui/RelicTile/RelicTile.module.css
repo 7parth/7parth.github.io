@@ -9,12 +9,12 @@
    DESIGN TOKENS (local — match globals.css)
    ──────────────────────────────────────────────────────────── */
 :root {
-  --rt-glow:       #69D6FF;
-  --rt-glow-dim:   rgba(105, 214, 255, 0.18);
-  --rt-frost:      rgba(165, 243, 252, 0.12);
+  --rt-glow: #69D6FF;
+  --rt-glow-dim: rgba(105, 214, 255, 0.18);
+  --rt-frost: rgba(165, 243, 252, 0.12);
   --rt-shadow-deep: rgba(0, 0, 0, 0.80);
-  --rt-bevel-hi:   rgba(220, 235, 245, 0.065);
-  --rt-bevel-lo:   rgba(0, 0, 0, 0.62);
+  --rt-bevel-hi: rgba(220, 235, 245, 0.065);
+  --rt-bevel-lo: rgba(0, 0, 0, 0.62);
   --rt-border-idle: rgba(88, 92, 100, 0.38);
   --rt-border-hover: rgba(128, 151, 158, 0.42);
   --rt-border-active: rgba(151, 169, 166, 0.56);
@@ -40,12 +40,24 @@
    */
   mix-blend-mode: normal;
 }
+
 /* Idle: very faint stone grain — world bleeds through strongly */
-.stoneIdle   { background-image: url("/ui/relic/relic-default.png"); opacity: 1; }
+.stoneIdle {
+  background-image: url("/ui/relic/relic-default.png");
+  opacity: 1;
+}
+
 /* Hover: stone texture becomes slightly more visible */
-.stoneHover  { background-image: url("/ui/relic/relic-hover.png");   opacity: 0; }
+.stoneHover {
+  background-image: url("/ui/relic/relic-hover.png");
+  opacity: 0;
+}
+
 /* Active: glowing stone shows through the recess */
-.stoneActive { background-image: url("/ui/relic/relic-active.png");  opacity: 0; }
+.stoneActive {
+  background-image: url("/ui/relic/relic-active.png");
+  opacity: 0;
+}
 
 /* ────────────────────────────────────────────────────────────
    LAYER 2 — Frost overlay (opacity only — no filter)
@@ -55,10 +67,10 @@
   inset: 0;
   border-radius: inherit;
   background:
-    linear-gradient(136deg, transparent 0 18%, rgba(165,243,252,0.16) 19%, transparent 20% 100%),
-    linear-gradient(28deg, transparent 0 68%, rgba(165,243,252,0.12) 69%, transparent 70% 100%),
-    radial-gradient(ellipse at 18% 18%, rgba(220,250,255,0.08), transparent 34%),
-    radial-gradient(ellipse at 82% 88%, rgba(165,243,252,0.07), transparent 38%);
+    linear-gradient(136deg, transparent 0 18%, rgba(165, 243, 252, 0.16) 19%, transparent 20% 100%),
+    linear-gradient(28deg, transparent 0 68%, rgba(165, 243, 252, 0.12) 69%, transparent 70% 100%),
+    radial-gradient(ellipse at 18% 18%, rgba(220, 250, 255, 0.08), transparent 34%),
+    radial-gradient(ellipse at 82% 88%, rgba(165, 243, 252, 0.07), transparent 38%);
   opacity: 0;
   will-change: opacity;
   transition: opacity 280ms ease;
@@ -80,49 +92,49 @@
   z-index: 2;
   opacity: 0.44;
   background:
-    linear-gradient(132deg, transparent 0 16%, rgba(255,255,255,0.045) 17%, transparent 18% 100%),
-    linear-gradient(32deg, transparent 0 46%, rgba(0,0,0,0.24) 47%, transparent 49% 100%),
-    radial-gradient(circle at 16% 18%, rgba(0,0,0,0.34) 0 2px, transparent 3px),
-    radial-gradient(circle at 84% 72%, rgba(255,255,255,0.055) 0 1px, transparent 2px);
+    linear-gradient(132deg, transparent 0 16%, rgba(255, 255, 255, 0.045) 17%, transparent 18% 100%),
+    linear-gradient(32deg, transparent 0 46%, rgba(0, 0, 0, 0.24) 47%, transparent 49% 100%),
+    radial-gradient(circle at 16% 18%, rgba(0, 0, 0, 0.34) 0 2px, transparent 3px),
+    radial-gradient(circle at 84% 72%, rgba(255, 255, 255, 0.055) 0 1px, transparent 2px);
   mix-blend-mode: overlay;
 }
 
 .tile[data-wear="1"] .wear {
   background:
-    linear-gradient(82deg, transparent 0 28%, rgba(0,0,0,0.26) 29%, transparent 31% 100%),
-    linear-gradient(156deg, transparent 0 61%, rgba(255,255,255,0.05) 62%, transparent 64% 100%),
-    radial-gradient(circle at 76% 16%, rgba(0,0,0,0.38) 0 2px, transparent 3px);
+    linear-gradient(82deg, transparent 0 28%, rgba(0, 0, 0, 0.26) 29%, transparent 31% 100%),
+    linear-gradient(156deg, transparent 0 61%, rgba(255, 255, 255, 0.05) 62%, transparent 64% 100%),
+    radial-gradient(circle at 76% 16%, rgba(0, 0, 0, 0.38) 0 2px, transparent 3px);
 }
 
 .tile[data-wear="2"] .wear {
   background:
-    linear-gradient(18deg, transparent 0 36%, rgba(0,0,0,0.24) 37%, transparent 38% 100%),
-    linear-gradient(118deg, transparent 0 70%, rgba(255,255,255,0.05) 71%, transparent 72% 100%),
-    radial-gradient(circle at 22% 78%, rgba(0,0,0,0.36) 0 2px, transparent 3px);
+    linear-gradient(18deg, transparent 0 36%, rgba(0, 0, 0, 0.24) 37%, transparent 38% 100%),
+    linear-gradient(118deg, transparent 0 70%, rgba(255, 255, 255, 0.05) 71%, transparent 72% 100%),
+    radial-gradient(circle at 22% 78%, rgba(0, 0, 0, 0.36) 0 2px, transparent 3px);
 }
 
 .tile[data-wear="3"] .wear {
   background:
-    linear-gradient(146deg, transparent 0 24%, rgba(255,255,255,0.045) 25%, transparent 27% 100%),
-    linear-gradient(64deg, transparent 0 58%, rgba(0,0,0,0.28) 59%, transparent 61% 100%),
-    radial-gradient(circle at 82% 24%, rgba(0,0,0,0.34) 0 2px, transparent 3px);
+    linear-gradient(146deg, transparent 0 24%, rgba(255, 255, 255, 0.045) 25%, transparent 27% 100%),
+    linear-gradient(64deg, transparent 0 58%, rgba(0, 0, 0, 0.28) 59%, transparent 61% 100%),
+    radial-gradient(circle at 82% 24%, rgba(0, 0, 0, 0.34) 0 2px, transparent 3px);
 }
 
 .cracks {
   z-index: 3;
   opacity: 0.46;
   background:
-    linear-gradient(112deg, transparent 0 43%, rgba(4,8,10,0.55) 43.4%, rgba(200,240,255,0.08) 43.8%, transparent 44.5% 100%),
-    linear-gradient(25deg, transparent 0 62%, rgba(3,6,8,0.46) 62.3%, transparent 63% 100%),
-    radial-gradient(ellipse at 54% 55%, transparent 0 42%, rgba(0,0,0,0.24) 74%, rgba(0,0,0,0.36) 100%);
+    linear-gradient(112deg, transparent 0 43%, rgba(4, 8, 10, 0.55) 43.4%, rgba(200, 240, 255, 0.08) 43.8%, transparent 44.5% 100%),
+    linear-gradient(25deg, transparent 0 62%, rgba(3, 6, 8, 0.46) 62.3%, transparent 63% 100%),
+    radial-gradient(ellipse at 54% 55%, transparent 0 42%, rgba(0, 0, 0, 0.24) 74%, rgba(0, 0, 0, 0.36) 100%);
 }
 
 .innerLight {
   z-index: 3;
   opacity: 0;
   background:
-    linear-gradient(112deg, transparent 0 43%, rgba(72,202,228,0.34) 43.4%, rgba(165,243,252,0.2) 43.8%, transparent 45% 100%),
-    radial-gradient(ellipse at 50% 44%, rgba(72,202,228,0.2), transparent 58%);
+    linear-gradient(112deg, transparent 0 43%, rgba(72, 202, 228, 0.34) 43.4%, rgba(165, 243, 252, 0.2) 43.8%, transparent 45% 100%),
+    radial-gradient(ellipse at 50% 44%, rgba(72, 202, 228, 0.2), transparent 58%);
   transition: opacity 420ms ease;
 }
 
@@ -130,8 +142,8 @@
   z-index: 4;
   opacity: 0.12;
   background:
-    linear-gradient(145deg, transparent 0 18%, rgba(165,243,252,0.12) 19%, transparent 20% 100%),
-    linear-gradient(20deg, transparent 0 78%, rgba(165,243,252,0.10) 79%, transparent 80% 100%);
+    linear-gradient(145deg, transparent 0 18%, rgba(165, 243, 252, 0.12) 19%, transparent 20% 100%),
+    linear-gradient(20deg, transparent 0 78%, rgba(165, 243, 252, 0.10) 79%, transparent 80% 100%);
   transform: translate3d(0, 0, 0);
   animation: frostVeinDrift 12s ease-in-out infinite;
 }
@@ -144,12 +156,10 @@
   inset: -6px;
   border-radius: inherit;
   /* Two-stop radial: tight inner + soft outer */
-  background: radial-gradient(
-    ellipse at 50% 40%,
-    rgba(105, 214, 255, 0.28) 0%,
-    rgba(72, 202, 228, 0.12) 38%,
-    transparent 68%
-  );
+  background: radial-gradient(ellipse at 50% 40%,
+      rgba(105, 214, 255, 0.28) 0%,
+      rgba(72, 202, 228, 0.12) 38%,
+      transparent 68%);
   opacity: 0;
   will-change: opacity;
   transition: opacity 280ms ease;
@@ -163,11 +173,9 @@
   position: absolute;
   inset: -28px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(105, 214, 255, 0.07) 0%,
-    transparent 65%
-  );
+  background: radial-gradient(circle at 50% 50%,
+      rgba(105, 214, 255, 0.07) 0%,
+      transparent 65%);
   opacity: 0;
   will-change: opacity;
   transition: opacity 400ms ease;
@@ -187,8 +195,10 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;           /* fill tile height */
-  overflow: hidden;       /* clip label/sublabel inside the tile */
+  height: 100%;
+  /* fill tile height */
+  overflow: hidden;
+  /* clip label/sublabel inside the tile */
   padding: 0.5rem 0.32rem 0.46rem;
   gap: 0.14rem;
   pointer-events: none;
@@ -232,15 +242,14 @@
    * Only carved bevel shadows define the relic shape.
    */
   opacity: 1;
-  background-color: #080a0d; /* Solid backdrop to block magical path visibility */
+  background-color: #080a0d;
+  /* Solid backdrop to block magical path visibility */
   background-image:
     /* Stronger stone tint so it doesn't look like empty glass */
-    linear-gradient(
-      165deg,
+    linear-gradient(165deg,
       rgba(30, 35, 42, 0.65) 0%,
       rgba(15, 18, 24, 0.75) 56%,
-      rgba(20, 24, 30, 0.65) 100%
-    );
+      rgba(20, 24, 30, 0.65) 100%);
   /* backdrop-filter removed: tiles are now fully opaque, and it was
      causing the magical path SVG to bleed through the stone surface */
   /* Hairline chiseled edge — stone fracture line */
@@ -248,24 +257,24 @@
 
   /* Carved bevel — lighter shadows so tiles don't merge into a dark block */
   box-shadow:
-    0  1px  0 rgba(255,255,255,0.018),
-    0 -1px  0 rgba(0,0,0,0.20),
+    0 1px 0 rgba(255, 255, 255, 0.018),
+    0 -1px 0 rgba(0, 0, 0, 0.20),
     /* Carved recess — subtle occlusion only */
-    inset 0  2px 1px rgba(215,230,235,0.03),
-    inset 0 -3px 6px rgba(0,0,0,0.30),
-    inset 3px  0 5px rgba(0,0,0,0.22),
-    inset -3px 0 5px rgba(0,0,0,0.24),
-    inset 0 0 10px rgba(0,0,0,0.18),
+    inset 0 2px 1px rgba(215, 230, 235, 0.03),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.30),
+    inset 3px 0 5px rgba(0, 0, 0, 0.22),
+    inset -3px 0 5px rgba(0, 0, 0, 0.24),
+    inset 0 0 10px rgba(0, 0, 0, 0.18),
     /* Subtle outer shadow — just enough depth, not a dark halo */
-    0 2px 6px rgba(0,0,0,0.18),
-    0 4px 12px rgba(0,0,0,0.10);
+    0 2px 6px rgba(0, 0, 0, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.10);
 
   /* Slight perspective tilt — same as before, plus custom base rotation */
   transform: perspective(600px) rotateX(1deg) translateZ(0);
   will-change: transform, box-shadow, border-color;
   transition:
-    transform    260ms var(--rt-ease-heavy),
-    box-shadow   260ms ease,
+    transform 260ms var(--rt-ease-heavy),
+    box-shadow 260ms ease,
     border-color 260ms ease,
     opacity 300ms ease;
 
@@ -290,22 +299,39 @@
   transform: perspective(600px) rotateX(1deg) translateY(-1px) translateZ(0);
   border-color: var(--rt-border-hover);
   box-shadow:
-    0  1px  0 rgba(255,255,255,0.04),
-    0 -1px  0 rgba(0,0,0,0.28),
-    inset 0  1px 0 rgba(200,240,255,0.10),
-    inset 0 -3px 5px rgba(0,0,0,0.32),
-    inset 3px  0 5px rgba(0,0,0,0.20),
-    inset -3px 0 5px rgba(0,0,0,0.22),
-    inset 0 0 12px rgba(72,202,228,0.08),
-    inset 0 0 16px rgba(0,0,0,0.18);
+    0 1px 0 rgba(255, 255, 255, 0.04),
+    0 -1px 0 rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(200, 240, 255, 0.10),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.32),
+    inset 3px 0 5px rgba(0, 0, 0, 0.20),
+    inset -3px 0 5px rgba(0, 0, 0, 0.22),
+    inset 0 0 12px rgba(72, 202, 228, 0.08),
+    inset 0 0 16px rgba(0, 0, 0, 0.18);
 }
 
-.tile:hover .stoneHover { opacity: 1; }
-.tile:hover .frost       { opacity: 0.40; }
-.tile:hover .glow        { opacity: 0.45; }
-.tile:hover .innerLight  { opacity: 0.50; }
-.tile:hover .cracks      { opacity: 0.64; }
-.tile:hover .frostVeins  { opacity: 0.24; }
+.tile:hover .stoneHover {
+  opacity: 1;
+}
+
+.tile:hover .frost {
+  opacity: 0.40;
+}
+
+.tile:hover .glow {
+  opacity: 0.45;
+}
+
+.tile:hover .innerLight {
+  opacity: 0.50;
+}
+
+.tile:hover .cracks {
+  opacity: 0.64;
+}
+
+.tile:hover .frostVeins {
+  opacity: 0.24;
+}
 
 /* Carved edge — frost and chisel marks around each stone face */
 .tile::before {
@@ -315,14 +341,17 @@
   border-radius: 7px;
   background:
     /* Frost accent diagonal — no heavy black fills, no edges bleeding together */
-    linear-gradient(140deg, transparent 0 16%, rgba(165,243,252,0.042) 17%, transparent 18% 100%),
-    linear-gradient(32deg, transparent 0 78%, rgba(125,107,74,0.07) 79%, transparent 80% 100%);
+    linear-gradient(140deg, transparent 0 16%, rgba(165, 243, 252, 0.042) 17%, transparent 18% 100%),
+    linear-gradient(32deg, transparent 0 78%, rgba(125, 107, 74, 0.07) 79%, transparent 80% 100%);
   z-index: -2;
   opacity: 0.60;
   transition: opacity 300ms ease;
   pointer-events: none;
 }
-.tile:hover::before { opacity: 0.82; }
+
+.tile:hover::before {
+  opacity: 0.82;
+}
 
 /* ────────────────────────────────────────────────────────────
    PRESSED STATE — Phase 6
@@ -343,12 +372,10 @@
    * Fully opaque so magical path cannot bleed through.
    */
   background-color: #080a0d;
-  background-image: linear-gradient(
-    155deg,
-    rgba(72, 202, 228, 0.22) 0%,
-    rgba(18, 22, 28, 0.58) 50%,
-    rgba(12, 16, 20, 0.62) 100%
-  );
+  background-image: linear-gradient(155deg,
+      rgba(72, 202, 228, 0.22) 0%,
+      rgba(18, 22, 28, 0.58) 50%,
+      rgba(12, 16, 20, 0.62) 100%);
   opacity: 1;
   border-color: var(--rt-border-active) !important;
   transform: perspective(600px) rotateX(1deg) translateY(-1px) translateZ(0) !important;
@@ -356,35 +383,56 @@
 }
 
 /* Stone swap */
-.tileActive .stoneActive { opacity: 1; }
-.tileActive .stoneIdle   { opacity: 0; }
+.tileActive .stoneActive {
+  opacity: 1;
+}
+
+.tileActive .stoneIdle {
+  opacity: 0;
+}
 
 /* Frost full show */
-.tileActive .frost { opacity: 0.48; }
+.tileActive .frost {
+  opacity: 0.48;
+}
 
 /* Glow full */
-.tileActive .glow  { opacity: 0.70; }
-.tileActive .innerLight { opacity: 1; animation: innerRuneFlicker 5.8s ease-in-out infinite; }
-.tileActive .cracks { opacity: 0.92; }
-.tileActive .frostVeins { opacity: 0.54; }
+.tileActive .glow {
+  opacity: 0.70;
+}
+
+.tileActive .innerLight {
+  opacity: 1;
+  animation: innerRuneFlicker 5.8s ease-in-out infinite;
+}
+
+.tileActive .cracks {
+  opacity: 0.92;
+}
+
+.tileActive .frostVeins {
+  opacity: 0.54;
+}
 
 /* Spill — lights adjacent tiles faintly */
-.tileActive .spillGlow { opacity: 1; }
+.tileActive .spillGlow {
+  opacity: 1;
+}
 
 /* Frost border full */
-.tileActive::before { opacity: 1; }
+.tileActive::before {
+  opacity: 1;
+}
 
 /* ── Active inner gradient overlay ── */
 .activeOverlay {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(
-    to bottom right,
-    rgba(72,202,228,0.10) 0%,
-    rgba(105,214,255,0.035) 40%,
-    transparent 70%
-  );
+  background: linear-gradient(to bottom right,
+      rgba(72, 202, 228, 0.10) 0%,
+      rgba(105, 214, 255, 0.035) 40%,
+      transparent 70%);
   pointer-events: none;
   z-index: 3;
 }
@@ -398,17 +446,17 @@
   pointer-events: none;
   z-index: 4;
 }
+
 .frostSweep::after {
   content: '';
   position: absolute;
-  top: 0; bottom: 0;
+  top: 0;
+  bottom: 0;
   width: 35%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(165,243,252,0.14),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(165, 243, 252, 0.14),
+      transparent);
   animation: frostSweep 5.5s ease-in-out infinite 2s;
 }
 
@@ -420,9 +468,9 @@
   z-index: 8;
   opacity: 0.48;
   background:
-    radial-gradient(circle at 30% 70%, rgba(165,243,252,0.42) 0 1px, transparent 2px),
-    radial-gradient(circle at 62% 38%, rgba(176,141,87,0.32) 0 1px, transparent 2px),
-    radial-gradient(circle at 76% 76%, rgba(165,243,252,0.36) 0 1px, transparent 2px);
+    radial-gradient(circle at 30% 70%, rgba(165, 243, 252, 0.42) 0 1px, transparent 2px),
+    radial-gradient(circle at 62% 38%, rgba(176, 141, 87, 0.32) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 76%, rgba(165, 243, 252, 0.36) 0 1px, transparent 2px);
   animation: dustLift 7.5s ease-in-out infinite;
 }
 
@@ -454,8 +502,7 @@
 
   /* Engraved: bottom shadow + subtle top highlight = carved look */
   filter:
-    drop-shadow(0px 2px 2px rgba(0,0,0,0.92))
-    drop-shadow(0px -1px 0px rgba(255,255,255,0.035));
+    drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.92)) drop-shadow(0px -1px 0px rgba(255, 255, 255, 0.035));
 
   /* Phase 7: idle icons 20% dimmer */
   color: rgba(150, 156, 160, 0.68);
@@ -467,9 +514,7 @@
   color: rgba(178, 238, 248, 0.94);
   opacity: 1;
   filter:
-    drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-    drop-shadow(0px -1px 0px rgba(255,255,255,0.04))
-    drop-shadow(0 0 4px rgba(72,202,228,0.42));
+    drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.90)) drop-shadow(0px -1px 0px rgba(255, 255, 255, 0.04)) drop-shadow(0 0 4px rgba(72, 202, 228, 0.42));
   animation: runePulse 4.5s ease-in-out infinite;
 }
 
@@ -478,8 +523,7 @@
   opacity: 0.96;
   transform: translateY(-1px);
   filter:
-    drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-    drop-shadow(0 0 3px rgba(105,214,255,0.22));
+    drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.90)) drop-shadow(0 0 3px rgba(105, 214, 255, 0.22));
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -504,18 +548,21 @@
 
   /* Engraved */
   text-shadow:
-    0px 1px 2px rgba(0,0,0,0.90),
-    0px -1px 1px rgba(255,255,255,0.07);
+    0px 1px 2px rgba(0, 0, 0, 0.90),
+    0px -1px 1px rgba(255, 255, 255, 0.07);
 }
 
 .tileActive .title {
   color: rgba(235, 244, 244, 0.96);
   text-shadow:
-    0px 1px 2px rgba(0,0,0,0.90),
-    0px -1px 1px rgba(255,255,255,0.07),
-    0 0 5px rgba(72,202,228,0.18);
+    0px 1px 2px rgba(0, 0, 0, 0.90),
+    0px -1px 1px rgba(255, 255, 255, 0.07),
+    0 0 5px rgba(72, 202, 228, 0.18);
 }
-.tile:hover .title { color: rgba(211,223,222,0.9); }
+
+.tile:hover .title {
+  color: rgba(211, 223, 222, 0.9);
+}
 
 /* ────────────────────────────────────────────────────────────
    SUBTITLE — Phase 7
@@ -536,23 +583,43 @@
   line-clamp: 2;
   -webkit-box-orient: vertical;
 
-  /* Phase 7: ~45% opacity */
-  color: rgba(176, 181, 184, 0.42);
+  /* Increased contrast from ~42% to 72% opacity for better readability */
+  color: rgba(190, 205, 215, 0.72);
   transition: color 240ms ease;
-  text-shadow: 0px 1px 2px rgba(0,0,0,0.85);
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.85);
 }
 
-.tileActive .subtitle { color: rgba(157,218,226,0.68); }
-.tile:hover  .subtitle { color: rgba(190,210,211,0.54); }
+.tileActive .subtitle {
+  color: rgba(186, 242, 255, 0.96);
+}
+
+.tile:hover .subtitle {
+  color: rgba(224, 242, 254, 0.92);
+}
 
 /* ────────────────────────────────────────────────────────────
    RESPONSIVE
    ──────────────────────────────────────────────────────────── */
 @media (min-width: 1280px) {
-  .content { padding: 0.58rem 0.38rem 0.5rem; gap: 0.16rem; }
-  .icon     { font-size: 2.48rem; width: 49px; height: 49px; margin-bottom: 0.42rem; }
-  .title    { font-size: 0.625rem; }
-  .subtitle { font-size: 0.5rem; }
+  .content {
+    padding: 0.58rem 0.38rem 0.5rem;
+    gap: 0.16rem;
+  }
+
+  .icon {
+    font-size: 2.48rem;
+    width: 49px;
+    height: 49px;
+    margin-bottom: 0.42rem;
+  }
+
+  .title {
+    font-size: 0.625rem;
+  }
+
+  .subtitle {
+    font-size: 0.6rem;
+  }
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -562,78 +629,127 @@
 
 /* Breathing glow — 4.5s, slow and elegant */
 @keyframes relicBreathe {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow:
-      0  1px  0 rgba(255,255,255,0.03),
-      0 -1px  0 rgba(0,0,0,0.55),
-      inset 0 0  11px rgba(72,202,228,0.14),
-      inset 0 0  30px rgba(0,0,0,0.44),
+      0 1px 0 rgba(255, 255, 255, 0.03),
+      0 -1px 0 rgba(0, 0, 0, 0.55),
+      inset 0 0 11px rgba(72, 202, 228, 0.14),
+      inset 0 0 30px rgba(0, 0, 0, 0.44),
       inset 0 2px 1px var(--rt-bevel-hi),
-      inset 0 -4px 5px rgba(0,0,0,0.72),
-      inset 4px 0 7px rgba(0,0,0,0.40),
-      inset -4px 0 7px rgba(0,0,0,0.44);
+      inset 0 -4px 5px rgba(0, 0, 0, 0.72),
+      inset 4px 0 7px rgba(0, 0, 0, 0.40),
+      inset -4px 0 7px rgba(0, 0, 0, 0.44);
   }
+
   50% {
     box-shadow:
-      0  1px  0 rgba(255,255,255,0.035),
-      0 -1px  0 rgba(0,0,0,0.58),
-      inset 0 0 19px rgba(72,202,228,0.25),
-      inset 0 0 32px rgba(0,0,0,0.34),
+      0 1px 0 rgba(255, 255, 255, 0.035),
+      0 -1px 0 rgba(0, 0, 0, 0.58),
+      inset 0 0 19px rgba(72, 202, 228, 0.25),
+      inset 0 0 32px rgba(0, 0, 0, 0.34),
       inset 0 2px 1px var(--rt-bevel-hi),
-      inset 0 -4px 5px rgba(0,0,0,0.66),
-      inset 4px 0 7px rgba(0,0,0,0.34),
-      inset -4px 0 7px rgba(0,0,0,0.38);
+      inset 0 -4px 5px rgba(0, 0, 0, 0.66),
+      inset 4px 0 7px rgba(0, 0, 0, 0.34),
+      inset -4px 0 7px rgba(0, 0, 0, 0.38);
   }
 }
 
 /* Rune pulse — 4.5s, organic double-flash */
 @keyframes runePulse {
-  0%, 65%, 100% {
+
+  0%,
+  65%,
+  100% {
     filter:
-      drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 3px rgba(72,202,228,0.36));
+      drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.90)) drop-shadow(0 0 3px rgba(72, 202, 228, 0.36));
   }
+
   75% {
     filter:
-      drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 9px rgba(72,202,228,0.72))
-      drop-shadow(0 0 18px rgba(165,243,252,0.34));
+      drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.90)) drop-shadow(0 0 9px rgba(72, 202, 228, 0.72)) drop-shadow(0 0 18px rgba(165, 243, 252, 0.34));
   }
+
   82% {
     filter:
-      drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 4px rgba(72,202,228,0.42));
+      drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.90)) drop-shadow(0 0 4px rgba(72, 202, 228, 0.42));
   }
+
   88% {
     filter:
-      drop-shadow(0px 3px 3px rgba(0,0,0,0.90))
-      drop-shadow(0 0 7px rgba(72,202,228,0.58))
-      drop-shadow(0 0 14px rgba(165,243,252,0.25));
+      drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.90)) drop-shadow(0 0 7px rgba(72, 202, 228, 0.58)) drop-shadow(0 0 14px rgba(165, 243, 252, 0.25));
   }
 }
 
 /* Frost shimmer — slow and elegant */
 @keyframes frostSweep {
-  0%   { transform: translateX(-130%) skewX(-12deg); opacity: 0; }
-  8%   { opacity: 0.7; }
-  85%  { opacity: 0.25; }
-  100% { transform: translateX(230%) skewX(-12deg); opacity: 0; }
+  0% {
+    transform: translateX(-130%) skewX(-12deg);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.7;
+  }
+
+  85% {
+    opacity: 0.25;
+  }
+
+  100% {
+    transform: translateX(230%) skewX(-12deg);
+    opacity: 0;
+  }
 }
 
 @keyframes innerRuneFlicker {
-  0%, 58%, 100% { opacity: 0.82; }
-  63% { opacity: 0.98; }
-  68% { opacity: 0.72; }
-  74% { opacity: 0.9; }
+
+  0%,
+  58%,
+  100% {
+    opacity: 0.82;
+  }
+
+  63% {
+    opacity: 0.98;
+  }
+
+  68% {
+    opacity: 0.72;
+  }
+
+  74% {
+    opacity: 0.9;
+  }
 }
 
 @keyframes frostVeinDrift {
-  0%, 100% { transform: translate3d(-1px, 0, 0); }
-  50% { transform: translate3d(1px, -1px, 0); }
+
+  0%,
+  100% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(1px, -1px, 0);
+  }
 }
 
 @keyframes dustLift {
-  0%, 100% { transform: translate3d(0, 5px, 0); opacity: 0.18; }
-  45% { transform: translate3d(0, -7px, 0); opacity: 0.46; }
-  72% { opacity: 0.28; }
+
+  0%,
+  100% {
+    transform: translate3d(0, 5px, 0);
+    opacity: 0.18;
+  }
+
+  45% {
+    transform: translate3d(0, -7px, 0);
+    opacity: 0.46;
+  }
+
+  72% {
+    opacity: 0.28;
+  }
 }
