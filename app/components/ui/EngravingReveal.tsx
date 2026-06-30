@@ -142,6 +142,7 @@ export default function EngravingReveal({
   const [beamX,    setBeamX]     = useState(0);
   const [panelH,   setPanelH]    = useState(0);
   const [clipX,    setClipX]     = useState(0); // px covered so far
+  const [everScanned, setEverScanned] = useState(false);
 
   const animRef  = useRef<{ stop: () => void } | null>(null);
   const prevKey  = useRef(sectionKey);
@@ -184,7 +185,10 @@ export default function EngravingReveal({
           setBeamX(x);
           setClipX(x);
         },
-        onComplete: () => setScanning(false),
+        onComplete: () => {
+          setScanning(false);
+          setEverScanned(true);
+        },
       });
       animRef.current = ctrl;
     };
@@ -193,6 +197,8 @@ export default function EngravingReveal({
       // Initial mount — no content swap, just scan immediately
       doScan(w, h);
     } else {
+      // Reset everScanned so the full cover shows during content swap
+      setEverScanned(false);
       setTimeout(() => {
         setDisplayed(newChildren);
         setPanelH(outer.offsetHeight);
@@ -249,8 +255,21 @@ export default function EngravingReveal({
         </>
       )}
 
-      {/* ── Clip mask overlay — covers unrevealed portion ── */}
+      {/* ── Clip mask overlay ──
+           Before first scan: covers everything (hides panel until beam)
+           During scan: right portion still covered
+           After scan: gone entirely
+      ── */}
+      {!everScanned && !scanning && (
+        // Pre-scan full cover — hides panel before beam starts
+        <div aria-hidden="true" style={{
+          position: "absolute", inset: 0,
+          background: "rgba(8,6,4,0.97)",
+          zIndex: 28, pointerEvents: "none",
+        }} />
+      )}
       {scanning && (
+        // During scan: right portion still black
         <div aria-hidden="true" style={{
           position: "absolute",
           top: 0, left: `${clipX}px`,
