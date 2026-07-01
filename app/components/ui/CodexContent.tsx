@@ -22,7 +22,7 @@ export default function CodexContent({
   return (
     <div
       key={sectionKey}
-      className="p-5 lg:p-8 flex flex-col h-full overflow-hidden codex-inner-border bg-surface-container-low/80 backdrop-blur-md"
+      className="p-5 lg:p-8 flex flex-col h-full overflow-hidden"
     >
       <div className="text-center mb-6 lg:mb-8 relative flex-shrink-0 border-b border-faded-bronze/30 pb-6">
         <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-xs mb-2 lg:mb-3 engraved-text">

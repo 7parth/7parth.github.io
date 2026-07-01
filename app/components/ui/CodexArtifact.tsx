@@ -3,9 +3,10 @@
 import React from "react";
 import { motion, MotionValue, useTransform } from "framer-motion";
 import CodexContent, { CodexContentProps } from "./CodexContent";
-
-const CHAIN_SVG =
-  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=";
+import FrameLayer from "../codex/FrameLayer";
+import StoneLayer from "../codex/StoneLayer";
+import WatermarkLayer from "../codex/WatermarkLayer";
+import FrostLayer from "../codex/FrostLayer";
 
 export interface CodexArtifactProps extends CodexContentProps {
   progress: MotionValue<number>;
@@ -22,10 +23,9 @@ export default function CodexArtifact({
   ...contentProps
 }: CodexArtifactProps) {
   const artifactClip = useTransform(revealProgress, (value) => `inset(0 ${100 - value * 100}% 0 0)`);
-
   const artifactScale = useTransform(revealProgress, [0, 0.14, 1], [0.975, 1.006, 1]);
   const artifactFilter = useTransform(revealProgress, [0, 0.28, 1], ["blur(5px)", "blur(1px)", "blur(0px)"]);
-  const runeIgnition = useTransform(revealProgress, [0, 0.18, 0.72, 1], [0, 0.78, 0.22, 0]);
+  const runeIgnition = useTransform(revealProgress, [0, 0.05, 0.6, 1], [0, 1, 0.15, 0]);
 
   return (
     <motion.div
@@ -36,8 +36,9 @@ export default function CodexArtifact({
       <motion.div
         className="relative"
         style={{
-          width: "min(1000px, 85vw)",
-          height: "min(800px, 85vh)",
+          width: "min(100vw - 2rem, 1200px)",
+          maxWidth: "calc((100vh - 2rem) * 1.5)",
+          aspectRatio: "1536 / 1024",
           clipPath: artifactClip,
           scale: artifactScale,
           filter: artifactFilter,
@@ -45,42 +46,54 @@ export default function CodexArtifact({
           pointerEvents: interactionEnabled ? "auto" : "none",
         }}
       >
-        <div className="codex-tablet relative flex flex-col w-full h-full">
-          {interactionEnabled && (
-            <button
-              onClick={onClose}
-              aria-label="Close codex"
-              className="absolute top-3 left-3 z-20 w-8 h-8 rounded-full bg-[#0d0e10] border border-[#444] flex items-center justify-center cursor-pointer hover:border-rune-glow/60 hover:shadow-[0_0_8px_rgba(72,202,228,0.4)] transition-all duration-200 hover:rotate-90 hover:scale-105"
-            >
-              <span className="text-white text-sm leading-none">×</span>
-            </button>
-          )}
+        {/* ISSUE 1 & 2: Stone, frost, and watermark are all inset to match the
+            frame's inner transparent window. The iron borders of frame.png
+            naturally mask the stone edges — everything reads as one slab.
+            No separate inner tablet. No rounded container. */}
+        <StoneLayer />
+        <WatermarkLayer />
+        <FrostLayer />
 
+        {/* Rune ignition — instantaneous blinding flash to mask frame load */}
+        <motion.div
+          className="absolute pointer-events-none"
+          style={{
+            zIndex: 10,
+            top: '14%', bottom: '14%', left: '13%', right: '13%',
+            opacity: runeIgnition,
+            background:
+              "radial-gradient(circle at 22% 16%, rgba(72,202,228,0.45), transparent 35%), radial-gradient(circle at 78% 84%, rgba(176,141,87,0.35), transparent 40%)",
+          }}
+        />
+
+        {/* ISSUE 1 & 3: Frame sits at z-30, above stone.
+            Its opaque iron borders are the only visible outer edge.
+            No separate background, no shadow box around it. */}
+        <FrameLayer />
+
+        {/* Close button above everything */}
+        {interactionEnabled && (
+          <button
+            onClick={onClose}
+            aria-label="Close codex"
+            className="absolute top-8 right-8 z-50 w-10 h-10 rounded-full bg-[#0d0e10]/80 border border-[#555] flex items-center justify-center cursor-pointer hover:border-rune-glow/80 hover:shadow-[0_0_12px_rgba(72,202,228,0.5)] transition-all duration-200 hover:rotate-90 hover:scale-105"
+          >
+            <span className="text-white text-lg leading-none">×</span>
+          </button>
+        )}
+
+        {/* ISSUE 4: Content area expanded to ~78% of tablet.
+            Insets pulled in to ensure it perfectly sits inside the iron borders.
+            ISSUE 7: Vignette only — no hard container, no border, no background. */}
+        <div className="absolute" style={{ top: '15.5%', bottom: '15.5%', left: '14.5%', right: '14.5%', zIndex: 40 }}>
+          {/* Soft central vignette for readability — fades to transparent, no hard edges */}
           <div
-            className="absolute -top-[60px] left-8 w-3 h-[80px] opacity-80"
-            style={{ backgroundImage: `url('${CHAIN_SVG}')` }}
-          />
-          <div
-            className="absolute -top-[60px] right-8 w-3 h-[80px] opacity-80"
-            style={{ backgroundImage: `url('${CHAIN_SVG}')` }}
-          />
-
-          <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-[#555] rounded-tl" />
-          <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-[#555] rounded-tr" />
-          <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-[#555] rounded-bl" />
-          <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-[#555] rounded-br" />
-
-          <motion.div
             className="absolute inset-0 pointer-events-none"
             style={{
-              opacity: runeIgnition,
-              background:
-                "radial-gradient(circle at 22% 16%, rgba(72,202,228,0.22), transparent 24%), radial-gradient(circle at 78% 84%, rgba(176,141,87,0.18), transparent 26%)",
-              boxShadow: "inset 0 0 48px rgba(72,202,228,0.18)",
+              background: "radial-gradient(ellipse 85% 75% at 50% 50%, rgba(0,0,0,0.38) 0%, transparent 100%)",
             }}
           />
-
-          <div className="m-4 h-[calc(100%-2rem)] relative">
+          <div className="relative w-full h-full flex flex-col overflow-hidden" style={{ zIndex: 1 }}>
             <CodexContent {...contentProps} />
           </div>
         </div>

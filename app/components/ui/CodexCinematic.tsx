@@ -177,7 +177,7 @@ export default function CodexCinematic({
         />
 
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative pointer-events-none" style={{ width: "min(1000px, 85vw)", height: "min(800px, 85vh)" }}>
+          <div className="relative pointer-events-none overflow-hidden" style={{ width: "min(100vw - 2rem, 1200px)", maxWidth: "calc((100vh - 2rem) * 1.5)", aspectRatio: "1536 / 1024", clipPath: "inset(14% 13% 14% 13%)" }}>
             <motion.div
               className="codex-carved-trail absolute left-0 top-1/2 h-px origin-left"
               style={{
