@@ -174,6 +174,21 @@ export default function ContactSection() {
           )}
         </button>
       </form>
+
+      {/* Easter Egg */}
+      <div className="mt-12 pt-8 flex flex-col items-center justify-center opacity-30 hover:opacity-100 transition-opacity duration-700 border-t border-faded-bronze/10">
+        <p className="font-[family-name:var(--font-cinzel)] text-[9px] uppercase tracking-[0.2em] text-muted-gold/50 text-center mb-4 engraved-text max-w-xs">
+          Since you scrolled this far to contact me...<br/>here is an easter egg
+        </p>
+        <div className="w-40 relative rounded border border-muted-gold/20 overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+          <img 
+            src="/kratos-heart.gif" 
+            alt="Easter Egg" 
+            className="w-full h-auto object-cover mix-blend-luminosity hover:mix-blend-normal transition-all duration-700"
+          />
+          <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] pointer-events-none"></div>
+        </div>
+      </div>
     </div>
   );
 }

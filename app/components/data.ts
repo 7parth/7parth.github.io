@@ -15,7 +15,8 @@ export type SectionId =
   | "linkedin"
   | "leetcode"
   | "contact"
-  | "timeline";
+  | "timeline"
+  | "lore";
 
 export interface Relic {
   id: SectionId;

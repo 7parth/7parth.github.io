@@ -20,6 +20,7 @@ import ResumeSection from "./sections/ResumeSection";
 import ContactSection from "./sections/ContactSection";
 import TimelineSection from "./sections/TimelineSection";
 import PlaceholderSection from "./sections/PlaceholderSection";
+import LoreSection from "./sections/LoreSection";
 
 // ── World-reaction map ────────────────────────────────────
 const WORLD_CLASSES: Record<string, string> = {
@@ -53,7 +54,18 @@ export default function PortfolioShell() {
   const [wallAwake, setWallAwake] = useState(false);
   const [hoveredRelicIndex, setHoveredRelicIndex] = useState<number | null>(null);
 
-  const activeRelic = relics.find((r) => r.id === selectedId) || relics[0];
+  const activeRelic =
+    (isTransitioning ? pendingId : selectedId) === "lore"
+      ? {
+          id: "lore",
+          codexLabel: "LORE",
+          codexTitle: "THE ENGINEER'S CHRONICLE",
+          loreSummary: "A tale explaining why this Codex exists, told by an unlikely storyteller.",
+          icon: "menu_book",
+          runeSymbol: "ᛈ",
+          iconImg: "/icons/lore.png",
+        }
+      : relics.find((r) => r.id === (isTransitioning ? pendingId : selectedId)) || relics[0];
   const activeRelicIndex = relics.findIndex((r) => r.id === (isTransitioning ? pendingId : selectedId));
 
   const handleRelicClick = (id: SectionId) => {
@@ -182,6 +194,7 @@ export default function PortfolioShell() {
       case "resume": return <ResumeSection />;
       case "contact": return <ContactSection />;
       case "timeline": return <TimelineSection />;
+      case "lore": return <LoreSection />;
       default: return <PlaceholderSection title="Unknown Realm" />;
     }
   }
@@ -347,7 +360,10 @@ export default function PortfolioShell() {
           </p>
         </div>
         <div className="hidden md:flex gap-8 pointer-events-auto">
-          <a className="font-[family-name:var(--font-cinzel)] text-[11px] tracking-[0.2em] text-on-surface-variant/60 hover:text-muted-gold transition-colors engraved-text" href="#">LORE</a>
+          <button onClick={() => triggerTransition("lore")} className="group flex items-center gap-2 font-[family-name:var(--font-cinzel)] text-[12px] font-bold tracking-[0.25em] text-muted-gold hover:text-icy-cyan transition-all duration-300 engraved-text gold-glow-text">
+            <span className="w-1.5 h-1.5 rounded-full bg-muted-gold group-hover:bg-icy-cyan shadow-[0_0_8px_rgba(240,195,70,0.8)] group-hover:shadow-[0_0_12px_rgba(72,202,228,0.9)] animate-pulse transition-all duration-300"></span>
+            LORE
+          </button>
         </div>
       </footer>
     </div>
