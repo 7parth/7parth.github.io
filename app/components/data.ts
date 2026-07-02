@@ -21,7 +21,7 @@ export interface Relic {
   id: SectionId;
   /** Material Symbols icon name (fallback when no iconImg) */
   icon: string;
-  /** Path to a custom PNG icon in /public/icons/ — takes precedence over `icon` on the relic tile */
+  /** Path to a custom PNG icon in /assets/icons/ — takes precedence over `icon` on the relic tile */
   iconImg?: string;
   /** Scale multiplier for iconImg when the image has excess padding (default 1) */
   iconScale?: number;
