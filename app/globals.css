@@ -508,29 +508,6 @@ body {
   );
 }
 
-/* ============================================
-   Skill Bar
-   ============================================ */
-.skill-bar-track {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 9999px;
-  overflow: hidden;
-}
-
-.skill-bar-fill-cyan {
-  height: 100%;
-  background: linear-gradient(90deg, rgba(72, 202, 228, 0.4), rgba(165, 243, 252, 0.7));
-  border-radius: 9999px;
-  box-shadow: 0 0 6px rgba(72, 202, 228, 0.4);
-}
-
-.skill-bar-fill-gold {
-  height: 100%;
-  background: linear-gradient(90deg, rgba(125, 107, 74, 0.5), rgba(176, 141, 87, 0.8));
-  border-radius: 9999px;
-  box-shadow: 0 0 6px rgba(176, 141, 87, 0.4);
-}
 
 /* ============================================
    Cinematic Vignette

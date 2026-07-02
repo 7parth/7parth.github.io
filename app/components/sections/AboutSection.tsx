@@ -1,109 +1,53 @@
 // AboutSection — Warrior's Chronicle
 // Matches the Stitch "About Me" panel exactly: bio, stats, core focus, CTA
+import EntryMarker from "../ui/EntryMarker";
 
 export default function AboutSection() {
   return (
     <div className="flex flex-col gap-6 text-center section-fade">
       {/* Bio */}
-      <p className="font-body-md text-on-surface-variant/90 leading-relaxed tracking-wide text-sm engraved-text px-2">
-        I am a Computer Engineering undergraduate with hands-on experience building production grade AI systems, RAG pipelines, and scalable backend APIs.
-      </p>
-      <p className="font-body-md text-on-surface-variant/90 leading-relaxed tracking-wide text-sm engraved-text px-2">
-        I specialize in Agentic AI, LLM integration, and hybrid retrieval to solve complex problems and deliver end-to-end AI solutions.
-      </p>
-
-      {/* Stats Row */}
-      <div className="flex justify-between items-center py-7 mt-2 border-y border-[#2e2e2e]">
-        <div className="text-center flex flex-col items-center flex-1">
-          <span
-            className="material-symbols-outlined text-muted-gold text-3xl mb-2 icon-engraved"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            change_history
-          </span>
-          <span className="font-stat-num text-3xl text-white tracking-widest engraved-text">
-            3+
-          </span>
-          <span className="font-label-caps text-[9px] text-on-surface-variant/60 mt-2 uppercase text-center tracking-[0.2em]">
-            Years of
-            <br />
-            Learning
-          </span>
-        </div>
-        <div className="w-px h-16 bg-[#2e2e2e]" />
-        <div className="text-center flex flex-col items-center flex-1">
-          <span
-            className="material-symbols-outlined text-muted-gold text-3xl mb-2 icon-engraved"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            explore
-          </span>
-          <span className="font-stat-num text-3xl text-white tracking-widest engraved-text">
-            25+
-          </span>
-          <span className="font-label-caps text-[9px] text-on-surface-variant/60 mt-2 uppercase text-center tracking-[0.2em]">
-            Projects
-            <br />
-            Built
-          </span>
-        </div>
-        <div className="w-px h-16 bg-[#2e2e2e]" />
-        <div className="text-center flex flex-col items-center flex-1">
-          <span
-            className="material-symbols-outlined text-muted-gold text-3xl mb-2 icon-engraved"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            architecture
-          </span>
-          <span className="font-stat-num text-3xl text-white tracking-widest engraved-text">
-            250+
-          </span>
-          <span className="font-label-caps text-[9px] text-on-surface-variant/60 mt-2 uppercase text-center tracking-[0.2em]">
-            Problems
-            <br />
-            Solved
-          </span>
-        </div>
+      <div className="flex flex-col gap-3 text-left relative px-1">
+        <div className="absolute left-0 top-1 bottom-1 w-[2px] bg-gradient-to-b from-muted-gold/50 via-icy-cyan/20 to-transparent rounded-full" aria-hidden="true"></div>
+        <p className="font-[family-name:var(--font-ibm-plex)] text-[14px] lg:text-[15px] text-[#ECE7DD] font-normal engraved-text leading-[1.6] pl-4">
+          Currently a final year Computer Engineering student at JSPM's Rajarshi Shahu College of Engineering, Pune with hands-on experience building production-grade Agentic AI systems, RAG pipelines, and scalable backend APIs. Focused on the intersection of Machine Learning, Generative AI, and full-stack implementation.
+        </p>
+        <p className="font-[family-name:var(--font-ibm-plex)] text-[14px] lg:text-[15px] text-[#ECE7DD] font-normal engraved-text leading-[1.6] pl-4">
+          Hailing from Sindhudurg, beyond the screen I am a professional Table Tennis player, a massive fan of video games, and deeply passionate about competitive problem-solving.
+        </p>
+      </div>
+      
+      {/* Availability Status */}
+      <div className="flex justify-center mt-1 mb-2">
+        <span className="font-[family-name:var(--font-cinzel)] text-[10px] uppercase tracking-[0.2em] text-icy-cyan/80 bg-icy-cyan/5 border border-icy-cyan/20 px-3 py-1.5 rounded-sm shadow-[inset_0_0_8px_rgba(72,202,228,0.1)] engraved-text flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-icy-cyan animate-pulse"></span>
+          Open for Remote / On-Site / Hybrid
+        </span>
       </div>
 
       {/* Core Focus */}
       <div className="mt-2">
         <div className="flex items-center justify-center gap-4 mb-5">
-          <div className="h-px w-10 bg-muted-gold/30" />
-          <h3 className="font-label-caps text-[10px] text-muted-gold uppercase tracking-[0.35em] engraved-text">
+          <div className="h-px w-10 bg-gradient-to-r from-transparent to-muted-gold/40" />
+          <h3 className="font-[family-name:var(--font-cinzel)] text-[11px] lg:text-[12px] text-muted-gold uppercase tracking-[0.3em] font-medium engraved-text">
             Core Focus
           </h3>
-          <div className="h-px w-10 bg-muted-gold/30" />
+          <div className="h-px w-10 bg-gradient-to-l from-transparent to-muted-gold/40" />
         </div>
-        <ul className="flex flex-col gap-3.5 font-body-md text-xs text-on-surface-variant/80 tracking-wide px-4 text-left">
+        <ul className="flex flex-col gap-3.5 px-4 text-left">
           {[
             { icon: "code", label: "Full Stack Development" },
             { icon: "memory", label: "System Design & Optimization" },
             { icon: "schema", label: "AI, ML & Data Engineering" },
             { icon: "extension", label: "Problem Solving & DSA" },
-          ].map(({ icon, label }) => (
-            <li key={icon} className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-icy-cyan/70 text-xl icon-engraved flex-shrink-0">
-                {icon}
+          ].map(({ label }) => (
+            <li key={label} className="flex items-center gap-2">
+              <EntryMarker />
+              <span className="font-[family-name:var(--font-cinzel)] text-[12px] lg:text-[13px] uppercase tracking-[0.15em] text-[#ECE7DD] font-medium engraved-text">
+                {label}
               </span>
-              <span className="engraved-text">{label}</span>
             </li>
           ))}
         </ul>
-      </div>
-
-      {/* CTA Button */}
-      <div className="mt-6 pt-4 border-t border-outline-variant/20">
-        <button className="w-full py-4 bg-[#1a1c1e] border border-[#333] rounded flex items-center justify-center gap-3 hover:border-muted-gold/50 transition-colors group shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] relative overflow-hidden">
-          {/* Stitch shimmer: translate-x sweep on hover */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
-          <span className="font-label-caps text-muted-gold/80 text-[10px] uppercase tracking-[0.3em] group-hover:text-muted-gold transition-colors engraved-text">
-            More About My Journey
-          </span>
-          <span className="material-symbols-outlined text-muted-gold/80 text-sm icon-engraved group-hover:text-muted-gold group-hover:translate-x-2 transition-all duration-300">
-            arrow_forward
-          </span>
-        </button>
       </div>
     </div>
   );

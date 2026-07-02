@@ -14,9 +14,10 @@ export interface CodexContentProps {
   sectionKey: string;
   codexLabel: string;
   codexTitle: string;
-  runeSymbol: string;
   loreSummary: string;
   runes: readonly string[];
+  iconImg?: string;
+  icon?: string;
   children: React.ReactNode;
 }
 
@@ -91,9 +92,10 @@ export default function CodexArtifact({
           <CodexHero 
             label={contentProps.codexLabel}
             title={contentProps.codexTitle}
-            runeSymbol={contentProps.runeSymbol}
             loreSummary={contentProps.loreSummary}
             runes={contentProps.runes}
+            iconImg={contentProps.iconImg}
+            icon={contentProps.icon}
           />
 
           <main 

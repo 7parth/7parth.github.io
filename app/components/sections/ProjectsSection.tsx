@@ -1,5 +1,6 @@
 // ProjectsSection — Legendary Quests
 // 6 project cards with tech stack tags, descriptions, and links
+import EntryMarker from "../ui/EntryMarker";
 
 const projects = [
   {
@@ -43,33 +44,14 @@ export default function ProjectsSection() {
       {projects.map((project) => (
         <div
           key={project.id}
-          className={`relic-stone p-4 ${project.accent === "cyan" ? "card-glow" : "gold-card-glow"}`}
+          className="relative pb-8 mb-2 border-b last:border-b-0 border-faded-bronze/10"
         >
-          <div className="flex items-start gap-3">
-            {/* Icon */}
-            <div
-              className={`flex-shrink-0 w-10 h-10 rounded-stone bg-[#0d0e10] border flex items-center justify-center ${
-                project.accent === "cyan"
-                  ? "border-rune-glow/25"
-                  : "border-muted-gold/25"
-              }`}
-            >
-              <span
-                className={`material-symbols-outlined text-xl icon-engraved ${
-                  project.accent === "cyan"
-                    ? "text-rune-glow/70"
-                    : "text-muted-gold/70"
-                }`}
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                {project.icon}
-              </span>
-            </div>
-
+          <div className="flex flex-col">
             {/* Content */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-1 mb-0.5">
-                <h3 className="font-headline-md text-sm text-white engraved-text tracking-wider">
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-start justify-between gap-1 mb-1">
+                <h3 className="font-headline-md text-base lg:text-lg text-white engraved-text tracking-wider flex items-center">
+                  <EntryMarker />
                   {project.name}
                 </h3>
                 <div className="flex gap-1.5 flex-shrink-0">
@@ -105,7 +87,7 @@ export default function ProjectsSection() {
               </p>
               <div className="flex flex-wrap gap-1">
                 {project.tech.map((t) => (
-                  <span key={t} className="tech-tag">
+                  <span key={t} className="tech-tag bg-transparent border border-faded-bronze/20 text-on-surface-variant/80 text-[9px] lg:text-[10px] px-2 py-1">
                     {t}
                   </span>
                 ))}

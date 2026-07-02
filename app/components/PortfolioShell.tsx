@@ -57,6 +57,12 @@ export default function PortfolioShell() {
   const activeRelicIndex = relics.findIndex((r) => r.id === (isTransitioning ? pendingId : selectedId));
 
   const handleRelicClick = (id: SectionId) => {
+    const clickedRelic = relics.find((r) => r.id === id);
+    if (clickedRelic?.externalLink) {
+      window.open(clickedRelic.externalLink, "_blank", "noopener,noreferrer");
+      return;
+    }
+    
     setWallAwake(false);
     if (wallPulseTimerRef.current) clearTimeout(wallPulseTimerRef.current);
     requestAnimationFrame(() => setWallAwake(true));
@@ -176,9 +182,6 @@ export default function PortfolioShell() {
       case "resume": return <ResumeSection />;
       case "contact": return <ContactSection />;
       case "timeline": return <TimelineSection />;
-      case "github": return <PlaceholderSection title="GitHub" />;
-      case "linkedin": return <PlaceholderSection title="LinkedIn" />;
-      case "leetcode": return <PlaceholderSection title="LeetCode" />;
       default: return <PlaceholderSection title="Unknown Realm" />;
     }
   }
@@ -323,9 +326,10 @@ export default function PortfolioShell() {
           sectionKey={selectedId}
           codexLabel={activeRelic.codexLabel}
           codexTitle={activeRelic.codexTitle}
-          runeSymbol={activeRelic.runeSymbol}
           loreSummary={activeRelic.loreSummary}
           runes={RUNES}
+          iconImg={activeRelic.iconImg}
+          icon={activeRelic.icon}
           onPhaseChange={setPhase}
           onCommitContent={commitPending}
           onCloseRequest={triggerClose}

@@ -1,104 +1,45 @@
 // SkillsSection — Weapons Mastered
-// Categorised skill bars with animated fill and percentage readout
+// Minimalist, typography-driven skill lists
+
 
 const categories = [
   {
-    name: "Programming Languages",
-    icon: "code",
-    accent: "cyan",
-    skills: [
-      { name: "Python", level: 90 },
-      { name: "C/C++", level: 85 },
-      { name: "JavaScript", level: 85 },
-      { name: "SQL", level: 80 },
-    ],
+    name: "Computer Science",
+    skills: ["Python", "C/C++", "JavaScript", "SQL", "OOP", "CN", "Data Structures & Algorithms", "DBMS"],
   },
   {
     name: "Full-Stack Development",
-    icon: "layers",
-    accent: "gold",
-    skills: [
-      { name: "FastAPI", level: 92 },
-      { name: "React.js / Next.js", level: 85 },
-      { name: "Node.js / Express", level: 82 },
-      { name: "PostgreSQL", level: 80 },
-      { name: "MongoDB", level: 80 },
-      { name: "Supabase", level: 75 },
-    ],
+    skills: ["FastAPI", "React.js", "Next.js", "Node.js", "Express", "PostgreSQL", "MongoDB", "Supabase"],
   },
   {
-    name: "AI / ML & Agentic AI",
-    icon: "psychology",
-    accent: "cyan",
-    skills: [
-      { name: "LangChain / LangGraph", level: 90 },
-      { name: "RAG & Vector DBs", level: 88 },
-      { name: "Agentic AI / NLP", level: 85 },
-      { name: "Fine Tuning", level: 80 },
-      { name: "PyTorch / Transformers", level: 75 },
-    ],
+    name: "AI / ML",
+    skills: ["LangChain", "LangGraph", "RAG", "Vector Databases", "PyTorch", "Transformers", "NLP", "Fine Tuning"],
   },
   {
     name: "Cloud & DevOps",
-    icon: "cloud",
-    accent: "gold",
-    skills: [
-      { name: "Docker", level: 80 },
-      { name: "AWS EC2", level: 75 },
-      { name: "Redis", level: 70 },
-      { name: "Git / GitHub", level: 85 },
-      { name: "LangSmith", level: 80 },
-    ],
+    skills: ["Docker", "AWS EC2", "Redis", "Git / GitHub", "LangSmith"],
   },
 ] as const;
 
-interface SkillBarProps {
-  level: number;
-  accent: string;
-}
-
-function SkillBar({ level, accent }: SkillBarProps) {
-  return (
-    <div className="skill-bar-track flex-1">
-      <div
-        className={accent === "cyan" ? "skill-bar-fill-cyan" : "skill-bar-fill-gold"}
-        style={{ width: `${level}%` }}
-      />
-    </div>
-  );
-}
-
 export default function SkillsSection() {
   return (
-    <div className="flex flex-col gap-4 section-fade">
+    <div className="grid grid-cols-2 grid-rows-2 gap-x-6 lg:gap-x-12 gap-y-8 lg:gap-y-12 h-full section-fade pt-4 pb-2">
       {categories.map((cat) => (
-        <div key={cat.name} className="relic-stone p-4">
+        <div key={cat.name} className="flex flex-col">
           {/* Category header */}
-          <div className="flex items-center gap-2 mb-4">
-            <span
-              className={`material-symbols-outlined text-base icon-engraved ${
-                cat.accent === "cyan" ? "text-icy-cyan/70" : "text-muted-gold/70"
-              }`}
-            >
-              {cat.icon}
-            </span>
-            <h3 className="font-label-caps text-[10px] uppercase tracking-[0.3em] text-on-surface-variant engraved-text">
-              {cat.name}
-            </h3>
-          </div>
+          <h3 className="font-[family-name:var(--font-cinzel)] text-[12px] lg:text-[13px] uppercase tracking-[0.2em] text-muted-gold font-medium engraved-text mb-2">
+            {cat.name}
+          </h3>
+          
+          {/* Engraved divider */}
+          <hr className="border-t border-faded-bronze/25 w-full mb-4 lg:mb-5" style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.05)" }} />
 
-          {/* Skill bars */}
-          <div className="flex flex-col gap-3">
+          {/* Skill list */}
+          <div className="grid grid-cols-2 gap-x-3">
             {cat.skills.map((skill) => (
-              <div key={skill.name} className="flex items-center gap-3">
-                <span className="font-body-md text-[11px] text-on-surface-variant/75 w-28 flex-shrink-0 engraved-text">
-                  {skill.name}
-                </span>
-                <SkillBar level={skill.level} accent={cat.accent} />
-                <span className="font-label-caps text-[9px] text-on-surface-variant/35 w-7 text-right flex-shrink-0">
-                  {skill.level}
-                </span>
-              </div>
+              <span key={skill} className="font-[family-name:var(--font-cinzel)] text-[16px] lg:text-[17px] text-[#ECE7DD] font-medium engraved-text leading-[1.8] tracking-[0.05em]">
+                {skill}
+              </span>
             ))}
           </div>
         </div>

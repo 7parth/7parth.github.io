@@ -1,5 +1,6 @@
 // ExperienceSection — Battles Fought
 // Timeline-style entries with Norse runic markers
+import EntryMarker from "../ui/EntryMarker";
 
 const experiences = [
   {
@@ -39,26 +40,13 @@ export default function ExperienceSection() {
     <div className="flex flex-col gap-8 section-fade">
       {experiences.map((exp) => (
         <div key={exp.id} className="relative pb-10 mb-2 border-b last:border-b-0 border-faded-bronze/10">
-          <div className="flex items-start gap-4 lg:gap-6">
-            {/* Icon */}
-            <div className="flex-shrink-0 mt-0.5">
-              <span
-                className={`material-symbols-outlined text-3xl lg:text-4xl icon-engraved drop-shadow-md ${
-                  exp.accent === "cyan" ? "text-rune-glow/90" : "text-muted-gold/90"
-                }`}
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                {exp.icon}
-              </span>
-            </div>
-
-            <div className="flex-1">
-              {/* Header */}
-              <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3">
-                <div>
-                  <h3 className="font-headline-md text-lg lg:text-xl text-white/90 engraved-text tracking-wider">
-                    {exp.role}
-                  </h3>
+          <div className="flex flex-col">
+            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3">
+              <div>
+                <h3 className="font-headline-md text-lg lg:text-xl text-white/90 engraved-text tracking-wider flex items-center">
+                  <EntryMarker />
+                  {exp.role}
+                </h3>
                   <p
                     className={`font-label-caps text-[10px] lg:text-xs uppercase tracking-[0.2em] mt-1 lg:mt-2 ${
                       exp.accent === "cyan" ? "text-icy-cyan/70" : "text-muted-gold/70"
@@ -106,7 +94,6 @@ export default function ExperienceSection() {
               </div>
             </div>
           </div>
-        </div>
       ))}
     </div>
   );

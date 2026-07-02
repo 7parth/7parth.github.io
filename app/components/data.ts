@@ -37,6 +37,8 @@ export interface Relic {
   runeSymbol: string;
   /** A concise 2-3 line summary describing what the visitor is about to explore */
   loreSummary: string;
+  /** Optional URL to open in a new tab instead of opening a Codex section */
+  externalLink?: string;
 }
 
 export const relics: Relic[] = [
@@ -128,6 +130,7 @@ export const relics: Relic[] = [
     codexLabel: "FORGE ARCHIVES",
     runeSymbol: "code",
     loreSummary: "Enter the grand forge where code is hammered into reality. A repository of open-source contributions and active projects.",
+    externalLink: "https://github.com/7parth",
   },
   {
     id: "linkedin",
@@ -139,6 +142,7 @@ export const relics: Relic[] = [
     codexLabel: "HALL OF ALLIES",
     runeSymbol: "work",
     loreSummary: "A networking hall connecting warriors across realms. Professional alliances and endorsements from fellow creators.",
+    externalLink: "https://linkedin.com/in/parth-waradkar-7w",
   },
   {
     id: "leetcode",
@@ -150,6 +154,7 @@ export const relics: Relic[] = [
     codexLabel: "TRIALS OF WISDOM",
     runeSymbol: "psychology",
     loreSummary: "A proving ground for algorithmic mastery and logic. Trials undertaken to sharpen the mind and optimize execution.",
+    externalLink: "https://leetcode.com/u/7_parth/",
   },
   {
     id: "contact",
