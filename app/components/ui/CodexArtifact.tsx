@@ -2,10 +2,24 @@
 
 import React from "react";
 import { motion, MotionValue, useTransform } from "framer-motion";
-import CodexContent, { CodexContentProps } from "./CodexContent";
+import CodexHero from "./CodexHero";
+import CodexFrame from "../codex/frame/CodexFrame";
 
-const CHAIN_SVG =
-  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM1NSIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48cmVjdCB5PSIxNSIgd2lkdGg9IjIwIiBmaWxsPSJub25lIiBzdHJva2U9IiM0NCIgc3Ryb2tlLXdpZHRoPSIyIiByeD0iNSIgcnk9IjUiLz48L3N2Zz4=";
+// Calculated from the physical solid bounds of the frame pieces (ignoring transparent drop shadow bounding boxes)
+const innerInsetTop = 60;
+const innerInsetBottom = 45;
+const innerInsetLeft = 75;
+const innerInsetRight = 65;
+export interface CodexContentProps {
+  sectionKey: string;
+  codexLabel: string;
+  codexTitle: string;
+  loreSummary: string;
+  runes: readonly string[];
+  iconImg?: string;
+  icon?: string;
+  children: React.ReactNode;
+}
 
 export interface CodexArtifactProps extends CodexContentProps {
   progress: MotionValue<number>;
@@ -45,45 +59,83 @@ export default function CodexArtifact({
           pointerEvents: interactionEnabled ? "auto" : "none",
         }}
       >
-        <div className="codex-tablet relative flex flex-col w-full h-full">
-          {interactionEnabled && (
-            <button
-              onClick={onClose}
-              aria-label="Close codex"
-              className="absolute top-3 left-3 z-20 w-8 h-8 rounded-full bg-[#0d0e10] border border-[#444] flex items-center justify-center cursor-pointer hover:border-rune-glow/60 hover:shadow-[0_0_8px_rgba(72,202,228,0.4)] transition-all duration-200 hover:rotate-90 hover:scale-105"
-            >
-              <span className="text-white text-sm leading-none">×</span>
-            </button>
-          )}
-
-          <div
-            className="absolute -top-[60px] left-8 w-3 h-[80px] opacity-80"
-            style={{ backgroundImage: `url('${CHAIN_SVG}')` }}
-          />
-          <div
-            className="absolute -top-[60px] right-8 w-3 h-[80px] opacity-80"
-            style={{ backgroundImage: `url('${CHAIN_SVG}')` }}
-          />
-
-          <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-[#555] rounded-tl" />
-          <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-[#555] rounded-tr" />
-          <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-[#555] rounded-bl" />
-          <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-[#555] rounded-br" />
-
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              opacity: runeIgnition,
-              background:
-                "radial-gradient(circle at 22% 16%, rgba(72,202,228,0.22), transparent 24%), radial-gradient(circle at 78% 84%, rgba(176,141,87,0.18), transparent 26%)",
-              boxShadow: "inset 0 0 48px rgba(72,202,228,0.18)",
-            }}
-          />
-
-          <div className="m-4 h-[calc(100%-2rem)] relative">
-            <CodexContent {...contentProps} />
-          </div>
+        {/* The Frame Overlay - pointer events none so tablet can scroll underneath */}
+        <div className="absolute inset-0 z-30 pointer-events-none">
+          <CodexFrame />
         </div>
+
+
+
+        {/* The stone tablet background - inset slightly so it hides perfectly behind the outer frame corners, removing the visible box! */}
+        <div 
+          className="codex-tablet absolute z-10 pointer-events-none"
+          style={{
+            top: 15,
+            bottom: 15,
+            left: 20,
+            right: 20,
+            borderRadius: 10
+          }}
+        />
+
+        {/* The Scrollable Content Area - constrained exactly to the frame's solid inner edge */}
+        <div 
+          className="absolute z-20 flex flex-col"
+          style={{
+            top: innerInsetTop,
+            bottom: innerInsetBottom,
+            left: innerInsetLeft,
+            right: innerInsetRight,
+            width: `calc(100% - ${innerInsetLeft + innerInsetRight}px)`
+          }}
+        >
+          <CodexHero 
+            label={contentProps.codexLabel}
+            title={contentProps.codexTitle}
+            loreSummary={contentProps.loreSummary}
+            runes={contentProps.runes}
+            iconImg={contentProps.iconImg}
+            icon={contentProps.icon}
+          />
+
+          <main 
+            className="flex-1 w-full pb-12 overflow-y-auto hide-scrollbar"
+            style={{
+              paddingTop: 8 // Tighter gap to the divider for cohesiveness
+            }}
+          >
+            {contentProps.children}
+          </main>
+        </div>
+
+        {/* Effects Overlay */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            opacity: runeIgnition,
+            background:
+              "radial-gradient(circle at 22% 16%, rgba(72,202,228,0.22), transparent 24%), radial-gradient(circle at 78% 84%, rgba(176,141,87,0.18), transparent 26%)",
+            boxShadow: "inset 0 0 48px rgba(72,202,228,0.18)",
+          }}
+        />
+
+        {interactionEnabled && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.2, ease: [0.2, 0.02, 0.18, 1] }}
+            onClick={onClose}
+            aria-label="Close codex"
+            className="absolute top-6 left-6 z-50 w-10 h-10 flex items-center justify-center cursor-pointer group pointer-events-auto"
+          >
+            {/* The stone diamond background */}
+            <div className="absolute inset-0 bg-[#121316] border border-faded-bronze/40 rounded-sm rotate-45 shadow-[inset_0_0_10px_rgba(0,0,0,0.8),_0_2px_10px_rgba(0,0,0,0.6)] group-hover:border-icy-cyan/60 group-hover:bg-icy-cyan/5 group-hover:shadow-[0_0_15px_rgba(72,202,228,0.5),_inset_0_0_10px_rgba(72,202,228,0.2)] transition-all duration-300 group-hover:scale-105"></div>
+            {/* The Gebo rune (X) */}
+            <span className="relative text-muted-gold/80 text-[18px] group-hover:text-icy-cyan group-hover:drop-shadow-[0_0_10px_rgba(72,202,228,0.9)] transition-all duration-300 engraved-text font-bold z-10 -ml-0.5 mt-0.5">
+              ᚷ
+            </span>
+          </motion.button>
+        )}
       </motion.div>
     </motion.div>
   );

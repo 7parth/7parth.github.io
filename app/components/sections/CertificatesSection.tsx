@@ -1,5 +1,6 @@
 // CertificatesSection — Sacred Seals
 // 5 certificate cards with issuer, date, and credential ID
+import EntryMarker from "../ui/EntryMarker";
 
 const certs = [
   {
@@ -60,29 +61,12 @@ export default function CertificatesSection() {
       {certs.map((cert) => (
         <div
           key={cert.id}
-          className={`relic-stone p-4 ${cert.accent === "gold" ? "gold-card-glow" : "card-glow"}`}
+          className="relative pb-6 mb-2 border-b last:border-b-0 border-faded-bronze/10"
         >
-          <div className="flex items-center gap-3">
-            {/* Seal icon */}
-            <div
-              className={`flex-shrink-0 w-10 h-10 rounded-stone bg-[#0d0e10] border flex items-center justify-center ${
-                cert.accent === "gold"
-                  ? "border-muted-gold/30"
-                  : "border-rune-glow/30"
-              }`}
-            >
-              <span
-                className={`material-symbols-outlined text-xl icon-engraved ${
-                  cert.accent === "gold" ? "text-muted-gold/75" : "text-rune-glow/75"
-                }`}
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                {cert.icon}
-              </span>
-            </div>
-
+          <div className="flex flex-col">
             <div className="flex-1 min-w-0">
-              <h3 className="font-headline-md text-xs text-white engraved-text tracking-wide leading-snug">
+              <h3 className="font-headline-md text-sm text-white engraved-text tracking-wide leading-snug flex items-center">
+                <EntryMarker />
                 {cert.name}
               </h3>
               <p className="font-label-caps text-[9px] text-on-surface-variant/55 uppercase tracking-[0.15em] mt-0.5">

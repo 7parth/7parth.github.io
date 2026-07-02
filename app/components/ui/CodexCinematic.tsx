@@ -18,8 +18,10 @@ export interface CodexCinematicProps {
   sectionKey: string;
   codexLabel: string;
   codexTitle: string;
-  runeSymbol: string;
+  loreSummary: string;
   runes: readonly string[];
+  iconImg?: string;
+  icon?: string;
   onPhaseChange: (phase: CinematicPhase) => void;
   onCommitContent: () => void;
   onCloseRequest: () => void;
@@ -35,8 +37,10 @@ export default function CodexCinematic({
   sectionKey,
   codexLabel,
   codexTitle,
-  runeSymbol,
+  loreSummary,
   runes,
+  iconImg,
+  icon,
   onPhaseChange,
   onCommitContent,
   onCloseRequest,
@@ -222,8 +226,10 @@ export default function CodexCinematic({
         sectionKey={sectionKey}
         codexLabel={codexLabel}
         codexTitle={codexTitle}
-        runeSymbol={runeSymbol}
+        loreSummary={loreSummary}
         runes={runes}
+        iconImg={iconImg}
+        icon={icon}
       >
         {children}
       </CodexArtifact>

@@ -1,5 +1,6 @@
 // ProjectsSection — Legendary Quests
 // 6 project cards with tech stack tags, descriptions, and links
+import EntryMarker from "../ui/EntryMarker";
 
 const projects = [
   {
@@ -43,33 +44,14 @@ export default function ProjectsSection() {
       {projects.map((project) => (
         <div
           key={project.id}
-          className={`relic-stone p-4 ${project.accent === "cyan" ? "card-glow" : "gold-card-glow"}`}
+          className="relative pb-8 mb-2 border-b last:border-b-0 border-faded-bronze/10"
         >
-          <div className="flex items-start gap-3">
-            {/* Icon */}
-            <div
-              className={`flex-shrink-0 w-10 h-10 rounded-stone bg-[#0d0e10] border flex items-center justify-center ${
-                project.accent === "cyan"
-                  ? "border-rune-glow/25"
-                  : "border-muted-gold/25"
-              }`}
-            >
-              <span
-                className={`material-symbols-outlined text-xl icon-engraved ${
-                  project.accent === "cyan"
-                    ? "text-rune-glow/70"
-                    : "text-muted-gold/70"
-                }`}
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                {project.icon}
-              </span>
-            </div>
-
+          <div className="flex flex-col">
             {/* Content */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-1 mb-0.5">
-                <h3 className="font-headline-md text-sm text-white engraved-text tracking-wider">
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-start justify-between gap-1 mb-1">
+                <h3 className="font-[family-name:var(--font-cinzel)] text-[14px] lg:text-[15px] uppercase tracking-[0.1em] text-muted-gold font-medium flex items-center engraved-text">
+                  <EntryMarker />
                   {project.name}
                 </h3>
                 <div className="flex gap-1.5 flex-shrink-0">
@@ -92,20 +74,20 @@ export default function ProjectsSection() {
                 </div>
               </div>
               <p
-                className={`font-label-caps text-[9px] uppercase tracking-[0.18em] mb-2 ${
+                className={`font-[family-name:var(--font-cinzel)] text-[10px] lg:text-[11px] uppercase tracking-[0.15em] mb-2 ${
                   project.accent === "cyan"
-                    ? "text-icy-cyan/50"
-                    : "text-muted-gold/50"
+                    ? "text-icy-cyan/70"
+                    : "text-muted-gold/70"
                 }`}
               >
                 {project.subtitle}
               </p>
-              <p className="font-body-md text-[10px] text-on-surface-variant/65 leading-relaxed engraved-text mb-3">
+              <p className="font-[family-name:var(--font-ibm-plex)] text-[13px] lg:text-[14px] text-[#ECE7DD] font-normal leading-[1.6] tracking-[0.2px] engraved-text mb-3">
                 {project.desc}
               </p>
               <div className="flex flex-wrap gap-1">
                 {project.tech.map((t) => (
-                  <span key={t} className="tech-tag">
+                  <span key={t} className="tech-tag bg-transparent border border-faded-bronze/20 text-on-surface-variant/80 font-[family-name:var(--font-ibm-plex)] text-[11px] lg:text-[12px] px-2 py-1">
                     {t}
                   </span>
                 ))}

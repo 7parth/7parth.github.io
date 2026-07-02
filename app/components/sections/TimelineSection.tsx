@@ -1,83 +1,63 @@
 // TimelineSection — Path of the Ghost
 // Ancient chronicle layout — carved artifact entries
+import EntryMarker from "../ui/EntryMarker";
 
 const events = [
   {
-    year: "2019",
+    year: "2023",
     title: "The Spark",
-    desc: "Wrote first lines of C. Compiled 'Hello World' — the cosmos trembled.",
+    desc: "Wrote my first lines of code. The journey of crafting logic and forging intelligent systems began.",
     rune: "ᛋ",
     accent: "gold" as const,
   },
   {
-    year: "2020",
-    title: "The Trials Begin",
-    desc: "Discovered competitive programming on HackerRank, then Codeforces. Solved first 100 problems.",
-    rune: "ᛏ",
-    accent: "cyan" as const,
-  },
-  {
-    year: "2022 · Mar",
-    title: "The Academy",
-    desc: "Entered the undergraduate CE programme. JEE Advanced qualified. A new chapter begins.",
-    rune: "ᛗ",
-    accent: "gold" as const,
-  },
-  {
-    year: "2022 · Oct",
-    title: "First Quest",
-    desc: "First open source contribution merged. A small bug fix — but it felt like slaying a dragon.",
-    rune: "ᚢ",
-    accent: "cyan" as const,
-  },
-  {
-    year: "2023 · Feb",
-    title: "First Battle",
-    desc: "Competed in the college ICPC mock round and placed 3rd. The forge had begun shaping a warrior.",
-    rune: "ᛚ",
-    accent: "gold" as const,
-  },
-  {
-    year: "2023 · Aug",
-    title: "HackMIT Victory",
-    desc: "Won 'Best Systems Hack' at HackMIT — a distributed filesystem built in 24 hours.",
+    year: "2024",
+    title: "First Hackathon Win (Sinhagad)",
+    desc: "Secured 2nd place among 600+ participants for building an AI-powered, Blockchain-driven solution.",
     rune: "ᛟ",
     accent: "cyan" as const,
   },
   {
-    year: "2023 · Dec",
-    title: "Into the Machine",
-    desc: "ML Research Intern at AsgardAI Labs. Fine-tuned LLMs, built RAG pipelines. The path of the sage.",
-    rune: "ᛋ",
-    accent: "gold" as const,
-  },
-  {
-    year: "2024 · May",
-    title: "Google Summer of Code",
-    desc: "Accepted into GSoC. Contributed a high-performance parser to a major open-source compiler.",
+    year: "2024",
+    title: "Table Tennis Runner Up",
+    desc: "Demonstrated agility and strategy, securing the Runner Up position at the Intercollegiate Table Tennis Tournament in PCMC.",
     rune: "ᛏ",
-    accent: "cyan" as const,
-  },
-  {
-    year: "2024 · Jul",
-    title: "SWE Internship",
-    desc: "Software Engineering Intern at Midgard Tech Corp. Shipped pipelines, redesigned APIs.",
-    rune: "ᛗ",
     accent: "gold" as const,
   },
   {
-    year: "2024 · Nov",
-    title: "ICPC Regionals",
-    desc: "Qualified and competed in ICPC Asia Regionals. Top 15 / 280+. The warrior proved worthy.",
+    year: "2024",
+    title: "Bajaj Finserv HackRx 6.0",
+    desc: "Ranked 67th out of 4800+ teams nationwide, building an advanced document intelligence backend system.",
     rune: "ᚢ",
     accent: "cyan" as const,
   },
   {
-    year: "2025 — Now",
-    title: "The Codex Begins",
-    desc: "Building the final year project. Writing blogs. Crafting this very codex. The chronicle continues…",
-    rune: "ᛚ",
+    year: "2025",
+    title: "Smart India Hackathon",
+    desc: "National Top 5 Finalist. Built a production RAG system for government policy retrieval.",
+    rune: "ᛏ",
     accent: "gold" as const,
+  },
+  {
+    year: "2025",
+    title: "Table Tennis 2nd Runner Up",
+    desc: "Secured another podium finish as the Second Runner Up in the Intercollegiate Table Tennis Tournament.",
+    rune: "ᛋ",
+    accent: "cyan" as const,
+  },
+  {
+    year: "2026",
+    title: "HackMatrix 4.0 (Artimas)",
+    desc: "Secured Runner Up at PCCOE. Built an AI-powered financial platform for credit health management and loan guidance.",
+    rune: "ᛗ",
+    accent: "gold" as const,
+  },
+  {
+    year: "2026",
+    title: "Avinya 4.0 Hackathon Winner",
+    desc: "Secured 1st place winning a final prize of ₹30,000 for our innovative solution at RSCOE.",
+    rune: "ᛚ",
+    accent: "cyan" as const,
   },
 ] as const;
 
@@ -87,34 +67,28 @@ export default function TimelineSection() {
       {events.map((evt, idx) => (
         <div key={idx}>
           {/* ── Chronicle Entry ── */}
-          <div className="py-3 px-1">
-
+          <div className="py-4 px-1">
             {/* Year */}
             <p
-              className={`font-label-caps text-[9px] uppercase tracking-[0.25em] mb-2 engraved-text ${
-                evt.accent === "cyan" ? "text-rune-glow/55" : "text-muted-gold/55"
+              className={`font-[family-name:var(--font-cinzel)] text-[10px] lg:text-[11px] uppercase tracking-[0.2em] mb-1.5 font-semibold engraved-text ${
+                evt.accent === "cyan" ? "text-icy-cyan/70" : "text-muted-gold/70"
               }`}
             >
               {evt.year}
             </p>
 
-            {/* Rune bullet + Title */}
-            <div className="flex items-center gap-2.5 mb-1.5">
-              <span
-                className={`text-sm leading-none flex-shrink-0 ${
-                  evt.accent === "cyan" ? "text-rune-glow/50" : "text-muted-gold/50"
-                }`}
-                aria-hidden="true"
-              >
-                {evt.rune}
-              </span>
-              <h3 className="font-headline-md text-[11px] text-frost-white/90 engraved-text tracking-wider uppercase leading-tight">
+            {/* Title */}
+            <div className="flex items-center mb-1.5">
+              <h3 className={`font-[family-name:var(--font-cinzel)] text-[14px] lg:text-[15px] font-medium engraved-text tracking-[0.1em] uppercase leading-tight flex items-center ${
+                evt.accent === "cyan" ? "text-frost-white/90" : "text-muted-gold/90"
+              }`}>
+                <EntryMarker />
                 {evt.title}
               </h3>
             </div>
 
             {/* Description */}
-            <p className="font-body-md text-[10px] text-on-surface-variant/55 leading-relaxed engraved-text pl-[22px]">
+            <p className="font-[family-name:var(--font-ibm-plex)] text-[13px] lg:text-[14px] text-[#ECE7DD] font-normal engraved-text leading-[1.6] tracking-[0.2px] pl-[22px]">
               {evt.desc}
             </p>
           </div>

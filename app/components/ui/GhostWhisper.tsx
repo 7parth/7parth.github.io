@@ -9,10 +9,13 @@ const RIGHT_RUNES = ["ᛁ", "ᛃ", "ᛇ", "ᛈ", "ᛉ", "ᛋ"];
 
 // ── Stanza content matching the specification ──
 const STANZAS = [
-  "Every battle leaves a mark.\nEvery project tells a story.",
-  "Forged through relentless curiosity,\nI build intelligent systems\nwhere artificial intelligence\nmeets craftsmanship.",
-  "From national hackathons\nto production-ready AI,\neach challenge has become\nanother chapter of the journey.",
-  "The pursuit of mastery\nnever truly ends.",
+  "Knowledge is not collected.\nIt is forged.",
+
+  "Every project.\nEvery competition.\nEvery lesson.\nA relic preserved.",
+
+  "These chronicles contain\nmore than achievements.\nThey record the journey.",
+
+  "May the reader find\nsomething worth carrying\ninto their own battles.",
 ];
 
 // ── Timing constants (ms) ──
@@ -43,7 +46,7 @@ export default function GhostWhisper() {
   useEffect(() => {
     const t1 = setTimeout(() => setRevealed(true), REVEAL_START);
     const t2 = setTimeout(() => setIdle(true), IDLE_DELAY);
-    
+
     // Generate stable particle coordinates on client to prevent hydration mismatch
     const generated = Array.from({ length: 18 }, (_, i) => ({
       id: i,

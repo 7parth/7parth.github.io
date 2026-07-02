@@ -15,13 +15,14 @@ export type SectionId =
   | "linkedin"
   | "leetcode"
   | "contact"
-  | "timeline";
+  | "timeline"
+  | "lore";
 
 export interface Relic {
   id: SectionId;
   /** Material Symbols icon name (fallback when no iconImg) */
   icon: string;
-  /** Path to a custom PNG icon in /public/icons/ — takes precedence over `icon` on the relic tile */
+  /** Path to a custom PNG icon in /assets/icons/ — takes precedence over `icon` on the relic tile */
   iconImg?: string;
   /** Scale multiplier for iconImg when the image has excess padding (default 1) */
   iconScale?: number;
@@ -35,6 +36,10 @@ export interface Relic {
   codexLabel: string;
   /** Icon shown in the codex panel header */
   runeSymbol: string;
+  /** A concise 2-3 line summary describing what the visitor is about to explore */
+  loreSummary: string;
+  /** Optional URL to open in a new tab instead of opening a Codex section */
+  externalLink?: string;
 }
 
 export const relics: Relic[] = [
@@ -48,6 +53,7 @@ export const relics: Relic[] = [
     codexTitle: "About Me",
     codexLabel: "WARRIOR'S CHRONICLE",
     runeSymbol: "change_history",
+    loreSummary: "Unveil the origins and philosophy of the AI Engineer. A testament to relentless curiosity and the pursuit of intelligent systems.",
   },
   {
     id: "projects",
@@ -58,6 +64,7 @@ export const relics: Relic[] = [
     codexTitle: "Projects",
     codexLabel: "LEGENDARY QUESTS",
     runeSymbol: "hardware",
+    loreSummary: "Examine the artifacts forged in the fires of creation. Each project stands as a monolithic achievement in software craftsmanship.",
   },
   {
     id: "experience",
@@ -68,6 +75,7 @@ export const relics: Relic[] = [
     codexTitle: "Experience",
     codexLabel: "BATTLES FOUGHT",
     runeSymbol: "shield",
+    loreSummary: "Witness the scars and victories earned across various battlefields. A record of professional endeavors and collaborative conquests.",
   },
   {
     id: "skills",
@@ -78,6 +86,7 @@ export const relics: Relic[] = [
     codexTitle: "Skills",
     codexLabel: "WEAPONS MASTERED",
     runeSymbol: "swords",
+    loreSummary: "Review the arsenal of languages, frameworks, and tools. Weapons honed and mastered for modern digital warfare.",
   },
   {
     id: "achievements",
@@ -88,6 +97,7 @@ export const relics: Relic[] = [
     codexTitle: "Achievements",
     codexLabel: "TROPHIES OF VALHALLA",
     runeSymbol: "emoji_events",
+    loreSummary: "Behold the glories and honors claimed in competitive arenas. Trophies that echo through the halls of eternity.",
   },
   {
     id: "education",
@@ -98,6 +108,7 @@ export const relics: Relic[] = [
     codexTitle: "Education",
     codexLabel: "SCROLLS OF KNOWLEDGE",
     runeSymbol: "menu_book",
+    loreSummary: "Trace the academic lineage and foundational knowledge. Ancient scrolls detailing the pursuit of higher learning.",
   },
   {
     id: "resume",
@@ -108,6 +119,7 @@ export const relics: Relic[] = [
     codexTitle: "Resume",
     codexLabel: "THE ANCIENT SCROLL",
     runeSymbol: "history_edu",
+    loreSummary: "A condensed parchment detailing a journey of mastery. The definitive scroll containing all worldly experience.",
   },
   {
     id: "github",
@@ -118,6 +130,8 @@ export const relics: Relic[] = [
     codexTitle: "GitHub",
     codexLabel: "FORGE ARCHIVES",
     runeSymbol: "code",
+    loreSummary: "Enter the grand forge where code is hammered into reality. A repository of open-source contributions and active projects.",
+    externalLink: "https://github.com/7parth",
   },
   {
     id: "linkedin",
@@ -128,6 +142,8 @@ export const relics: Relic[] = [
     codexTitle: "LinkedIn",
     codexLabel: "HALL OF ALLIES",
     runeSymbol: "work",
+    loreSummary: "A networking hall connecting warriors across realms. Professional alliances and endorsements from fellow creators.",
+    externalLink: "https://linkedin.com/in/parth-waradkar-7w",
   },
   {
     id: "leetcode",
@@ -138,6 +154,8 @@ export const relics: Relic[] = [
     codexTitle: "LeetCode",
     codexLabel: "TRIALS OF WISDOM",
     runeSymbol: "psychology",
+    loreSummary: "A proving ground for algorithmic mastery and logic. Trials undertaken to sharpen the mind and optimize execution.",
+    externalLink: "https://leetcode.com/u/7_parth/",
   },
   {
     id: "contact",
@@ -148,6 +166,7 @@ export const relics: Relic[] = [
     codexTitle: "Contact",
     codexLabel: "MYSTIC GATEWAY",
     runeSymbol: "explore",
+    loreSummary: "A mystic gateway to establish direct communication. Send a raven across the realms to forge new alliances.",
   },
   {
     id: "timeline",
@@ -157,6 +176,7 @@ export const relics: Relic[] = [
     codexTitle: "Timeline",
     codexLabel: "PATH OF THE GHOST",
     runeSymbol: "timeline",
+    loreSummary: "A chronological map of the journey so far. Key milestones and transitions across the path of the ghost.",
   },
 ];
 
