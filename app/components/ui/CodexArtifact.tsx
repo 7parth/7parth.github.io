@@ -2,14 +2,23 @@
 
 import React from "react";
 import { motion, MotionValue, useTransform } from "framer-motion";
-import CodexContent, { CodexContentProps } from "./CodexContent";
+import CodexHero from "./CodexHero";
 import CodexFrame from "../codex/frame/CodexFrame";
 
-// Calculated from the visual thickness of the frame pieces to avoid overlap
-const contentInsetTop = 87;
-const contentInsetBottom = 87;
-const contentInsetLeft = 151;
-const contentInsetRight = 151;
+// Calculated from the physical bounds of the frame pieces
+const innerInsetTop = 80;
+const innerInsetBottom = 80;
+const innerInsetLeft = 142;
+const innerInsetRight = 142;
+export interface CodexContentProps {
+  sectionKey: string;
+  codexLabel: string;
+  codexTitle: string;
+  runeSymbol: string;
+  loreSummary: string;
+  runes: readonly string[];
+  children: React.ReactNode;
+}
 
 export interface CodexArtifactProps extends CodexContentProps {
   progress: MotionValue<number>;
@@ -49,41 +58,75 @@ export default function CodexArtifact({
           pointerEvents: interactionEnabled ? "auto" : "none",
         }}
       >
-        <div className="codex-tablet relative flex flex-col w-full h-full">
-          {interactionEnabled && (
-            <button
-              onClick={onClose}
-              aria-label="Close codex"
-              className="absolute top-3 left-3 z-20 w-8 h-8 rounded-full bg-[#0d0e10] border border-[#444] flex items-center justify-center cursor-pointer hover:border-rune-glow/60 hover:shadow-[0_0_8px_rgba(72,202,228,0.4)] transition-all duration-200 hover:rotate-90 hover:scale-105"
-            >
-              <span className="text-white text-sm leading-none">×</span>
-            </button>
-          )}
+        {/* The Frame Overlay - pointer events none so tablet can scroll underneath */}
+        <div className="absolute inset-0 z-30 pointer-events-none">
+          <CodexFrame />
+        </div>
 
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              opacity: runeIgnition,
-              background:
-                "radial-gradient(circle at 22% 16%, rgba(72,202,228,0.22), transparent 24%), radial-gradient(circle at 78% 84%, rgba(176,141,87,0.18), transparent 26%)",
-              boxShadow: "inset 0 0 48px rgba(72,202,228,0.18)",
-            }}
+
+
+        {/* The stone tablet background - inset slightly so it hides perfectly behind the outer frame corners, removing the visible box! */}
+        <div 
+          className="codex-tablet absolute z-10 pointer-events-none"
+          style={{
+            top: 15,
+            bottom: 15,
+            left: 20,
+            right: 20,
+            borderRadius: 10
+          }}
+        />
+
+        {/* The Scrollable Content Area - constrained exactly to the frame's solid inner edge */}
+        <div 
+          className="absolute z-20 flex flex-col"
+          style={{
+            top: innerInsetTop,
+            bottom: innerInsetBottom,
+            left: innerInsetLeft,
+            right: innerInsetRight,
+            width: `calc(100% - ${innerInsetLeft + innerInsetRight}px)`
+          }}
+        >
+          <CodexHero 
+            label={contentProps.codexLabel}
+            title={contentProps.codexTitle}
+            runeSymbol={contentProps.runeSymbol}
+            loreSummary={contentProps.loreSummary}
+            runes={contentProps.runes}
+            style={{ paddingTop: 12 }}
           />
 
-          <CodexFrame />
-
-          <div 
-            className="absolute z-40"
+          <main 
+            className="flex-1 w-full pb-12 overflow-y-auto hide-scrollbar"
             style={{
-              top: contentInsetTop,
-              bottom: contentInsetBottom,
-              left: contentInsetLeft,
-              right: contentInsetRight
+              paddingTop: 16 // Add a bit of space below the divider before content starts
             }}
           >
-            <CodexContent {...contentProps} />
-          </div>
+            {contentProps.children}
+          </main>
         </div>
+
+        {/* Effects Overlay */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            opacity: runeIgnition,
+            background:
+              "radial-gradient(circle at 22% 16%, rgba(72,202,228,0.22), transparent 24%), radial-gradient(circle at 78% 84%, rgba(176,141,87,0.18), transparent 26%)",
+            boxShadow: "inset 0 0 48px rgba(72,202,228,0.18)",
+          }}
+        />
+
+        {interactionEnabled && (
+          <button
+            onClick={onClose}
+            aria-label="Close codex"
+            className="absolute top-3 left-3 z-50 w-8 h-8 rounded-full bg-[#0d0e10] border border-[#444] flex items-center justify-center cursor-pointer hover:border-rune-glow/60 hover:shadow-[0_0_8px_rgba(72,202,228,0.4)] transition-all duration-200 hover:rotate-90 hover:scale-105 pointer-events-auto"
+          >
+            <span className="text-white text-sm leading-none">×</span>
+          </button>
+        )}
       </motion.div>
     </motion.div>
   );

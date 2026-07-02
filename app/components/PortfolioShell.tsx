@@ -324,6 +324,7 @@ export default function PortfolioShell() {
           codexLabel={activeRelic.codexLabel}
           codexTitle={activeRelic.codexTitle}
           runeSymbol={activeRelic.runeSymbol}
+          loreSummary={activeRelic.loreSummary}
           runes={RUNES}
           onPhaseChange={setPhase}
           onCommitContent={commitPending}
