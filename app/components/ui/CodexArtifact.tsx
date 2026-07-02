@@ -5,11 +5,11 @@ import { motion, MotionValue, useTransform } from "framer-motion";
 import CodexHero from "./CodexHero";
 import CodexFrame from "../codex/frame/CodexFrame";
 
-// Calculated from the physical bounds of the frame pieces
-const innerInsetTop = 80;
-const innerInsetBottom = 80;
-const innerInsetLeft = 142;
-const innerInsetRight = 142;
+// Calculated from the physical solid bounds of the frame pieces (ignoring transparent drop shadow bounding boxes)
+const innerInsetTop = 60;
+const innerInsetBottom = 45;
+const innerInsetLeft = 75;
+const innerInsetRight = 65;
 export interface CodexContentProps {
   sectionKey: string;
   codexLabel: string;
@@ -94,13 +94,12 @@ export default function CodexArtifact({
             runeSymbol={contentProps.runeSymbol}
             loreSummary={contentProps.loreSummary}
             runes={contentProps.runes}
-            style={{ paddingTop: 12 }}
           />
 
           <main 
             className="flex-1 w-full pb-12 overflow-y-auto hide-scrollbar"
             style={{
-              paddingTop: 16 // Add a bit of space below the divider before content starts
+              paddingTop: 8 // Tighter gap to the divider for cohesiveness
             }}
           >
             {contentProps.children}

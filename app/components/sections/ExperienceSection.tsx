@@ -38,17 +38,13 @@ export default function ExperienceSection() {
   return (
     <div className="flex flex-col gap-8 section-fade">
       {experiences.map((exp) => (
-        <div key={exp.id} className={`relic-stone p-6 lg:p-8 ${exp.accent === "cyan" ? "card-glow" : "gold-card-glow"}`}>
+        <div key={exp.id} className="relative pb-10 mb-2 border-b last:border-b-0 border-faded-bronze/10">
           <div className="flex items-start gap-4 lg:gap-6">
             {/* Icon */}
-            <div
-              className={`flex-shrink-0 w-12 h-12 lg:w-16 lg:h-16 rounded-stone bg-[#0d0e10] border flex items-center justify-center ${
-                exp.accent === "cyan" ? "border-rune-glow/30 shadow-[0_0_15px_rgba(72,202,228,0.15)]" : "border-muted-gold/30 shadow-[0_0_15px_rgba(176,141,87,0.15)]"
-              }`}
-            >
+            <div className="flex-shrink-0 mt-0.5">
               <span
-                className={`material-symbols-outlined text-2xl lg:text-3xl icon-engraved ${
-                  exp.accent === "cyan" ? "text-rune-glow/80" : "text-muted-gold/80"
+                className={`material-symbols-outlined text-3xl lg:text-4xl icon-engraved drop-shadow-md ${
+                  exp.accent === "cyan" ? "text-rune-glow/90" : "text-muted-gold/90"
                 }`}
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
@@ -103,7 +99,7 @@ export default function ExperienceSection() {
               {/* Tech tags */}
               <div className="flex flex-wrap gap-2 mt-5 lg:mt-6">
                 {exp.tech.map((t) => (
-                  <span key={t} className="tech-tag text-[9px] lg:text-[10px] px-2 py-1">
+                  <span key={t} className="tech-tag bg-transparent border border-faded-bronze/20 text-on-surface-variant/80 text-[9px] lg:text-[10px] px-2 py-1">
                     {t}
                   </span>
                 ))}
