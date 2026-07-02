@@ -5,7 +5,7 @@
 const categories = [
   {
     name: "Computer Science",
-    skills: ["Python", "C/C++", "JavaScript", "SQL", "OOP", "CN", "Data Structures & Algorithms", "DBMS"],
+    skills: ["Python", "C/C++", "JavaScript", "SQL", "OOP", "CN", "DSA", "DBMS"],
   },
   {
     name: "Full-Stack Development",
@@ -13,11 +13,11 @@ const categories = [
   },
   {
     name: "AI / ML",
-    skills: ["LangChain", "LangGraph", "RAG", "Vector Databases", "PyTorch", "Transformers", "NLP", "Fine Tuning"],
+    skills: ["LangChain", "LangGraph", "RAG", "Machine Learning", "PyTorch", "Transformers", "NLP", "Fine Tuning"],
   },
   {
     name: "Cloud & DevOps",
-    skills: ["Docker", "AWS EC2", "Redis", "Git / GitHub", "LangSmith"],
+    skills: ["Docker", "AWS", "Redis", "Git / GitHub"],
   },
 ] as const;
 
@@ -30,7 +30,7 @@ export default function SkillsSection() {
           <h3 className="font-[family-name:var(--font-cinzel)] text-[12px] lg:text-[13px] uppercase tracking-[0.2em] text-muted-gold font-medium engraved-text mb-2">
             {cat.name}
           </h3>
-          
+
           {/* Engraved divider */}
           <hr className="border-t border-faded-bronze/25 w-full mb-4 lg:mb-5" style={{ boxShadow: "0 1px 0 rgba(255,255,255,0.05)" }} />
 

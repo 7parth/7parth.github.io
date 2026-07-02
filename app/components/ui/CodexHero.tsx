@@ -14,15 +14,15 @@ export interface CodexHeroProps {
 export default function CodexHero({ label, title, loreSummary, runes, iconImg, icon, style, className }: CodexHeroProps) {
   return (
     <div className={`text-left pt-0 mb-1 relative flex-shrink-0 flex flex-col items-start ${className || ""}`} style={style}>
-      <p className="font-label-caps text-muted-gold tracking-[0.3em] uppercase text-[10px] lg:text-xs mb-0.5 engraved-text">
+      <p className="font-[family-name:var(--font-cinzel)] text-muted-gold tracking-[0.3em] uppercase text-[11px] lg:text-[12px] mb-1 font-semibold engraved-text">
         {label}
       </p>
 
-      <h2 className="font-headline-lg text-xl lg:text-3xl text-rune-glow codex-title-animate uppercase tracking-widest mb-1 lg:mb-1.5">
+      <h2 className="font-[family-name:var(--font-cinzel)] text-2xl lg:text-4xl text-rune-glow codex-title-animate uppercase tracking-[0.15em] mb-2 font-bold engraved-text drop-shadow-[0_0_8px_rgba(72,202,228,0.4)]">
         {title}
       </h2>
 
-      <p className="text-on-surface-variant/70 text-xs lg:text-sm text-left leading-snug mb-2 italic max-w-xl">
+      <p className="font-[family-name:var(--font-ibm-plex)] text-[#ECE7DD] text-[13px] lg:text-[14px] text-left leading-[1.6] mb-3 italic max-w-xl engraved-text opacity-90">
         {loreSummary}
       </p>
 
@@ -37,7 +37,7 @@ export default function CodexHero({ label, title, loreSummary, runes, iconImg, i
         <div className="h-[1px] flex-1 bg-gradient-to-r from-faded-bronze/40 to-transparent"></div>
       </div>
 
-      <div className="absolute top-0 right-2 lg:right-4 w-12 h-12 lg:w-16 lg:h-16 flex items-center justify-center opacity-70 pointer-events-none animate-pulse" style={{ filter: "drop-shadow(0 0 12px rgba(72,202,228,0.6)) drop-shadow(0 0 24px rgba(72,202,228,0.4))" }}>
+      <div className="absolute top-0 right-2 lg:right-4 w-20 h-20 lg:w-20 lg:h-20 flex items-center justify-center opacity-70 pointer-events-none animate-pulse" style={{ filter: "drop-shadow(0 0 12px rgba(72,202,228,0.6)) drop-shadow(0 0 24px rgba(72,202,228,0.4))" }}>
         {iconImg ? (
           <img src={iconImg} alt="" aria-hidden="true" className="w-full h-full object-contain" />
         ) : icon ? (

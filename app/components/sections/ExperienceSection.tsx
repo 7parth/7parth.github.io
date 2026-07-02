@@ -43,12 +43,12 @@ export default function ExperienceSection() {
           <div className="flex flex-col">
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3">
               <div>
-                <h3 className="font-headline-md text-lg lg:text-xl text-white/90 engraved-text tracking-wider flex items-center">
+                <h3 className="font-[family-name:var(--font-cinzel)] text-[14px] lg:text-[15px] uppercase tracking-[0.1em] text-white/90 font-medium engraved-text flex items-center">
                   <EntryMarker />
                   {exp.role}
                 </h3>
                   <p
-                    className={`font-label-caps text-[10px] lg:text-xs uppercase tracking-[0.2em] mt-1 lg:mt-2 ${
+                    className={`font-[family-name:var(--font-cinzel)] text-[10px] lg:text-[11px] uppercase tracking-[0.15em] mt-1 lg:mt-2 ${
                       exp.accent === "cyan" ? "text-icy-cyan/70" : "text-muted-gold/70"
                     }`}
                   >
@@ -56,10 +56,10 @@ export default function ExperienceSection() {
                   </p>
                 </div>
                 <div className="text-left lg:text-right flex-shrink-0">
-                  <p className="font-label-caps text-[9px] lg:text-[10px] text-on-surface-variant/60 uppercase tracking-[0.1em]">
+                  <p className="font-[family-name:var(--font-cinzel)] text-[9px] lg:text-[10px] text-on-surface-variant/60 uppercase tracking-[0.1em]">
                     {exp.period}
                   </p>
-                  <p className="font-label-caps text-[9px] lg:text-[10px] text-on-surface-variant/40 mt-1">
+                  <p className="font-[family-name:var(--font-cinzel)] text-[9px] lg:text-[10px] text-on-surface-variant/40 mt-1">
                     {exp.location}
                   </p>
                 </div>
@@ -70,7 +70,7 @@ export default function ExperienceSection() {
                 {exp.points.map((pt, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-3 text-xs lg:text-sm text-on-surface-variant/80 leading-relaxed engraved-text"
+                    className="flex items-start gap-3 font-[family-name:var(--font-ibm-plex)] text-[13px] lg:text-[14px] text-[#ECE7DD] leading-[1.6] engraved-text tracking-[0.2px]"
                   >
                     <span
                       className={`flex-shrink-0 mt-0.5 text-base ${
@@ -87,7 +87,7 @@ export default function ExperienceSection() {
               {/* Tech tags */}
               <div className="flex flex-wrap gap-2 mt-5 lg:mt-6">
                 {exp.tech.map((t) => (
-                  <span key={t} className="tech-tag bg-transparent border border-faded-bronze/20 text-on-surface-variant/80 text-[9px] lg:text-[10px] px-2 py-1">
+                  <span key={t} className="tech-tag bg-transparent border border-faded-bronze/20 text-on-surface-variant/80 font-[family-name:var(--font-ibm-plex)] text-[11px] lg:text-[12px] px-2 py-1">
                     {t}
                   </span>
                 ))}

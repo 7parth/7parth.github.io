@@ -347,9 +347,7 @@ export default function PortfolioShell() {
           </p>
         </div>
         <div className="hidden md:flex gap-8 pointer-events-auto">
-          <a className="font-label-caps text-[10px] tracking-[0.2em] text-on-surface-variant/60 hover:text-muted-gold transition-colors engraved-text" href="#">LORE</a>
-          <a className="font-label-caps text-[10px] tracking-[0.2em] text-on-surface-variant/60 hover:text-muted-gold transition-colors engraved-text" href="#">TERMS OF SERVICE</a>
-          <a className="font-label-caps text-[10px] tracking-[0.2em] text-on-surface-variant/60 hover:text-muted-gold transition-colors engraved-text" href="#">RUNIC HELP</a>
+          <a className="font-[family-name:var(--font-cinzel)] text-[11px] tracking-[0.2em] text-on-surface-variant/60 hover:text-muted-gold transition-colors engraved-text" href="#">LORE</a>
         </div>
       </footer>
     </div>

@@ -50,7 +50,7 @@ export default function ProjectsSection() {
             {/* Content */}
             <div className="flex flex-col min-w-0">
               <div className="flex items-start justify-between gap-1 mb-1">
-                <h3 className="font-headline-md text-base lg:text-lg text-white engraved-text tracking-wider flex items-center">
+                <h3 className="font-[family-name:var(--font-cinzel)] text-[14px] lg:text-[15px] uppercase tracking-[0.1em] text-muted-gold font-medium flex items-center engraved-text">
                   <EntryMarker />
                   {project.name}
                 </h3>
@@ -74,20 +74,20 @@ export default function ProjectsSection() {
                 </div>
               </div>
               <p
-                className={`font-label-caps text-[9px] uppercase tracking-[0.18em] mb-2 ${
+                className={`font-[family-name:var(--font-cinzel)] text-[10px] lg:text-[11px] uppercase tracking-[0.15em] mb-2 ${
                   project.accent === "cyan"
-                    ? "text-icy-cyan/50"
-                    : "text-muted-gold/50"
+                    ? "text-icy-cyan/70"
+                    : "text-muted-gold/70"
                 }`}
               >
                 {project.subtitle}
               </p>
-              <p className="font-body-md text-[10px] text-on-surface-variant/65 leading-relaxed engraved-text mb-3">
+              <p className="font-[family-name:var(--font-ibm-plex)] text-[13px] lg:text-[14px] text-[#ECE7DD] font-normal leading-[1.6] tracking-[0.2px] engraved-text mb-3">
                 {project.desc}
               </p>
               <div className="flex flex-wrap gap-1">
                 {project.tech.map((t) => (
-                  <span key={t} className="tech-tag bg-transparent border border-faded-bronze/20 text-on-surface-variant/80 text-[9px] lg:text-[10px] px-2 py-1">
+                  <span key={t} className="tech-tag bg-transparent border border-faded-bronze/20 text-on-surface-variant/80 font-[family-name:var(--font-ibm-plex)] text-[11px] lg:text-[12px] px-2 py-1">
                     {t}
                   </span>
                 ))}

@@ -120,13 +120,21 @@ export default function CodexArtifact({
         />
 
         {interactionEnabled && (
-          <button
+          <motion.button
+            initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.2, ease: [0.2, 0.02, 0.18, 1] }}
             onClick={onClose}
             aria-label="Close codex"
-            className="absolute top-3 left-3 z-50 w-8 h-8 rounded-full bg-[#0d0e10] border border-[#444] flex items-center justify-center cursor-pointer hover:border-rune-glow/60 hover:shadow-[0_0_8px_rgba(72,202,228,0.4)] transition-all duration-200 hover:rotate-90 hover:scale-105 pointer-events-auto"
+            className="absolute top-6 left-6 z-50 w-10 h-10 flex items-center justify-center cursor-pointer group pointer-events-auto"
           >
-            <span className="text-white text-sm leading-none">×</span>
-          </button>
+            {/* The stone diamond background */}
+            <div className="absolute inset-0 bg-[#121316] border border-faded-bronze/40 rounded-sm rotate-45 shadow-[inset_0_0_10px_rgba(0,0,0,0.8),_0_2px_10px_rgba(0,0,0,0.6)] group-hover:border-icy-cyan/60 group-hover:bg-icy-cyan/5 group-hover:shadow-[0_0_15px_rgba(72,202,228,0.5),_inset_0_0_10px_rgba(72,202,228,0.2)] transition-all duration-300 group-hover:scale-105"></div>
+            {/* The Gebo rune (X) */}
+            <span className="relative text-muted-gold/80 text-[18px] group-hover:text-icy-cyan group-hover:drop-shadow-[0_0_10px_rgba(72,202,228,0.9)] transition-all duration-300 engraved-text font-bold z-10 -ml-0.5 mt-0.5">
+              ᚷ
+            </span>
+          </motion.button>
         )}
       </motion.div>
     </motion.div>
