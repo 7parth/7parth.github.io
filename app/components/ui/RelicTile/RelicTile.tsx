@@ -37,6 +37,8 @@ export interface RelicTileProps {
   /** Hover events for path tracking */
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  /** Optional custom class name */
+  className?: string;
 }
 
 const RelicTile = React.memo(function RelicTile({
