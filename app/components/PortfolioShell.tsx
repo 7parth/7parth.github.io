@@ -57,14 +57,14 @@ export default function PortfolioShell() {
   const activeRelic =
     (isTransitioning ? pendingId : selectedId) === "lore"
       ? {
-          id: "lore",
-          codexLabel: "LORE",
-          codexTitle: "THE ENGINEER'S CHRONICLE",
-          loreSummary: "A tale explaining why this Codex exists, told by an unlikely storyteller.",
-          icon: "menu_book",
-          runeSymbol: "ᛈ",
-          iconImg: "/icons/lore.png",
-        }
+        id: "lore",
+        codexLabel: "LORE",
+        codexTitle: "THE ENGINEER'S CHRONICLE",
+        loreSummary: "A tale explaining why this Codex exists, told by an unlikely storyteller.",
+        icon: "menu_book",
+        runeSymbol: "ᛈ",
+        iconImg: "/icons/lore.png",
+      }
       : relics.find((r) => r.id === (isTransitioning ? pendingId : selectedId)) || relics[0];
   const activeRelicIndex = relics.findIndex((r) => r.id === (isTransitioning ? pendingId : selectedId));
 
@@ -74,7 +74,7 @@ export default function PortfolioShell() {
       window.open(clickedRelic.externalLink, "_blank", "noopener,noreferrer");
       return;
     }
-    
+
     setWallAwake(false);
     if (wallPulseTimerRef.current) clearTimeout(wallPulseTimerRef.current);
     requestAnimationFrame(() => setWallAwake(true));
@@ -237,12 +237,12 @@ export default function PortfolioShell() {
           className="flex items-center gap-4 pointer-events-auto"
           style={{ willChange: "transform" }}
         >
-          <img src="/icons/omega-blue.png" alt="" aria-hidden="true" height={60} width={60} />
+          <img src="/icons/omega2.png" alt="" aria-hidden="true" height={60} width={60} />
           <div>
-            <h1 className="font-headline-lg text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
+            <h1 className="font-[family-name:var(--font-cinzel)] text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
               Parth Waradkar
             </h1>
-            <p className="font-label-caps text-xs text-on-surface-variant uppercase tracking-[0.3em] mt-1 engraved-text">
+            <p className="font-[family-name:var(--font-cinzel)] text-xs text-on-surface-variant uppercase tracking-[0.3em] mt-1 engraved-text">
               AI Engineer
             </p>
           </div>

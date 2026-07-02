@@ -24,9 +24,9 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  title: "KRATOS' CODEX — Chronicles of a Warrior",
+  title: "Parth's CODEX",
   description:
-    "A cinematic Norse-mythology-themed developer portfolio. Final year Computer Engineering student building efficient, scalable, and impactful digital solutions.",
+    "A cinematic God-of-War-themed developer portfolio. Final year Computer Engineering student building efficient, scalable, and impactful digital solutions.",
   keywords: [
     "portfolio",
     "developer",
@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     "computer engineering",
     "software engineer",
   ],
+  icons: {
+    icon: "/icons/omega.png",
+  },
 };
 
 export default function RootLayout({

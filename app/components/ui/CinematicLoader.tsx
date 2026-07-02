@@ -92,10 +92,10 @@ export default function CinematicLoader({ onComplete }: CinematicLoaderProps) {
               <p suppressHydrationWarning className="font-[family-name:var(--font-ibm-plex)] text-sm md:text-base text-faded-bronze italic mb-8 min-h-[3rem]">
                 "{quote}"
               </p>
-              
+
               {/* Subtle engraved loading line */}
               <div className="w-48 h-[2px] bg-black/40 rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] relative mb-8">
-                <motion.div 
+                <motion.div
                   className="absolute top-0 left-0 h-full bg-icy-cyan/40 shadow-[0_0_8px_rgba(72,202,228,0.4)]"
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
@@ -103,7 +103,7 @@ export default function CinematicLoader({ onComplete }: CinematicLoaderProps) {
                 />
               </div>
 
-              <motion.p 
+              <motion.p
                 className="font-[family-name:var(--font-cinzel)] text-[10px] tracking-[0.3em] text-faded-bronze/50 uppercase engraved-text mt-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
