@@ -73,12 +73,12 @@ export default function EducationSection() {
           </div>
 
           {/* Meta bar */}
-          <div className="flex items-center justify-between mb-3 mt-2 py-1.5 border-y border-faded-bronze/10">
-            <div className="flex items-center gap-4">
-              <span className="font-[family-name:var(--font-ibm-plex)] text-[13px] text-on-surface-variant/70 tracking-[0.5px]">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3 mt-2 py-1.5 border-y border-faded-bronze/10">
+            <div className="flex flex-wrap items-center gap-2 md:gap-4">
+              <span className="font-[family-name:var(--font-ibm-plex)] text-[12px] md:text-[13px] text-on-surface-variant/70 tracking-[0.5px]">
                 {edu.period}
               </span>
-              <span className="font-[family-name:var(--font-ibm-plex)] text-[13px] text-on-surface-variant/70 tracking-[0.5px]">
+              <span className="font-[family-name:var(--font-ibm-plex)] text-[12px] md:text-[13px] text-on-surface-variant/70 tracking-[0.5px]">
                 {edu.location}
               </span>
             </div>

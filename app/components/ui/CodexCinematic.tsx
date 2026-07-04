@@ -62,11 +62,11 @@ export default function CodexCinematic({
   const travelBeamOpacity = useTransform(progress, [0, 0.1, 0.15, 0.39, 0.45], [0, 0, 1, 1, 0]);
   const carvingBeamOpacity = useTransform(artifactReveal, [0, 0.02, 1], [0, 0.86, 0.72]);
   const carvingEdgeOpacity = interactionEnabled ? 0 : carvingBeamOpacity;
-  const travelBeamLeft = useTransform(progress, [0.15, 0.4], ["28%", "calc(50% - min(500px, 42.5vw))"]);
+  const travelBeamLeft = useTransform(progress, [0.15, 0.4], ["28%", "calc(50% - var(--codex-half-w, 47.5vw))"]);
   const travelBeamLength = useTransform(progress, (value) => {
     if (value < 0.15) return "0px";
     const travel = Math.max(0, Math.min(1, (value - 0.15) / 0.25));
-    return `calc(${travel} * (50vw - min(500px, 42.5vw) - 28vw))`;
+    return `calc(${travel} * (50vw - var(--codex-half-w, 47.5vw) - 28vw))`;
   });
   const travelBeamRight = useMotionTemplate`calc(100% - ${travelBeamLeft})`;
   const carvingBeamX = useTransform(artifactReveal, (value) => `${value * 100}%`);
@@ -181,7 +181,7 @@ export default function CodexCinematic({
         />
 
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative pointer-events-none" style={{ width: "min(1000px, 85vw)", height: "min(800px, 85vh)" }}>
+          <div className="relative pointer-events-none w-[95vw] h-[90vh] md:w-[min(1000px,85vw)] md:h-[min(800px,85vh)]">
             <motion.div
               className="codex-carved-trail absolute left-0 top-1/2 h-px origin-left"
               style={{

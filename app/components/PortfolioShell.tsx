@@ -231,18 +231,18 @@ export default function PortfolioShell() {
       <GhostWhisper />
 
       {/* ── Header ── */}
-      <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 bg-gradient-to-b from-surface-container-lowest/80 to-transparent pointer-events-none">
+      <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-4 py-4 md:px-6 md:py-6 bg-gradient-to-b from-surface-container-lowest/80 to-transparent pointer-events-none">
         <div
           ref={logoRef}
-          className="flex items-center gap-4 pointer-events-auto"
+          className="flex items-center gap-2 md:gap-4 pointer-events-auto"
           style={{ willChange: "transform" }}
         >
-          <img src="/icons/omega2.png" alt="" aria-hidden="true" height={60} width={60} />
+          <img src="/icons/omega2.png" alt="" aria-hidden="true" className="h-10 w-10 md:h-[60px] md:w-[60px]" />
           <div>
-            <h1 className="font-[family-name:var(--font-cinzel)] text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
+            <h1 className="font-[family-name:var(--font-cinzel)] text-[18px] md:text-2xl tracking-widest text-on-surface leading-none uppercase engraved-text">
               Parth Waradkar
             </h1>
-            <p className="font-[family-name:var(--font-cinzel)] text-xs text-on-surface-variant uppercase tracking-[0.3em] mt-1 engraved-text">
+            <p className="font-[family-name:var(--font-cinzel)] text-[9px] md:text-xs text-on-surface-variant uppercase tracking-[0.2em] md:tracking-[0.3em] mt-1 md:mt-1 engraved-text">
               AI Engineer
             </p>
           </div>
@@ -250,23 +250,24 @@ export default function PortfolioShell() {
       </header>
 
       {/* ── Main Layout ── */}
-      <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-start pt-[80px] pb-[100px] px-8">
+      <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-center md:justify-start pt-[60px] pb-[80px] px-2 md:pt-[80px] md:pb-[100px] md:px-8">
 
         {/* LEFT: Wall of Relics */}
-        <aside className="w-full md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-4">
+        <aside className="w-full sm:w-[80%] md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-2 md:px-4">
           <div
             ref={navRef}
-            className="relic-wall-shell flex-1 pt-8 pb-8 relative"
+            className="relic-wall-shell flex-1 pt-2 pb-2 sm:pt-4 sm:pb-4 md:pt-8 md:pb-8 relative"
             style={{
               willChange: "transform",
             }}
           >
             <MagicalPathOverlay hoveredRelicIndex={hoveredRelicIndex} activeRelicIndex={activeRelicIndex} />
-            <div className={`relic-wall relative z-10 grid grid-cols-3 gap-6 md:h-full place-content-center ${wallAwake ? "relic-wall-awake" : ""}`}>
+            <div className={`relic-wall relative z-10 grid grid-cols-3 gap-1.5 sm:gap-3 md:gap-6 md:h-full place-content-center ${wallAwake ? "relic-wall-awake" : ""}`}>
               {relics.map((relic, index) => {
                 const isActive = selectedId === relic.id;
                 // Show pending highlight during transition so relic feels "selected"
                 const isPending = pendingId === relic.id && isTransitioning;
+                
                 const activeRow = Math.floor(activeRelicIndex / 3);
                 const activeCol = activeRelicIndex % 3;
                 const row = Math.floor(index / 3);
@@ -353,10 +354,10 @@ export default function PortfolioShell() {
       )}
 
       {/* Footer */}
-      <footer className="absolute bottom-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-gradient-to-t from-surface-container-lowest to-transparent pointer-events-none">
-        <div className="pointer-events-auto">
-          <p className="font-label-caps text-[10px] tracking-[0.2em] text-faded-bronze/70 engraved-text">
-            © 985 ÆSIR REALM - HANDCRAFTED IN MIDGARD
+      <footer className="absolute bottom-0 left-0 w-full z-50 flex justify-center md:justify-between items-center px-4 md:px-6 py-4 bg-gradient-to-t from-surface-container-lowest to-transparent pointer-events-none">
+        <div className="pointer-events-auto text-center md:text-left">
+          <p className="font-label-caps text-[8px] md:text-[10px] tracking-[0.1em] md:tracking-[0.2em] text-faded-bronze/70 engraved-text leading-tight">
+            © 985 ÆSIR REALM<br className="md:hidden" /> HANDCRAFTED IN MIDGARD
           </p>
         </div>
         <div className="hidden md:flex gap-8 pointer-events-auto">

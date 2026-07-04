@@ -109,6 +109,25 @@ body {
 /* ============================================
    Scrollbar Utilities
    ============================================ */
+:root {
+  --codex-inset-top: 20px;
+  --codex-inset-bottom: 20px;
+  --codex-inset-left: 20px;
+  --codex-inset-right: 20px;
+  --codex-inset-x: 40px;
+  --codex-half-w: 47.5vw;
+}
+@media (min-width: 768px) {
+  :root {
+    --codex-inset-top: 60px;
+    --codex-inset-bottom: 45px;
+    --codex-inset-left: 75px;
+    --codex-inset-right: 65px;
+    --codex-inset-x: 140px;
+    --codex-half-w: min(500px, 42.5vw);
+  }
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }

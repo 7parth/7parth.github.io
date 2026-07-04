@@ -48,10 +48,8 @@ export default function CodexArtifact({
       aria-hidden={progress.get() < 0.45}
     >
       <motion.div
-        className="relative"
+        className="relative w-[95vw] h-[90vh] md:w-[min(1000px,85vw)] md:h-[min(800px,85vh)]"
         style={{
-          width: "min(1000px, 85vw)",
-          height: "min(800px, 85vh)",
           clipPath: artifactClip,
           scale: artifactScale,
           filter: artifactFilter,
@@ -60,7 +58,7 @@ export default function CodexArtifact({
         }}
       >
         {/* The Frame Overlay - pointer events none so tablet can scroll underneath */}
-        <div className="absolute inset-0 z-30 pointer-events-none">
+        <div className="absolute inset-0 z-30 pointer-events-none hidden md:block">
           <CodexFrame />
         </div>
 
@@ -80,13 +78,13 @@ export default function CodexArtifact({
 
         {/* The Scrollable Content Area - constrained exactly to the frame's solid inner edge */}
         <div 
-          className="absolute z-20 flex flex-col"
+          className="absolute z-20 flex flex-col codex-content-area"
           style={{
-            top: innerInsetTop,
-            bottom: innerInsetBottom,
-            left: innerInsetLeft,
-            right: innerInsetRight,
-            width: `calc(100% - ${innerInsetLeft + innerInsetRight}px)`
+            top: "var(--codex-inset-top, 60px)",
+            bottom: "var(--codex-inset-bottom, 45px)",
+            left: "var(--codex-inset-left, 75px)",
+            right: "var(--codex-inset-right, 65px)",
+            width: "calc(100% - var(--codex-inset-x, 140px))"
           }}
         >
           <CodexHero 

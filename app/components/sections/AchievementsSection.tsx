@@ -82,7 +82,7 @@ export default function AchievementsSection() {
           <hr className="border-t border-faded-bronze/25 w-full mb-3 shadow-[0_1px_0_rgba(255,255,255,0.05)]" />
 
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-[10px] lg:text-[11px] font-label-caps uppercase tracking-[0.15em]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[10px] lg:text-[11px] font-label-caps uppercase tracking-[0.15em]">
               <span className={ach.accent === "gold" ? "text-muted-gold/70" : "text-icy-cyan/70"}>
                 {ach.subtitle}
               </span>
