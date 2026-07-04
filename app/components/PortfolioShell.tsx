@@ -253,7 +253,10 @@ export default function PortfolioShell() {
       <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-center md:justify-start pt-[60px] pb-[80px] px-2 md:pt-[80px] md:pb-[100px] md:px-8">
 
         {/* LEFT: Wall of Relics */}
-        <aside className="w-full sm:w-[80%] md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-2 md:px-4">
+        <aside 
+          className="w-full sm:w-[80%] md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-2 md:px-4"
+          style={{ maxWidth: "calc(95vh - 180px)" }}
+        >
           <div
             ref={navRef}
             className="relic-wall-shell flex-1 pt-2 pb-2 sm:pt-4 sm:pb-4 md:pt-8 md:pb-8 relative"
