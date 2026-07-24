@@ -212,7 +212,7 @@ export default function PortfolioShell() {
           src="/gow-bg2.png"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-overlay"
+          className="absolute inset-0 w-full h-full object-cover opacity-70 md:mix-blend-overlay"
           style={{ transition: "transform 0.12s linear" }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest opacity-40" />
@@ -250,12 +250,12 @@ export default function PortfolioShell() {
       </header>
 
       {/* ── Main Layout ── */}
-      <main ref={mainRef} className="relative z-20 w-full h-full flex items-center justify-center md:justify-start pt-[60px] pb-[80px] px-2 md:pt-[80px] md:pb-[100px] md:px-8">
+      <main ref={mainRef} className="relative z-20 w-full h-full flex flex-col md:flex-row items-center justify-start pt-[80px] pb-[80px] px-2 md:pt-[80px] md:pb-[100px] md:px-8 overflow-y-auto hide-scrollbar">
 
         {/* LEFT: Wall of Relics */}
         <aside 
-          className="w-full sm:w-[80%] md:w-[60%] lg:w-[48%] xl:w-[42%] h-full flex flex-col pointer-events-auto z-30 px-2 md:px-4"
-          style={{ maxWidth: "calc(95vh - 180px)" }}
+          className="w-full sm:w-[80%] md:w-[60%] lg:w-[48%] xl:w-[42%] min-h-max md:h-full flex flex-col justify-center pointer-events-auto z-30 px-2 md:px-4 my-auto"
+          style={{ maxWidth: typeof window !== 'undefined' && window.innerWidth < 768 ? '400px' : 'calc(95vh - 180px)' }}
         >
           <div
             ref={navRef}
@@ -264,8 +264,10 @@ export default function PortfolioShell() {
               willChange: "transform",
             }}
           >
-            <MagicalPathOverlay hoveredRelicIndex={hoveredRelicIndex} activeRelicIndex={activeRelicIndex} />
-            <div className={`relic-wall relative z-10 grid grid-cols-3 gap-1.5 sm:gap-3 md:gap-6 md:h-full place-content-center ${wallAwake ? "relic-wall-awake" : ""}`}>
+            <div className="hidden md:block">
+              <MagicalPathOverlay hoveredRelicIndex={hoveredRelicIndex} activeRelicIndex={activeRelicIndex} />
+            </div>
+            <div className={`relic-wall relative z-10 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 md:h-full place-content-center ${wallAwake ? "relic-wall-awake" : ""}`}>
               {relics.map((relic, index) => {
                 const isActive = selectedId === relic.id;
                 // Show pending highlight during transition so relic feels "selected"

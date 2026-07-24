@@ -103,7 +103,8 @@ export default function ParticleCanvas({ worldMode = "" }: ParticleCanvasProps) 
       return p;
     }
 
-    const COUNT = 300;
+    const isMobile = window.innerWidth < 768;
+    const COUNT = isMobile ? 60 : 150;
     const pool: P[] = Array.from({ length: COUNT }, () => mkParticle(true));
 
     function colorOf(p: P, op: number): string {

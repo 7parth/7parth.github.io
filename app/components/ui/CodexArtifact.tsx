@@ -124,7 +124,7 @@ export default function CodexArtifact({
             transition={{ duration: 1.2, ease: [0.2, 0.02, 0.18, 1] }}
             onClick={onClose}
             aria-label="Close codex"
-            className="absolute top-6 left-6 z-50 w-10 h-10 flex items-center justify-center cursor-pointer group pointer-events-auto"
+            className="absolute top-2 left-2 md:top-6 md:left-6 z-50 w-10 h-10 flex items-center justify-center cursor-pointer group pointer-events-auto"
           >
             {/* The stone diamond background */}
             <div className="absolute inset-0 bg-[#121316] border border-faded-bronze/40 rounded-sm rotate-45 shadow-[inset_0_0_10px_rgba(0,0,0,0.8),_0_2px_10px_rgba(0,0,0,0.6)] group-hover:border-icy-cyan/60 group-hover:bg-icy-cyan/5 group-hover:shadow-[0_0_15px_rgba(72,202,228,0.5),_inset_0_0_10px_rgba(72,202,228,0.2)] transition-all duration-300 group-hover:scale-105"></div>
