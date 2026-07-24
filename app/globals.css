@@ -538,7 +538,6 @@ body {
     rgba(0,0,0,0.40) 70%,
     rgba(0,0,0,0.72) 100%
   );
-  animation: vignettePulse 10s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -551,7 +550,6 @@ body {
     rgba(176,141,87,0.12) 0%,
     transparent 60%
   );
-  animation: goldShift 12s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -627,7 +625,6 @@ body {
     radial-gradient(circle at 72% 38%, rgba(176,141,87,0.13) 0 1px, transparent 2px),
     radial-gradient(circle at 46% 76%, rgba(165,243,252,0.12) 0 1px, transparent 2px);
   opacity: 0.24;
-  animation: relicWallDust 14s ease-in-out infinite;
 }
 
 .relic-wall {
@@ -739,13 +736,11 @@ body {
 /* Projects → distant lightning shimmer */
 html.world-lightning .world-reaction-layer {
   background: radial-gradient(ellipse at 60% 20%, rgba(180,220,255,0.06) 0%, transparent 55%);
-  animation: worldLightning 6s ease-in-out infinite;
 }
 
 /* Skills → faint rune blue-green pulse */
 html.world-rune .world-reaction-layer {
   background: radial-gradient(ellipse at 50% 50%, rgba(72,202,228,0.06) 0%, transparent 60%);
-  animation: worldPulse 5s ease-in-out infinite;
 }
 
 /* Experience → colder blue left-edge */
@@ -756,13 +751,11 @@ html.world-cold .world-reaction-layer {
 /* Timeline → warm golden dust */
 html.world-gold .world-reaction-layer {
   background: radial-gradient(ellipse at 50% 80%, rgba(176,141,87,0.09) 0%, transparent 55%);
-  animation: goldShift 8s ease-in-out infinite;
 }
 
 /* Education → soft floating dust (very faint warm) */
 html.world-dust .world-reaction-layer {
   background: radial-gradient(ellipse at 40% 60%, rgba(160,145,120,0.07) 0%, transparent 55%);
-  animation: worldPulse 9s ease-in-out infinite;
 }
 
 @keyframes worldLightning {

@@ -63,14 +63,12 @@ export default function CodexCinematic({
   const carvingBeamOpacity = useTransform(artifactReveal, [0, 0.02, 1], [0, 0.86, 0.72]);
   const carvingEdgeOpacity = interactionEnabled ? 0 : carvingBeamOpacity;
   const travelBeamLeft = useTransform(progress, [0.15, 0.4], ["28%", "calc(50% - var(--codex-half-w, 47.5vw))"]);
-  const travelBeamLength = useTransform(progress, (value) => {
-    if (value < 0.15) return "0px";
-    const travel = Math.max(0, Math.min(1, (value - 0.15) / 0.25));
-    return `calc(${travel} * (50vw - var(--codex-half-w, 47.5vw) - 28vw))`;
+  const travelBeamScale = useTransform(progress, (value) => {
+    if (value < 0.15) return 0;
+    return Math.max(0, Math.min(1, (value - 0.15) / 0.25));
   });
   const travelBeamRight = useMotionTemplate`calc(100% - ${travelBeamLeft})`;
   const carvingBeamX = useTransform(artifactReveal, (value) => `${value * 100}%`);
-  const carvedWidth = useTransform(artifactReveal, (value) => `${value * 100}%`);
   const runePulse = useTransform(progress, [0.05, 0.1, 0.15], [0, 1, 0]);
 
   useMotionValueEvent(progress, "change", (value) => {
@@ -170,8 +168,10 @@ export default function CodexCinematic({
         <motion.div
           className="codex-travel-beam absolute top-1/2 h-px origin-right"
           style={{
+            willChange: "transform, opacity",
             right: travelBeamRight,
-            width: travelBeamLength,
+            width: "calc(50vw - var(--codex-half-w, 47.5vw) - 28vw)",
+            scaleX: travelBeamScale,
             opacity: travelBeamOpacity,
             background:
               "linear-gradient(90deg, transparent, rgba(72,202,228,0.45), rgba(165,243,252,0.9), rgba(230,185,70,0.95))",
@@ -183,9 +183,10 @@ export default function CodexCinematic({
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative pointer-events-none w-[95vw] h-[90vh] md:w-[min(1000px,85vw)] md:h-[min(800px,85vh)]">
             <motion.div
-              className="codex-carved-trail absolute left-0 top-1/2 h-px origin-left"
+              className="codex-carved-trail absolute left-0 top-1/2 h-px origin-left w-full"
               style={{
-                width: carvedWidth,
+                willChange: "transform, opacity",
+                scaleX: artifactReveal,
                 opacity: carvingEdgeOpacity,
                 background:
                   "linear-gradient(90deg, rgba(72,202,228,0.05), rgba(176,141,87,0.32), rgba(240,195,70,0.56))",
@@ -195,6 +196,7 @@ export default function CodexCinematic({
             <motion.div
               className="codex-carving-beam absolute top-0 -translate-x-1/2 w-[2px] h-full"
               style={{
+                willChange: "left, opacity",
                 left: carvingBeamX,
                 opacity: carvingEdgeOpacity,
                 background:

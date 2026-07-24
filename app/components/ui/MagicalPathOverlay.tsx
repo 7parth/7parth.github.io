@@ -103,22 +103,7 @@ export default function MagicalPathOverlay({
         preserveAspectRatio="none"
       >
         <defs>
-          {/* Organic crack / root distortion */}
-          <filter id="carved-crack" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.04"
-              numOctaves="3"
-              result="noise"
-            />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="10"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
+
 
           {/*
             ── Tile mask ──────────────────────────────────────────────
@@ -151,7 +136,7 @@ export default function MagicalPathOverlay({
         {/* All drawing is masked to the gap region only */}
         <g mask="url(#gap-only-mask)">
           {/* Base layer: dark idle carved grooves */}
-          <g filter="url(#carved-crack)">
+          <g>
             {EDGES.map((edge) => (
               <line
                 key={`base-${edge.id}`}
@@ -165,7 +150,7 @@ export default function MagicalPathOverlay({
           </g>
 
           {/* Active layer: glowing magical veins */}
-          <g filter="url(#carved-crack)">
+          <g>
             {EDGES.map((edge) => {
               const isActive = activeEdges.includes(edge.id);
               const sequenceIndex = activeEdges.indexOf(edge.id);

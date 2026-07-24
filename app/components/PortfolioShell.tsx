@@ -91,16 +91,9 @@ export default function PortfolioShell() {
   });
 
   // ── Camera breathing (GSAP) ──────────────────────────────
+  // Removed for performance: animating <main> forced continuous heavy repaints
   useEffect(() => {
-    let tween: { kill: () => void } | null = null;
-    import("gsap").then(({ gsap }) => {
-      if (mainRef.current) {
-        tween = gsap.to(mainRef.current, {
-          y: -4, duration: 10, yoyo: true, repeat: -1, ease: "sine.inOut",
-        }) as unknown as { kill: () => void };
-      }
-    }).catch(() => { });
-    return () => { tween?.kill(); };
+    // Left empty to maintain hook order if needed, but safe to just have no logic
   }, []);
 
   // ── Multi-layer damped parallax ──────────────────────────
@@ -124,17 +117,28 @@ export default function PortfolioShell() {
     function tick() {
       const m = mouse.current;
       const s = smooth.current;
+      let needsUpdate = false;
+
       for (const key of ["bg", "nav", "logo"] as const) {
         const range = RANGES[key];
-        s[key].x += (m.x * range - s[key].x) * DAMP;
-        s[key].y += (m.y * range - s[key].y) * DAMP;
+        const targetX = m.x * range;
+        const targetY = m.y * range;
+
+        if (Math.abs(targetX - s[key].x) > 0.05 || Math.abs(targetY - s[key].y) > 0.05) {
+          s[key].x += (targetX - s[key].x) * DAMP;
+          s[key].y += (targetY - s[key].y) * DAMP;
+          needsUpdate = true;
+        }
       }
-      if (bgRef.current)
-        bgRef.current.style.transform = `translate(${s.bg.x}px,${s.bg.y}px) scale(1.04)`;
-      if (navRef.current)
-        navRef.current.style.transform = `translate(${s.nav.x}px,${s.nav.y}px)`;
-      if (logoRef.current)
-        logoRef.current.style.transform = `translate(${s.logo.x}px,${s.logo.y}px)`;
+
+      if (needsUpdate) {
+        if (bgRef.current)
+          bgRef.current.style.transform = `translate(${s.bg.x}px,${s.bg.y}px) scale(1.04)`;
+        if (navRef.current)
+          navRef.current.style.transform = `translate(${s.nav.x}px,${s.nav.y}px)`;
+        if (logoRef.current)
+          logoRef.current.style.transform = `translate(${s.logo.x}px,${s.logo.y}px)`;
+      }
       rafId = requestAnimationFrame(tick);
     }
     rafId = requestAnimationFrame(tick);

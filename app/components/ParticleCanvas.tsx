@@ -6,9 +6,7 @@ export interface ParticleCanvasProps {
 }
 
 export default function ParticleCanvas({ worldMode = "" }: ParticleCanvasProps) {
-  const bgRef  = useRef<HTMLCanvasElement>(null); // z-5  — deep background
-  const midRef = useRef<HTMLCanvasElement>(null); // z-15 — mid layer
-  const fgRef  = useRef<HTMLCanvasElement>(null); // z-25 — foreground
+  const canvasRef = useRef<HTMLCanvasElement>(null); // merged z-15 layer
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
   const worldRef = useRef(worldMode);
 
@@ -16,21 +14,17 @@ export default function ParticleCanvas({ worldMode = "" }: ParticleCanvasProps) 
   useEffect(() => { worldRef.current = worldMode; }, [worldMode]);
 
   useEffect(() => {
-    const bgCanvas  = bgRef.current;
-    const midCanvas = midRef.current;
-    const fgCanvas  = fgRef.current;
-    if (!bgCanvas || !midCanvas || !fgCanvas) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const bgCtx  = bgCanvas.getContext("2d");
-    const midCtx = midCanvas.getContext("2d");
-    const fgCtx  = fgCanvas.getContext("2d");
-    if (!bgCtx || !midCtx || !fgCtx) return;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    if (!ctx) return;
 
     let W = 0, H = 0, animId: number;
 
     function resize() {
-      W = bgCanvas!.width  = midCanvas!.width  = fgCanvas!.width  = window.innerWidth;
-      H = bgCanvas!.height = midCanvas!.height = fgCanvas!.height = window.innerHeight;
+      W = canvas!.width = window.innerWidth;
+      H = canvas!.height = window.innerHeight;
     }
     window.addEventListener("resize", resize);
     resize();
@@ -118,12 +112,6 @@ export default function ParticleCanvas({ worldMode = "" }: ParticleCanvasProps) 
       }
     }
 
-    function ctxForLayer(layerZ: number): CanvasRenderingContext2D {
-      if (layerZ < 0.33) return bgCtx!;
-      if (layerZ < 0.66) return midCtx!;
-      return fgCtx!;
-    }
-
     function drawParticle(ctx: CanvasRenderingContext2D, p: P) {
       const t    = p.life / p.maxLife;
       const fade = t < 0.15 ? t / 0.15 : t > 0.80 ? (1 - t) / 0.20 : 1;
@@ -137,10 +125,7 @@ export default function ParticleCanvas({ worldMode = "" }: ParticleCanvasProps) 
       const op   = Math.min(1, p.opacity + boost);
 
       if (p.type === "fog") {
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-        g.addColorStop(0, colorOf(p, op));
-        g.addColorStop(1, "transparent");
-        ctx.fillStyle = g;
+        ctx.fillStyle = colorOf(p, op * 0.5); // Simplified from expensive radial gradient
       } else {
         ctx.fillStyle = colorOf(p, op);
       }
@@ -160,12 +145,10 @@ export default function ParticleCanvas({ worldMode = "" }: ParticleCanvasProps) 
     }
 
     function animate() {
-      bgCtx!.clearRect(0, 0, W, H);
-      midCtx!.clearRect(0, 0, W, H);
-      fgCtx!.clearRect(0, 0, W, H);
+      ctx!.clearRect(0, 0, W, H);
       for (const p of pool) {
         updateParticle(p);
-        drawParticle(ctxForLayer(p.layerZ), p);
+        drawParticle(ctx!, p);
       }
       animId = requestAnimationFrame(animate);
     }
@@ -187,10 +170,6 @@ export default function ParticleCanvas({ worldMode = "" }: ParticleCanvasProps) 
   };
 
   return (
-    <>
-      <canvas ref={bgRef}  style={{ ...canvasStyle, zIndex: 5  }} aria-hidden="true" />
-      <canvas ref={midRef} style={{ ...canvasStyle, zIndex: 15 }} aria-hidden="true" />
-      <canvas ref={fgRef}  style={{ ...canvasStyle, zIndex: 25 }} aria-hidden="true" />
-    </>
+    <canvas ref={canvasRef} style={{ ...canvasStyle, zIndex: 15 }} aria-hidden="true" />
   );
 }

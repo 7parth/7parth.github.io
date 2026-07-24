@@ -666,26 +666,18 @@
   0%,
   100% {
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.03),
       0 -1px 0 rgba(0, 0, 0, 0.55),
       inset 0 0 11px rgba(72, 202, 228, 0.14),
       inset 0 0 30px rgba(0, 0, 0, 0.44),
-      inset 0 2px 1px var(--rt-bevel-hi),
-      inset 0 -4px 5px rgba(0, 0, 0, 0.72),
-      inset 4px 0 7px rgba(0, 0, 0, 0.40),
-      inset -4px 0 7px rgba(0, 0, 0, 0.44);
+      inset 0 -4px 5px rgba(0, 0, 0, 0.72);
   }
 
   50% {
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.035),
       0 -1px 0 rgba(0, 0, 0, 0.58),
       inset 0 0 19px rgba(72, 202, 228, 0.25),
       inset 0 0 32px rgba(0, 0, 0, 0.34),
-      inset 0 2px 1px var(--rt-bevel-hi),
-      inset 0 -4px 5px rgba(0, 0, 0, 0.66),
-      inset 4px 0 7px rgba(0, 0, 0, 0.34),
-      inset -4px 0 7px rgba(0, 0, 0, 0.38);
+      inset 0 -4px 5px rgba(0, 0, 0, 0.66);
   }
 }
 

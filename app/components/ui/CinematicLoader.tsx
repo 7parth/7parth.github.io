@@ -65,7 +65,7 @@ export default function CinematicLoader({ onComplete }: CinematicLoaderProps) {
           src="/gow-bg2.png"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay"
+          className="absolute inset-0 w-full h-full object-cover opacity-10"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-surface-container-lowest" />
       </div>
@@ -75,9 +75,9 @@ export default function CinematicLoader({ onComplete }: CinematicLoaderProps) {
           {phase === "loading" ? (
             <motion.div
               key="loading"
-              initial={{ opacity: 0, filter: "blur(10px)" }}
-              animate={{ opacity: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, filter: "blur(10px)", scale: 0.98 }}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
               className="flex flex-col items-center"
             >
@@ -96,9 +96,9 @@ export default function CinematicLoader({ onComplete }: CinematicLoaderProps) {
               {/* Subtle engraved loading line */}
               <div className="w-48 h-[2px] bg-black/40 rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)] relative mb-8">
                 <motion.div
-                  className="absolute top-0 left-0 h-full bg-icy-cyan/40 shadow-[0_0_8px_rgba(72,202,228,0.4)]"
-                  initial={{ width: "0%" }}
-                  animate={{ width: "100%" }}
+                  className="absolute top-0 left-0 h-full w-full bg-icy-cyan/40 shadow-[0_0_8px_rgba(72,202,228,0.4)] origin-left"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
                   transition={{ duration: 3.6, ease: "linear" }}
                 />
               </div>
@@ -115,8 +115,8 @@ export default function CinematicLoader({ onComplete }: CinematicLoaderProps) {
           ) : (
             <motion.div
               key="complete"
-              initial={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="flex flex-col items-center justify-center"
