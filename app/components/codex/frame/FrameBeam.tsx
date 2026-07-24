@@ -9,17 +9,26 @@ export default function FrameBeam({ orientation }: FrameBeamProps) {
 
   const containerClasses = [
     'absolute z-30 pointer-events-none',
-    isHorizontal ? 'left-[160px] right-[160px] h-[117px]' : 'top-[160px] bottom-[160px] w-[210px]',
-    orientation === 'top' ? 'top-[-30px]' : '',
-    orientation === 'bottom' ? 'bottom-[-30px] scale-y-[-1]' : '',
-    orientation === 'left' ? 'left-[-59px]' : '',
-    orientation === 'right' ? 'right-[-59px] scale-x-[-1]' : '',
+    orientation === 'bottom' ? 'scale-y-[-1]' : '',
+    orientation === 'right' ? 'scale-x-[-1]' : '',
   ].filter(Boolean).join(' ');
+
+  const style: React.CSSProperties = isHorizontal ? {
+    left: 'var(--fb-h-inset)',
+    right: 'var(--fb-h-inset)',
+    height: 'var(--fb-h-thick)',
+    ...(orientation === 'top' ? { top: 'var(--fb-h-shift)' } : { bottom: 'var(--fb-h-shift)' })
+  } : {
+    top: 'var(--fb-v-inset)',
+    bottom: 'var(--fb-v-inset)',
+    width: 'var(--fb-v-thick)',
+    ...(orientation === 'left' ? { left: 'var(--fb-v-shift)' } : { right: 'var(--fb-v-shift)' })
+  };
 
   const src = isHorizontal ? '/ui/codex/frames/top.png' : '/ui/codex/frames/left.png';
 
   return (
-    <div className={containerClasses}>
+    <div className={containerClasses} style={style}>
       <img
         src={src}
         alt=""

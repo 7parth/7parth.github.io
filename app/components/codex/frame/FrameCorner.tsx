@@ -6,7 +6,7 @@ export interface FrameCornerProps {
 
 export default function FrameCorner({ position }: FrameCornerProps) {
   const containerClasses = [
-    'absolute w-[170px] h-[170px] z-30 pointer-events-none',
+    'absolute z-30 pointer-events-none',
     position === 'tl' ? 'top-0 left-0' : '',
     position === 'tr' ? 'top-0 right-0 scale-x-[-1]' : '',
     position === 'bl' ? 'bottom-0 left-0 scale-y-[-1]' : '',
@@ -14,7 +14,7 @@ export default function FrameCorner({ position }: FrameCornerProps) {
   ].filter(Boolean).join(' ');
 
   return (
-    <div className={containerClasses}>
+    <div className={containerClasses} style={{ width: 'var(--fc-size)', height: 'var(--fc-size)' }}>
       <img
         src="/ui/codex/frames/corner-tl.png"
         alt=""

@@ -4,7 +4,15 @@ import FrameCorner from './FrameCorner';
 
 export default function CodexFrame() {
   return (
-    <div className="absolute -inset-x-[9px] -inset-y-[7px] z-30 pointer-events-none">
+    <div 
+      className="absolute z-30 pointer-events-none"
+      style={{
+        top: 'var(--fc-out-y)',
+        bottom: 'var(--fc-out-y)',
+        left: 'var(--fc-out-x)',
+        right: 'var(--fc-out-x)',
+      }}
+    >
       <FrameBeam orientation="top" />
       <FrameBeam orientation="bottom" />
       <FrameBeam orientation="left" />

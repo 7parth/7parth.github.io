@@ -58,7 +58,7 @@ export default function CodexArtifact({
         }}
       >
         {/* The Frame Overlay - pointer events none so tablet can scroll underneath */}
-        <div className="absolute inset-0 z-30 pointer-events-none hidden md:block">
+        <div className="absolute inset-0 z-30 pointer-events-none">
           <CodexFrame />
         </div>
 

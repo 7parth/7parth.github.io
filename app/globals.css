@@ -110,12 +110,23 @@ body {
    Scrollbar Utilities
    ============================================ */
 :root {
-  --codex-inset-top: 20px;
-  --codex-inset-bottom: 20px;
-  --codex-inset-left: 20px;
-  --codex-inset-right: 20px;
-  --codex-inset-x: 40px;
+  --codex-inset-top: 55px;
+  --codex-inset-bottom: 25px;
+  --codex-inset-left: 25px;
+  --codex-inset-right: 25px;
+  --codex-inset-x: 50px;
   --codex-half-w: 47.5vw;
+
+  /* Mobile Frame Dimensions (approx 55% scale) */
+  --fc-size: 94px;
+  --fb-h-inset: 88px;
+  --fb-h-thick: 64px;
+  --fb-h-shift: -16px;
+  --fb-v-inset: 88px;
+  --fb-v-thick: 115px;
+  --fb-v-shift: -32px;
+  --fc-out-x: -5px;
+  --fc-out-y: -4px;
 }
 @media (min-width: 768px) {
   :root {
@@ -125,6 +136,17 @@ body {
     --codex-inset-right: 65px;
     --codex-inset-x: 140px;
     --codex-half-w: min(500px, 42.5vw);
+
+    /* Desktop Frame Dimensions */
+    --fc-size: 170px;
+    --fb-h-inset: 160px;
+    --fb-h-thick: 117px;
+    --fb-h-shift: -30px;
+    --fb-v-inset: 160px;
+    --fb-v-thick: 210px;
+    --fb-v-shift: -59px;
+    --fc-out-x: -9px;
+    --fc-out-y: -7px;
   }
 }
 
